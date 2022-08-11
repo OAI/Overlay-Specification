@@ -8,8 +8,8 @@ Overlays can address a wide range of scenarios that have been frequently request
 
 - Support multi-language API descriptions by using Overlays to contain language translations.
 - Provide configuration information for different deployment environments.
-- Allow separation of concerns for metadata such as gateway configuration or SLA informtation.
-- Support a traits like capability for applying a set of configuration data, such as multiple parameters, or multiple headers to a targeted object
+- Allow separation of concerns for metadata such as gateway configuration or SLA information.
+- Support a traits like capability for applying a set of configuration data, such as multiple parameters, or multiple headers to a targeted object.
 - Provide default responses, or parameters where they are not explicitly provided.
 - Apply configuration data globally or based on filter conditions.
 
