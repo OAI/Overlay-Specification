@@ -240,6 +240,7 @@ for (let l in lines) {
         line = line.replace('[CommonMark syntax](https://spec.commonmark.org/)','[[CommonMark]] syntax');
         line = line.replace('[JSONPath](https://datatracker.ietf.org/wg/jsonpath/documents/)','[[RFC9535|JSONPath]]');
         line = line.replace('JSON or YAML format.','[[RFC7159|JSON]] or [[YAML|YAML]] format.');
+        line = line.replace('OpenAPI document','[[OpenAPI]] document');
         line = line.replace(/YAML version \[1\.2\]\(https:\/\/(www\.)?yaml\.org\/spec\/1\.2\/spec\.html\)/,'[[YAML|YAML version 1.2]]');
     }
 
