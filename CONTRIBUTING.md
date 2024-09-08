@@ -25,3 +25,5 @@ Produce stand-alone HTML files in the local `deploy/overlay` folder:
 ```sh
 npm run build
 ```
+
+Note that Linux users may need to add `--no-sandbox` to run `npx respec` as found in the `scripts/md2html/build.sh` file.
