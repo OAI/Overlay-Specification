@@ -208,6 +208,9 @@ for (let l in lines) {
         inCodeBlock = !inCodeBlock;
     }
 
+    // replace <a name="..."></a> with <span id="..."></span> - respec can't deal with it, and mdv needs it for link checks
+    line = line.replace(/<a name="([^"]+)"><\/a>/g,'<span id="$1"></span>');
+
     line = line.split('\\|').join('&#124;'); // was &brvbar
 
     if (!inCodeBlock) {
