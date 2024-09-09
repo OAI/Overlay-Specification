@@ -211,7 +211,6 @@ for (let l in lines) {
     line = line.split('\\|').join('&#124;'); // was &brvbar
 
     if (!inCodeBlock) {
-
         // minor fixups to get RFC links to work properly
         line = line.replace(/\[RFC ?([0-9]{1,5})\]\(/g,'[[RFC$1]](');
 
