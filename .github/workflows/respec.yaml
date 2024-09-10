@@ -54,6 +54,7 @@ jobs:
         labels: Housekeeping
         # reviewers: OAI/tsc
         author: ${{ github.actor }} <${{ github.actor }}@users.noreply.github.com>
+        committer: GitHub <noreply@github.com>
         title: Update ReSpec-rendered specification versions for Overlay
         commit-message: Update ReSpec-rendered specification versions
         signoff: false
