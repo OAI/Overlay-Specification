@@ -13,7 +13,6 @@ on:
   push:
     branches:
       - main
-      - respec-workflow # TODO: remove
   workflow_dispatch: {}
 
 jobs:
@@ -52,9 +51,7 @@ jobs:
         delete-branch: true
         path: deploy
         labels: Housekeeping
-        # reviewers: OAI/tsc
-        # author: GitHub <noreply@github.com>
-        # committer: GitHub <noreply@github.com>
+        # team-reviewers: OAI/tsc
         title: Update ReSpec-rendered specification versions for Overlay
         commit-message: Update ReSpec-rendered specification versions
         signoff: true
