@@ -12,9 +12,6 @@
     "url": "https://github.com/OAI/Overlay-Specification.git"
   },
   "license": "Apache-2.0",
-  "scripts": {
-    "build": "bash ./scripts/md2html/build.sh"
-  },
   "readmeFilename": "README.md",
   "dependencies": {
     "cheerio": "^1.0.0-rc.5",
@@ -26,6 +23,7 @@
   "devDependencies": {
     "markdownlint-cli": "^0.41.0",
     "mdv": "^1.3.4",
+    "prettier": "^3.3.3",
     "yaml": "^2.5.0"
   },
   "keywords": [
@@ -36,5 +34,9 @@
     "Overlay",
     "Specification",
     "Swagger"
-  ]
+  ],
+  "scripts": {
+    "build": "bash ./scripts/md2html/build.sh",
+    "format-markdown": "bash ./scripts/format-markdown.sh ./versions/*.md"
+  }
 }
