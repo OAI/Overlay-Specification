@@ -208,19 +208,14 @@ for (let l in lines) {
         inCodeBlock = !inCodeBlock;
     }
 
-    //TODO: change source markdown instead
-    // replace deprecated <a name="..."></a> with <span id="..."></span> - needed for older specs
+    // replace <a name="..."></a> with <span id="..."></span> - respec can't deal with it, and mdv needs it for link checks
     line = line.replace(/<a name="([^"]+)"><\/a>/g,'<span id="$1"></span>');
 
     line = line.split('\\|').join('&#124;'); // was &brvbar
 
     if (!inCodeBlock) {
-
         // minor fixups to get RFC links to work properly
         line = line.replace(/\[RFC ?([0-9]{1,5})\]\(/g,'[[RFC$1]](');
-
-        // harmonize RFC URLs
-        line = line.replaceAll('https://datatracker.ietf.org/doc/html/','https://tools.ietf.org/html/');
 
         // handle url fragments in RFC links and construct section links as well as RFC links
         line = line.replace(/\]\]\(https:\/\/tools.ietf.org\/html\/rfc([0-9]{1,5})\/?(\#[^)]*)?\)/g, function(match, rfcNumber, fragment) {
@@ -234,14 +229,6 @@ for (let l in lines) {
                 return ']]';
             }
         });
-
-        //TODO: change source markdown instead
-        // non-RFC references
-        line = line.replace('[CommonMark syntax](https://spec.commonmark.org/)','[[CommonMark]] syntax');
-        line = line.replace('[JSONPath](https://datatracker.ietf.org/wg/jsonpath/documents/)','[[RFC9535|JSONPath]]');
-        line = line.replace('JSON or YAML format.','[[RFC7159|JSON]] or [[YAML|YAML]] format.');
-        line = line.replace('OpenAPI document','[[OpenAPI]] document');
-        line = line.replace(/YAML version \[1\.2\]\(https:\/\/(www\.)?yaml\.org\/spec\/1\.2\/spec\.html\)/,'[[YAML|YAML version 1.2]]');
     }
 
     // fix indentation of headings
