@@ -53,11 +53,11 @@ jobs:
         path: deploy
         labels: Housekeeping
         # reviewers: OAI/tsc
-        author: GitHub <noreply@github.com>
-        committer: GitHub <noreply@github.com>
+        # author: GitHub <noreply@github.com>
+        # committer: GitHub <noreply@github.com>
         title: Update ReSpec-rendered specification versions for Overlay
         commit-message: Update ReSpec-rendered specification versions
-        signoff: false
+        signoff: true
         body: |
           This pull request is automatically triggered by GitHub action `respec` in the OAI/Overlay-Specification repo.
 
