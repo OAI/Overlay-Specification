@@ -53,7 +53,7 @@ jobs:
         path: deploy
         labels: Housekeeping
         # reviewers: OAI/tsc
-        author:  github-actions[bot] <41898282+github-actions[bot]@users.noreply.github.com>
+        author: github-actions[bot] <github-actions[bot]@users.noreply.github.com>
         title: Update ReSpec-rendered specification versions for Overlay
         commit-message: Update ReSpec-rendered specification versions
         signoff: true
