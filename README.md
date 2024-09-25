@@ -1,6 +1,6 @@
 # Overlay-Specification
 
-The [Overlay Specification](versions/1.0.0.md) is a community-driven open specification within the [OpenAPI Initiative](https://www.openapis.org/), a Linux Foundation Collaborative Project.
+The [Overlay Specification](https://spec.openapis.org/overlay/latest.html) is a community-driven open specification within the [OpenAPI Initiative](https://www.openapis.org/), a Linux Foundation Collaborative Project.
 
 The Overlay specification defines a way of creating documents that contain information to be merged with an OpenAPI description at some later point in time, for the purpose of updating the OpenAPI description with additional information.
 
