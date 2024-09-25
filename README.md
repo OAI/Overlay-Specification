@@ -17,6 +17,16 @@ Overlays can address a wide range of scenarios that have been frequently request
 
 The current specification is sufficiently stable for implementers to start experimenting.  We are looking for implementation experience to guide our decisions on the remaining open issues.
 
+## Tools that support Overlays
+
+If you are looking for tools to use with Overlays, try these:
+
+- [Bump.sh CLI](https://github.com/bump-sh/cli)
+- [Speakeasy CLI](https://www.speakeasy.com/docs/speakeasy-cli/getting-started)
+- [overlays-js](https://github.com/lornajane/openapi-overlays-js)
+
+(Is something missing from the list? Send us a pull request to add it!)
+
 ## Licensing
 
 See: [License (Apache-2.0)](./LICENSE)
