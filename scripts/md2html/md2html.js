@@ -117,7 +117,7 @@ function preface(title,options) {
     preface += `<h1 id="title">${title.split('|')[0]}</h1>`;
     preface += `<p class="copyright">Copyright © ${options.publishDate.getFullYear()} the Linux Foundation</p>`;
     preface += `<section class="notoc" id="abstract"><h2>${abstract}</h2>\n`;
-    preface += options.intro.join('\n');
+    preface += options.abstract.join('\n');
     preface += '</section>';
     preface += '<section class="override" id="sotd" data-max-toc="0">';
     preface += '<h2>Status of This Document</h2>';
@@ -180,17 +180,23 @@ let inTOC = false;
 let inDefs = false;
 let inCodeBlock = false;
 let indents = [0];
-let inIntro = false;
-argv.intro = [];
+let inAbstract = false;
+argv.abstract = [];
 
 // process the markdown
 for (let l in lines) {
     let line = lines[l];
 
-    // extract Introduction section for abstract
-    if (line.startsWith('## Introduction')) inIntro = true;
-    else if (line.startsWith('#')) inIntro = false; 
-    else if (inIntro) argv.intro.push(line);
+    // extract Abstract
+    if (line.startsWith('## Abstract')) { 
+        inAbstract = true;
+        line = '';
+    }
+    else if (line.startsWith('#')) inAbstract = false; 
+    else if (inAbstract) { 
+        argv.abstract.push(line);
+        line = '';
+    }
 
     // remove TOC from older spec versions, respec will generate a new one
     if (line.startsWith('## Table of Contents')) inTOC = true;
