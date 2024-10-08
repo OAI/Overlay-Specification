@@ -1,0 +1,101 @@
+$id: https://spec.openapis.org/overlay/1.0/schema/2024-10-17
+$schema: https://json-schema.org/draft/2020-12/schema
+description: The description of OpenAPI Initiative Overlay v1.0.0 documents
+  without schema validation, as defined by
+  https://spec.openapis.org/overlay/v1.0.0
+type: object
+$comment: https://spec.openapis.org/overlay/v1.0.0#overlay-object
+properties:
+  overlay:
+    description: The version number of the Overlay Specification
+    type: string
+    pattern: ^1\.0\.\d+(-.+)?$
+  info:
+    $ref: "#/$defs/info-object"
+  extends:
+    type: string
+    format: uri-reference
+  actions:
+    type: array
+    minItems: 1
+    uniqueItems: true
+    items:
+      $ref: "#/$defs/action-object"
+required:
+  - overlay
+  - info
+  - actions
+$ref: "#/$defs/specification-extensions"
+unevaluatedProperties: false
+$defs:
+  info-object:
+    $comment: https://spec.openapis.org/overlay/v1.0.0#info-object
+    description: Provides metadata about the Overlay description
+    type: object
+    properties:
+      title:
+        description: A human readable title of the Overlay Description
+        type: string
+      version:
+        description: The version identifier of the Overlay document (which is distinct
+          from the Overlay Specification version)
+        type: string
+    required:
+      - title
+      - version
+    $ref: "#/$defs/specification-extensions"
+    unevaluatedProperties: false
+  action-object:
+    $comment: https://spec.openapis.org/overlay/v1.0.0#action-object
+    description: This object represents one or more changes to be applied to the
+      target document at the location defined by the target JSONPath expression.
+    properties:
+      target:
+        description: A JSONPath expression selecting nodes in the target document
+        type: string
+        pattern: ^\$[.\[]?.*$
+      description:
+        description: A description of the action. [[CommonMark]] syntax MAY be used for
+          rich text representation.
+        type: string
+      update:
+        description: If the target selects an object node, the value of this field
+          MUST be an object with the properties and values to merge with the
+          node. If the target selects an array, the value of this field MUST
+          be an entry to append to the array.
+        type:
+          - string
+          - boolean
+          - object
+          - array
+          - number
+          - "null"
+      remove:
+        description: A boolean value that indicates that the target object is to be
+          removed from the the map or array it is contained in
+        type: boolean
+        default: false
+    allOf:
+      - description: The `update` field has no impact if the `remove` field of this
+          action object is true.
+        if:
+          properties:
+            remove:
+              const: true
+          required:
+            - remove
+        then:
+          not:
+            required:
+              - update
+    required:
+      - target
+    $ref: "#/$defs/specification-extensions"
+    unevaluatedProperties: false
+  specification-extensions:
+    $comment: https://spec.openapis.org/overlay/v1.0.0#specification-extensions
+    description: While the Overlay Specification tries to accommodate most use
+      cases, additional data can be added to extend the specification at certain
+      points
+    patternProperties:
+      ^x-: true
