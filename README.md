@@ -1,16 +1,16 @@
 # Overlay Specification
 
-The Overlay Specification is a community-driven open specification within the [OpenAPI Initiative](https://www.openapis.org/), a Linux Foundation Collaborative Project.
+The Overlay specification defines a document format for information that will augment an existing OpenAPI description without entangling that information in the OpenAPI description's source doccument(s).
 
-The Overlay Specification provides a way to augment an existing OpenAPI description without modifying the source document.
+This specfication is a community-driven, open specification within the [OpenAPI Initiative](https://www.openapis.org/), a Linux Foundation Collaborative Project.
 
-Overlays support a wide range of scenarios:
+Overlays support a range of scenarios, including:
 
-- Translating documentation into another language.
-- Providing configuration information for different deployment environments.
-- Allowing separation of concerns for metadata such as gateway configuration or SLA information.
-- Supporting a traits-like capability for applying a set of configuration data, such as multiple parameters or multiple headers, for a targeted object.
-- Providing default responses or parameters where they are not explicitly provided
+- Translating documentation into another language
+- Providing configuration information for different deployment environments
+- Allowing separation of concerns for metadata such as gateway configuration or SLA information
+- Supporting a traits-like capability for applying a set of configuration data, such as multiple parameters or multiple headers, for targeted objects
+- Providing default responses or parameters where they were not explicitly provided
 - Appling configuration data globally or based on filter conditions
 
 ## Current Status
