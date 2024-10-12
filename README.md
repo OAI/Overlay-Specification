@@ -1,8 +1,8 @@
 # Overlay Specification
 
-The Overlay specification defines a document format for information that will augment an existing OpenAPI description without entangling that information in the OpenAPI description's source doccument(s).
+The Overlay Specification defines a document format for information that will augment an existing OpenAPI description without entangling that information in the OpenAPI description's source doccument(s).
 
-This specfication is a community-driven, open specification within the [OpenAPI Initiative](https://www.openapis.org/), a Linux Foundation Collaborative Project.
+This specification is a community-driven, open specification within the [OpenAPI Initiative](https://www.openapis.org/), a Linux Foundation Collaborative Project.
 
 Overlays support a range of scenarios, including:
 
@@ -17,7 +17,7 @@ Overlays support a range of scenarios, including:
 
 The current specification is sufficiently stable for implementers to start experimenting. We are looking for implementation experience to guide our decisions on the remaining open issues.
 
-## Tools that support Overlays
+## Tools that Support Overlays
 
 If you are looking for tools to use with Overlays, try these:
 
