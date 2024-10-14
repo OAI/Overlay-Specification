@@ -13,10 +13,6 @@ Overlays support a range of scenarios, including:
 - Providing default responses or parameters where they were not explicitly provided
 - Appling configuration data globally or based on filter conditions
 
-## Current Status
-
-The current specification is sufficiently stable for implementers to start experimenting. We are looking for implementation experience to guide our decisions on the remaining open issues.
-
 ## Tools that Support Overlays
 
 If you are looking for tools to use with Overlays, try these:
