@@ -11,7 +11,7 @@ Overlays support a range of scenarios, including:
 - Allowing separation of concerns for metadata such as gateway configuration or SLA information
 - Supporting a traits-like capability for applying a set of configuration data, such as multiple parameters or multiple headers, for targeted objects
 - Providing default responses or parameters where they were not explicitly provided
-- Appling configuration data globally or based on filter conditions
+- Applying configuration data globally or based on filter conditions
 
 ## Tools that Support Overlays
 
