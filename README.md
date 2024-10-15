@@ -1,6 +1,6 @@
 # Overlay Specification
 
-The Overlay Specification defines a document format for information that will augment an existing OpenAPI description without entangling that information in the OpenAPI description's source doccument(s).
+The Overlay Specification defines a document format for information that augments an existing OpenAPI description but remains separate from the OpenAPI description's source document(s).
 
 This specification is a community-driven, open specification within the [OpenAPI Initiative](https://www.openapis.org/), a Linux Foundation Collaborative Project.
 
