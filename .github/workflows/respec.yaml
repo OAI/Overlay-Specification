@@ -45,6 +45,8 @@ jobs:
     - name: Create Pull Request
       uses: peter-evans/create-pull-request@v7
       with:
+        # A personal access token is required to push changes to the repository.
+        # This token needs to be refreshed regularly and stored in the repository secrets.
         token: ${{ secrets.OAS_REPO_TOKEN }}
         branch: update-overlay-respec-version
         base: gh-pages
