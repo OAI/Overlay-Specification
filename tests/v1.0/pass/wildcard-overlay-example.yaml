@@ -9,4 +9,4 @@ actions:
   - target: $.paths.*.get.parameters[?@.name=='filter' && @.in=='query']
     update:
       schema:
-        $ref: '/components/schemas/filterSchema'
+        $ref: '#/components/schemas/filterSchema'
