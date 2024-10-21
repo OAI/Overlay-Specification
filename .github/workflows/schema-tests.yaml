@@ -30,7 +30,7 @@ jobs:
 
     - name: Install dependencies from main
       run: |
-        git checkout remotes/origin/main -- package.json package-lock.json
+        # git checkout remotes/origin/main -- package.json package-lock.json #TODO: uncomment with subsequent PR
         npm ci
 
     - name: Run tests
