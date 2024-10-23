@@ -26,7 +26,7 @@ const parseYamlFromFile = (filePath) => {
 
 setMetaSchemaOutputFormat(BASIC);
 
-const validateOpenApi = await validate("./schemas/v1.0/schema.yaml");
+const validateOverlay = await validate("./schemas/v1.0/schema.yaml");
 
 describe("v1.0", () => {
   describe("Pass", () => {
@@ -35,7 +35,7 @@ describe("v1.0", () => {
       .forEach((entry) => {
         test(entry.name, () => {
           const instance = parseYamlFromFile(`./tests/v1.0/pass/${entry.name}`);
-          const output = validateOpenApi(instance, BASIC);
+          const output = validateOverlay(instance, BASIC);
           expect(output.valid).to.equal(true);
         });
       });
@@ -47,7 +47,7 @@ describe("v1.0", () => {
       .forEach((entry) => {
         test(entry.name, () => {
           const instance = parseYamlFromFile(`./tests/v1.0/fail/${entry.name}`);
-          const output = validateOpenApi(instance, BASIC);
+          const output = validateOverlay(instance, BASIC);
           expect(output.valid).to.equal(false);
         });
       });

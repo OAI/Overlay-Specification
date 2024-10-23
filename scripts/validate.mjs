@@ -43,10 +43,10 @@ const outputFormat = args.format || defaultOutputFormat;
 setMetaSchemaOutputFormat(outputFormat);
 
 // Compile / meta-validate
-const validateOpenApi = await validate(`./schemas/v1.0/${schemaType}.yaml`);
+const validateOverlay = await validate(`./schemas/v1.0/${schemaType}.yaml`);
 
 // Validate instance
 const instanceYaml = await readFile(`${process.argv[process.argv.length - 1]}`, "utf8");
 const instance = YAML.parse(instanceYaml);
-const results = validateOpenApi(instance, outputFormat);
+const results = validateOverlay(instance, outputFormat);
 console.log(JSON.stringify(results, null, "  "));
