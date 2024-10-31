@@ -20,6 +20,7 @@ If you are looking for tools to use with Overlays, try these:
 - [Bump.sh CLI](https://github.com/bump-sh/cli)
 - [Speakeasy CLI](https://www.speakeasy.com/docs/speakeasy-cli/getting-started)
 - [overlays-js](https://github.com/lornajane/openapi-overlays-js)
+- [apigee-go-gen CLI](https://apigee.github.io/apigee-go-gen/transform/commands/oas-overlay/)
 
 (Is something missing from the list? Send us a pull request to add it!)
 
