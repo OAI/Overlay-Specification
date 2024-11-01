@@ -1,21 +1,28 @@
-# Overlay-Specification
+# Overlay Specification
 
-The [Overlay Specification](https://spec.openapis.org/overlay/latest.html) is a community-driven open specification within the [OpenAPI Initiative](https://www.openapis.org/), a Linux Foundation Collaborative Project.
+The [Overlay Specification](https://spec.openapis.org/overlay/latest.html) defines a document format for information that augments an existing OpenAPI description yet remains separate from the OpenAPI description's source document(s).
 
-The Overlay specification defines a way of creating documents that contain information to be merged with an OpenAPI description at some later point in time, for the purpose of updating the OpenAPI description with additional information.
+This specification is a community-driven, open specification within the [OpenAPI Initiative](https://www.openapis.org/), a Linux Foundation Collaborative Project.
 
-Overlays can address a wide range of scenarios that have been frequently requested by OpenAPI users:
+Overlays support a range of scenarios, including:
 
-- Support multi-language API descriptions by using Overlays to contain language translations.
-- Provide configuration information for different deployment environments.
-- Allow separation of concerns for metadata such as gateway configuration or SLA information.
-- Support a traits like capability for applying a set of configuration data, such as multiple parameters, or multiple headers to a targeted object.
-- Provide default responses, or parameters where they are not explicitly provided.
-- Apply configuration data globally or based on filter conditions.
+- Translating documentation into another language
+- Providing configuration information for different deployment environments
+- Allowing separation of concerns for metadata such as gateway configuration or SLA information
+- Supporting a traits-like capability for applying a set of configuration data, such as multiple parameters or multiple headers, for targeted objects
+- Providing default responses or parameters where they were not explicitly provided
+- Applying configuration data globally or based on filter conditions
 
-## Current Status
+## Tools that Support Overlays
 
-The current specification is sufficiently stable for implementers to start experimenting.  We are looking for implementation experience to guide our decisions on the remaining open issues.
+If you are looking for tools to use with Overlays, try these:
+
+- [Bump.sh CLI](https://github.com/bump-sh/cli)
+- [Speakeasy CLI](https://www.speakeasy.com/docs/speakeasy-cli/getting-started)
+- [overlays-js](https://github.com/lornajane/openapi-overlays-js)
+- [apigee-go-gen CLI](https://apigee.github.io/apigee-go-gen/transform/commands/oas-overlay/)
+
+(Is something missing from the list? Send us a pull request to add it!)
 
 ## Licensing
 
