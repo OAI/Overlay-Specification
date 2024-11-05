@@ -1,0 +1,5 @@
+$id: https://spec.openapis.org/overlay/1.0/schema/WORK-IN-PROGRESS
+$schema: https://json-schema.org/draft/2020-12/schema
+description: The description of Overlay v1.0.x documents
+
+type: object
