@@ -17,7 +17,8 @@ on:
 
 jobs:
   respec:
-
+    if: github.repository == 'OAI/Overlay-Specification'
+    
     runs-on: ubuntu-latest
 
     steps:
