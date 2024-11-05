@@ -1,4 +1,4 @@
-# Contribute to the OpenAPI Overlays Specification
+# Contribute to the OpenAPI Overlay Specification
 
 We welcome contributions and discussion.
 Bug reports and feature requests are welcome, please add an issue explaining your use case.
@@ -27,3 +27,11 @@ npm run build
 ```
 
 Note that Linux users may need to add `--no-sandbox` to run `npx respec` as found in the `scripts/md2html/build.sh` file.
+
+## Style guide for Overlay Specification
+
+Some terminology and when to use it:
+
+- **Overlay Specification** - <https://spec.openapis.org/overlay/latest.html> , the full specification document.
+- **Overlay** - a file containing Overlay specification content, that can be overlaid onto an OpenAPI description. (Note: "Overlay" is a noun, unlike OpenAPI where the file would be "OpenAPI description").
+- **Overlays** - more informal form, can refer to more than one Overlay, or to the general concept covered by the Overlay Specification.
