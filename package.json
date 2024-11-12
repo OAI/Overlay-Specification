@@ -41,6 +41,6 @@
   "scripts": {
     "build": "bash ./scripts/md2html/build.sh",
     "format-markdown": "bash ./scripts/format-markdown.sh ./versions/*.md",
-    "test": "c8 --100 vitest --watch=false"
+    "test": "c8 --100 vitest --watch=false && bash scripts/schema-test-coverage.sh"
   }
 }
