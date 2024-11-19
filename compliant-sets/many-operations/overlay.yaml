@@ -1,0 +1,23 @@
+overlay: 1.0.0
+info:
+  title: Structured Overlay
+  version: 1.0.0
+actions:
+- target: $.paths['/pets'].get.summary
+  remove: true
+- target: $.paths.*.get
+  update:
+    tags:
+      - wildcard-done
+- target: $.paths['/pets'].get
+  update:
+    x-info:
+      x-overlay-applied: structured-overlay
+      description: This is an added description
+    tags:
+      - overlayed
+- target: $.paths.*
+  update:
+    post:
+      foo:
+        bar: hello
