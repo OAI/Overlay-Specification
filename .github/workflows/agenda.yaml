@@ -1,0 +1,39 @@
+name: Create meeting template
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  create-discussion:
+    permissions:
+      discussions: write
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Get agenda text from template
+        id: get-agenda
+        run: |
+          echo 'AGENDA<<EOF' >> $GITHUB_ENV
+          cat .github/templates/agenda.md >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
+      - name: Create discussion with agenda
+        id: create-repository-discussion
+        uses: octokit/graphql-action@v2.x
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          variables:
+            | 
+            body: "${{ env.AGENDA }}"
+            title: "Overlays Meeting"
+            repositoryId: 'MDEwOlJlcG9zaXRvcnkzNTk4NjU5MDI='
+            categoryId: 'DIC_kwDOFXMeLs4COVB8'
+          query: |
+            mutation CreateDiscussionMutation ($title: String!, $body: String!, $repositoryId: ID!, $categoryId: ID!) {
+              createDiscussion(input: { title: $title, body: $body, repositoryId: $repositoryId, categoryId: $categoryId }) {
+                discussion {
+                  title
+                }
+              }
+            }
+
