@@ -22,8 +22,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          variables:
-            | 
+          variables: | 
             body: "${{ env.AGENDA }}"
             title: "Overlays Meeting"
             repositoryId: 'MDEwOlJlcG9zaXRvcnkzNTk4NjU5MDI='
