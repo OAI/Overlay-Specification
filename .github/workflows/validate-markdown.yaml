@@ -26,6 +26,6 @@ jobs:
       with:
         node-version: '20.x'
     - name: Validate markdown
-      run: npx --yes mdv versions/*.md
+      run: npx --yes mdv ./{versions,schemas/**}/*.md
     - name: Lint markdown
-      run: npx --yes markdownlint-cli --config .markdownlint.yaml versions/*.md
+      run: npx --yes markdownlint-cli --config .markdownlint.yaml ./{versions,schemas/**}/*.md
