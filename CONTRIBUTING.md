@@ -7,6 +7,38 @@ Pull requests are also welcome, but it is recommended to create an issue first, 
 Questions and comments are also welcome - use the GitHub Discussions feature.
 You will also find notes from past meetings in the Discussion tab.
 
+## Key information
+
+This project is covered by our [Code of Conduct](https://github.com/OAI/OpenAPI-Specification?tab=coc-ov-file#readme).
+All participants are expected to read and follow this code.
+
+No changes, however trivial, are ever made to the contents of published specifications (the files in the `versions/` folder).
+Exceptions may be made when links to external documents have been changed by a 3rd party, in order to keep our documents accurate.
+
+Published versions of the specification are in the `versions/` folder.
+The under-development versions of the specification are in the file `spec/overlay.md` on the appropriately-versioned branch.
+For example, work on the next release for 1.1 is on `v1.1-dev` in the file `spec/overlay.md`.
+
+The [spec site](https://spec.openapis.org) is the source of truth for the OpenAPI Overlay specification as it contains all the citations and author credits.
+
+The OpenAPI project is almost entirely staffed by volunteers.
+Please be patient with the people in this project, who all have other jobs and are active here because we believe this project has a positive impact in the world.
+
+## Pull Requests
+
+Pull requests are always welcome but please read the section below on [branching strategy](#branching-strategy) before you start.
+
+Pull requests must come from a fork; create a fresh branch on your fork based on the target branch for your change.
+
+### Branching Strategy
+
+Overview of branches:
+
+- `main` holds the published versions of the specification, utility scripts and supporting documentation.
+- `dev` is for development infrastructure and other changes that apply to multiple versions of development.
+- Branches named `vX.Y-dev` are the active development branches for future releases.
+  All changes should be applied to the _earliest_ branch where the changes are relevant in the first instance.
+
 ## Build the HTML version to publish
 
 We use ReSpec to render the markdown specification as HTML for publishing and easier reading.
