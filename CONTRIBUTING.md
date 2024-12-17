@@ -37,7 +37,7 @@ Overview of branches:
 - `main` holds the published versions of the specification, utility scripts and supporting documentation.
 - `dev` is for development infrastructure and other changes that apply to multiple versions of development.
 - Branches named `vX.Y-dev` are the active development branches for future releases.
-  All changes should be applied to the _earliest_ branch where the changes is relevant in the first instance.
+  All changes should be applied to the _earliest_ branch where the changes are relevant in the first instance.
 
 ## Build the HTML version to publish
 
