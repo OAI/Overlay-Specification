@@ -13,7 +13,7 @@ This project is covered by our [Code of Conduct](https://github.com/OAI/OpenAPI-
 All participants are expected to read and follow this code.
 
 No changes, however trivial, are ever made to the contents of published specifications (the files in the `versions/` folder).
-Exceptions may be made when links to external URLs have been changed by a 3rd party, in order to keep our documents accurate.
+Exceptions may be made when links to external documents have been changed by a 3rd party, in order to keep our documents accurate.
 
 Published versions of the specification are in the `versions/` folder.
 The under-development versions of the specification are in the file `spec/overlay.md` on the appropriately-versioned branch.
