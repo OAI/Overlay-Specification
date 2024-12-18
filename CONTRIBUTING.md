@@ -16,8 +16,8 @@ No changes, however trivial, are ever made to the contents of published specific
 Exceptions may be made when links to external documents have been changed by a 3rd party, in order to keep our documents accurate.
 
 Published versions of the specification are in the `versions/` folder.
-The under-development versions of the specification are in the file `spec/overlay.md` on the appropriately-versioned branch.
-For example, work on the next release for 1.1 is on `v1.1-dev` in the file `spec/overlay.md`.
+The under-development versions of the specification are in the file `src/overlay.md` on the appropriately-versioned branch.
+For example, work on the next release for 1.1 is on `v1.1-dev` in the file `src/overlay.md`.
 
 The [spec site](https://spec.openapis.org) is the source of truth for the OpenAPI Overlay specification as it contains all the citations and author credits.
 
