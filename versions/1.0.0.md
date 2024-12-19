@@ -197,10 +197,10 @@ actions:
   - target: $.paths.*.get.parameters[?@.name=='filter' && @.in=='query']
     update:
       schema:
-        $ref: '/components/schemas/filterSchema'
+        $ref: '#/components/schemas/filterSchema'
 ```
 
-#### Array Modification Example
+#### Array Modification Examples
 
 Array elements MAY be deleted using the `remove` property. Use of array indexes to remove array items should be avoided where possible as indexes will change when items are removed.
 
