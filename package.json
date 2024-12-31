@@ -44,6 +44,7 @@
     "markdownlint:schemas": "npx --yes markdownlint-cli --config ./schemas/.markdownlint.yaml ./schemas/**/*.md",
     "markdownlint:versions": "npx --yes markdownlint-cli --config ./versions/.markdownlint.yaml ./versions/*.md",
     "markdownlint:all": "npm run markdownlint:schemas && npm run markdownlint:versions",
+    "markdwon-validate": "npx --yes mdv ./{versions,schemas/**}/*.md",
     "test": "c8 --100 vitest --watch=false && bash scripts/schema-test-coverage.sh"
   }
 }
