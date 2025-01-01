@@ -26,6 +26,6 @@ jobs:
       with:
         node-version: '20.x'
     - name: Validate markdown
-      run: npm run markdown-validate
+      run: "npm run markdown:validate"
     - name: Lint markdown
-      run: "npm run markdownlint:all"
+      run: "npm run markdown:lint"
