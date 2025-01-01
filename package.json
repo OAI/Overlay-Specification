@@ -40,7 +40,9 @@
   ],
   "scripts": {
     "build": "bash ./scripts/md2html/build.sh",
-    "format-markdown": "bash ./scripts/format-markdown.sh ./versions/*.md",
+    "format-markdown-versions": "bash ./scripts/format-markdown.sh --config ./versions/.markdownlint.yaml ./versions/*.md",
+    "format-markdown-schemas": "bash ./scripts/format-markdown.sh --config ./schemas/.markdownlint.yaml ./schemas/**/*.md",
+    "format-markdown": "npm run format-markdown-schemas && npm run format-markdown-versions",
     "markdownlint:schemas": "npx --yes markdownlint-cli --config ./schemas/.markdownlint.yaml ./schemas/**/*.md",
     "markdownlint:versions": "npx --yes markdownlint-cli --config ./versions/.markdownlint.yaml ./versions/*.md",
     "markdownlint:all": "npm run markdownlint:schemas && npm run markdownlint:versions",
