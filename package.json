@@ -42,7 +42,7 @@
     "build": "bash ./scripts/md2html/build.sh",
     "markdown:format:versions": "bash ./scripts/format-markdown.sh --config ./versions/.markdownlint.yaml ./versions/*.md",
     "markdown:format:schemas": "bash ./scripts/format-markdown.sh --config ./schemas/.markdownlint.yaml ./schemas/**/*.md",
-    "markdown:format": "npm run format-markdown-schemas && npm run format-markdown-versions",
+    "markdown:format": "npm run markdown:format:schemas && npm run markdown:format:versions",
     "markdown:lint:schemas": "npx --yes markdownlint-cli --config ./schemas/.markdownlint.yaml ./schemas/**/*.md",
     "markdown:lint:versions": "npx --yes markdownlint-cli --config ./versions/.markdownlint.yaml ./versions/*.md",
     "markdown:lint": "npm run markdownlint:schemas && npm run markdownlint:versions",
