@@ -40,7 +40,13 @@
   ],
   "scripts": {
     "build": "bash ./scripts/md2html/build.sh",
-    "format-markdown": "bash ./scripts/format-markdown.sh ./versions/*.md",
+    "markdown:format:versions": "bash ./scripts/format-markdown.sh --config ./versions/.markdownlint.yaml ./versions/*.md",
+    "markdown:format:schemas": "bash ./scripts/format-markdown.sh --config ./schemas/.markdownlint.yaml ./schemas/**/*.md",
+    "markdown:format": "npm run markdown:format:schemas && npm run markdown:format:versions",
+    "markdown:lint:schemas": "npx --yes markdownlint-cli --config ./schemas/.markdownlint.yaml ./schemas/**/*.md",
+    "markdown:lint:versions": "npx --yes markdownlint-cli --config ./versions/.markdownlint.yaml ./versions/*.md",
+    "markdown:lint": "npm run markdown:lint:schemas && npm run markdown:lint:versions",
+    "markdown:validate": "npx --yes mdv ./{versions,schemas/**}/*.md",
     "test": "c8 --100 vitest --watch=false && bash scripts/schema-test-coverage.sh"
   }
 }
