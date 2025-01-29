@@ -212,8 +212,8 @@ info:
 actions:
   - target: $.paths.*.get.parameters
     update:
-      name: newParam
-      in: query
+      - name: newParam
+        in: query
 ```
 
 ```yaml
@@ -238,7 +238,7 @@ info:
 paths:
   /items:
     get:
-      x-oai-traits: ['paged']
+      x-oai-paged: true
       responses:
         200:
           description: OK
@@ -252,15 +252,16 @@ info:
   title: Apply Traits
   version: 1.0.0
 actions:
-  - target: $.paths.*.get[?@.x-oai-traits.paged]
+  - target: $.paths[?@.get && @.get['x-oai-paged']]
     update:
-      parameters:
-        - name: top
-          in: query
-          # ...
-        - name: skip
-          in: query
-          # ...
+      get:
+        parameters:
+          - name: top
+            in: query
+            # ...
+          - name: skip
+            in: query
+            # ...
 ```
 
 This approach allows inversion of control as to where the Overlay updates apply to the target document itself.
