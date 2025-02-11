@@ -252,16 +252,15 @@ info:
   title: Apply Traits
   version: 1.0.0
 actions:
-  - target: $.paths[?@.get && @.get['x-oai-paged']]
+  - target: $.paths[?@.get['x-oai-paged']].get
     update:
-      get:
-        parameters:
-          - name: top
-            in: query
-            # ...
-          - name: skip
-            in: query
-            # ...
+      parameters:
+        - name: top
+          in: query
+          # ...
+        - name: skip
+          in: query
+          # ...
 ```
 
 This approach allows inversion of control as to where the Overlay updates apply to the target document itself.
