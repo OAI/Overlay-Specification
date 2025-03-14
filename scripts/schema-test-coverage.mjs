@@ -121,6 +121,7 @@ if (notCovered.length > 0) {
   const firstNotCovered = notCovered.slice(0, maxNotCovered);
   if (notCovered.length > maxNotCovered) firstNotCovered.push("...");
   console.log(firstNotCovered);
+  process.exitCode = 1;
 }
 
 console.log(
