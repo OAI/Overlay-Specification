@@ -1,12 +1,12 @@
-openapi: "3.1.0"
+openapi: 3.1.0
 info:
   version: 1.0.0
   title: Imaginary town
 servers:
-  - url: https://example.com
+  - url: 'https://example.com'
     description: Example server
 paths:
-  '/buildings':
+  /buildings:
     get:
       summary: All buildings
       operationId: buildingsList
@@ -18,8 +18,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Building"
-
+                  $ref: '#/components/schemas/Building'
   '/buildings/{buildingId}':
     get:
       summary: Specific building
@@ -37,9 +36,8 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Building"
-
-  '/locations':
+                $ref: '#/components/schemas/Building'
+  /locations:
     get:
       summary: All locations
       operationId: locationList
@@ -58,8 +56,7 @@ paths:
                       example: 44
                     name:
                       type: string
-                      example: "North Village"
-
+                      example: North Village
 components:
   schemas:
     Building:
@@ -67,7 +64,7 @@ components:
       properties:
         building:
           type: string
-          example: "house"
+          example: house
         location_id:
           type: integer
           example: 44
