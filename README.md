@@ -22,6 +22,7 @@ If you are looking for tools to use with Overlays, try these:
 - [overlays-js](https://github.com/lornajane/openapi-overlays-js)
 - [apigee-go-gen CLI](https://apigee.github.io/apigee-go-gen/transform/commands/oas-overlay/)
 - [openapi-format CLI/UI](https://github.com/thim81/openapi-format)
+- [oas-patch CLI](https://github.com/mcroissant/oas_patcher)
 
 (Is something missing from the list? Send us a pull request to add it!)
 
