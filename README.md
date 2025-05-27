@@ -24,6 +24,7 @@ If you are looking for tools to use with Overlays, try these:
 - [openapi-format CLI/UI](https://github.com/thim81/openapi-format)
 - [oas-patch CLI](https://github.com/mcroissant/oas_patcher)
 - [oas-overlay-java](https://github.com/IBM/oas-overlay-java)
+- [Specmatic](https://specmatic.io/) - [Docs](https://docs.specmatic.io/documentation/contract_tests.html#overlays)
 
 (Is something missing from the list? Send us a pull request to add it!)
 
