@@ -4,7 +4,7 @@
 
 The Overlay Specification defines a document format for information that augments an existing [[OpenAPI]] description yet remains separate from the OpenAPI description's source document(s).
 
-## Version 1.0.0
+## Version 1.1.0
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in [BCP 14](https://tools.ietf.org/html/bcp14) [RFC2119](https://tools.ietf.org/html/rfc2119) [RFC8174](https://tools.ietf.org/html/rfc8174) when, and only when, they appear in all capitals, as shown here.
 
@@ -115,8 +115,9 @@ This object represents one or more changes to be applied to the target document 
 | ---- | :----: | ---- |
 | <a name="action-target"></a>target | `string` | **REQUIRED** A JSONPath expression selecting nodes in the target document. |
 | <a name="action-description"></a>description | `string` | A description of the action. [[CommonMark]] syntax MAY be used for rich text representation. |
-| <a name="action-update"></a>update | Any | If the `target` selects an object node, the value of this field MUST be an object with the properties and values to merge with the selected node. If the `target` selects an array, the value of this field MUST be an entry to append to the array. This field has no impact if the `remove` field of this action object is `true`. |
+| <a name="action-update"></a>update | Any | If the `target` selects an object node, the value of this field MUST be an object with the properties and values to merge with the selected node. If the `target` selects an array, the value of this field MUST be an entry to append to the array. |
 | <a name="action-remove"></a>remove | `boolean` | A boolean value that indicates that the target object or array MUST be removed from the the map or array it is contained in. The default value is `false`. |
+| <a name="action-destination"></a>destination | `string` | A JSONPath expression selecting destination nodes in the target document. If set, this indicates that each node in the target expression (after applying the update) should be appended as a child to the destination node. If not set, the target is mutated in-place. |
 
 The result of the `target` JSONPath expression MUST be zero or more objects or arrays (not primitive types or `null` values).
 
@@ -226,6 +227,70 @@ actions:
     remove: true
 ```
 
+#### Destination Example
+
+The `destination` property enables moving or copying elements from one location to another in the target document. This is useful for reorganizing content or creating shared references.
+
+##### Renaming Path Items
+
+To rename a path from `/item` to `/newitem`:
+
+```yaml
+overlay: 1.0.0
+info:
+  title: Rename path items
+  version: 1.0.0
+actions:
+  - target: $.paths
+    update: 
+      "/newitem": {}
+  - target: $.paths["/item"]
+    destination: $.paths["/newitem"]
+    remove: true
+```
+
+This transforms:
+
+```yaml
+paths:
+  /item:
+    summary: 'The root resource'
+    get:
+      summary: 'Retrieve the root resource'
+      # ...
+```
+
+To:
+
+```yaml
+paths:
+  /newitem:
+    summary: 'The root resource'
+    get:
+      summary: 'Retrieve the root resource'
+      # ...
+```
+
+##### Moving Schemas to Components
+
+```yaml
+overlay: 1.0.0
+info:
+  title: Move schemas to components
+  version: 1.0.0
+actions:
+  - target: $.paths['/pets'].get.responses['200'].content['application/json'].schema
+    destination: $.components.schemas
+    update:
+      $id: 'PetList'
+  - target: $.paths['/pets/{id}'].get.responses['200'].content['application/json'].schema
+    destination: $.components.schemas
+    update:
+      $id: 'Pet'
+```
+
+In this example, inline schemas are moved to the components section of the OpenAPI document. The `update` adds an identifier to each schema as it's moved.
+
 #### Traits Example
 
 By annotating a target document (such as an [[OpenAPI]] document) using [Specification Extensions](#specification-extensions) such as `x-oai-traits`, the author of the target document MAY identify where overlay updates should be applied.
@@ -281,4 +346,5 @@ The extensions may or may not be supported by the available tooling, but those m
 
 | Version | Date | Notes |
 | ---- | ---- | ---- |
+| 1.1.0 | TBD | Added `destination` field to Action Object for moving/copying elements |
 | 1.0.0 | 2024-10-17 | First release of the Overlay Specification |
