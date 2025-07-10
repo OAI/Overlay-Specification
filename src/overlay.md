@@ -271,25 +271,6 @@ paths:
       # ...
 ```
 
-##### Moving Schemas to Components
-
-```yaml
-overlay: 1.0.0
-info:
-  title: Move schemas to components
-  version: 1.0.0
-actions:
-  - target: $.paths['/pets'].get.responses['200'].content['application/json'].schema
-    destination: $.components.schemas
-    update:
-      $id: 'PetList'
-  - target: $.paths['/pets/{id}'].get.responses['200'].content['application/json'].schema
-    destination: $.components.schemas
-    update:
-      $id: 'Pet'
-```
-
-In this example, inline schemas are moved to the components section of the OpenAPI document. The `update` adds an identifier to each schema as it's moved.
 
 #### Traits Example
 
