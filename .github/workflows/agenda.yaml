@@ -22,7 +22,7 @@ jobs:
       - name: Get Next Meeting Date
         id: get-next-meeting-date
         run: |
-          NEXT_MEETING_DATE=$(date -d "next Tuesday 08:00" +%Y-%m-%d)
+          NEXT_MEETING_DATE=$(date -d "next Tuesday" +%Y-%m-%d)
           echo "NEXT_MEETING_DATE=$NEXT_MEETING_DATE" >> $GITHUB_ENV
       - name: Create discussion with agenda
         id: create-repository-discussion
