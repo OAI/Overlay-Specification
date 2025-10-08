@@ -26,6 +26,7 @@ If you are looking for tools to use with Overlays, try these:
 - [oas-overlay-java](https://github.com/IBM/oas-overlay-java)
 - [Specmatic](https://specmatic.io/) - [Docs](https://docs.specmatic.io/documentation/contract_tests.html#overlays)
 - [BinkyLabs.OpenApi.Overlays - dotnet](https://github.com/BinkyLabs/openapi-overlays-dotnet)
+- [Legba - Clojure OpenAPI toolkit](https://github.com/mpenet/legba?tab=readme-ov-file#openapi-overlay-support)
 
 (Is something missing from the list? Send us a pull request to add it!)
 
