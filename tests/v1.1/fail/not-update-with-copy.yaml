@@ -1,0 +1,9 @@
+overlay: 1.1.0
+info:
+  title: Update many objects at once
+  version: 1.0.0
+actions:
+  - target: $.paths['foo'].get
+    update:
+      x-safe: true
+    copy: $.paths['bar'].get

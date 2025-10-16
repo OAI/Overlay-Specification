@@ -114,8 +114,9 @@ This object represents one or more changes to be applied to the target document 
 | Field Name | Type | Description |
 | ---- | :----: | ---- |
 | <a name="action-target"></a>target | `string` | **REQUIRED** A JSONPath expression selecting nodes in the target document. |
+| <a name="action-copy"></a>copy | `string` | A JSONPath expression selecting locations to copy target nodes to in the target document. If the `target` selects an object node, the value of this field MUST be an object with the properties and values to merge with the selected node. If the `target` selects an array, the value of this field MUST be an entry to append to the array. This field has no impact if the `remove` field of this action object is `true` or if the `update` field contains a value. If the `target` selects multiple nodes, the values will be copied sequentially with each node selected by the `copy` expression. |
 | <a name="action-description"></a>description | `string` | A description of the action. [[CommonMark]] syntax MAY be used for rich text representation. |
-| <a name="action-update"></a>update | Any | If the `target` selects an object node, the value of this field MUST be an object with the properties and values to merge with the selected node. If the `target` selects an array, the value of this field MUST be an entry to append to the array. This field has no impact if the `remove` field of this action object is `true`. |
+| <a name="action-update"></a>update | Any | If the `target` selects an object node, the value of this field MUST be an object with the properties and values to merge with the selected node. If the `target` selects an array, the value of this field MUST be an entry to append to the array. This field has no impact if the `remove` field of this action object is `true` or if the `copy` field contains a value. |
 | <a name="action-remove"></a>remove | `boolean` | A boolean value that indicates that the target object or array MUST be removed from the the map or array it is contained in. The default value is `false`. |
 
 The result of the `target` JSONPath expression MUST be zero or more objects or arrays (not primitive types or `null` values).
@@ -125,6 +126,8 @@ To update a primitive property value such as a string, the `target` expression s
 Primitive-valued items of an array cannot be replaced or removed individually, only the complete array can be replaced.
 
 The properties of the `update` object MUST be compatible with the target object referenced by the JSONPath key. When the Overlay document is applied, the properties in the `update` object are recursively merged with the properties in the target object with the same names; new properties are added to the target object.
+
+The properties of the resolved `copy` object MUST be compatible with the target object referenced by the JSONPath key. When the Overlay document is applied, the properties in the resolved `copy` object are recursively merged with the properties in the target object with the same names; new properties are added to the target object.
 
 This object MAY be extended with [Specification Extensions](#specification-extensions).
 
@@ -264,6 +267,53 @@ actions:
 ```
 
 This approach allows inversion of control as to where the Overlay updates apply to the target document itself.
+
+#### Copy example
+
+Copy actions behave similarly to update actions but source the node to from the document being transformed. Copy actions MAY be combined with update or remove actions to perform more advanced transformations like moving or renaming nodes.
+
+```yaml
+openapi: 3.1.0
+info:
+  title: API with a paged collection
+  version: 1.0.0
+paths:
+  /items:
+    get:
+      responses:
+        200:
+          description: OK
+  /some-items:
+    delete:
+      responses:
+        200:
+          description: OK
+```
+
+```yaml
+overlay: 1.1.0
+info:
+  title: Demonstrates variations of "copy" uses
+  version: 1.0.0
+actions:
+  - target: '$.paths["/some-items"]'
+    copy: '$.paths["/items"]'
+    description: 'copies recursively all elements from the "items" path item to the new "some-items" path item without ensuring the node exists before the copy'
+
+  - target: '$.paths'
+    update: { "/other-items": {} }
+  - target: '$.paths["/other-items"]'
+    copy: '$.paths["/items"]'
+    description: 'copies recursively all elements from the "items" path item to the new "other-items" path item while ensuring the node exists before the copy'
+
+  - target: '$.paths'
+    update: { "/new-items": {} }
+  - target: '$.paths["/new-items"]'
+    copy: '$.paths["/items"]'
+  - target: '$.paths["/items"]'
+    remove: true
+    description: 'moves/rename the "items" path item to "new-items"'
+```
 
 ### Specification Extensions
 

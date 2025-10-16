@@ -26,15 +26,16 @@ const parseYamlFromFile = (filePath) => {
 
 setMetaSchemaOutputFormat(BASIC);
 
-const validateOverlay = await validate("./schemas/v1.0/schema.yaml");
+const versions = ["1.0", "1.1"];
 
-describe("v1.0", () => {
+describe.each(versions)("v%s", async (version) => {
+  const validateOverlay = await validate(`./schemas/v${version}/schema.yaml`);
   describe("Pass", () => {
-    readdirSync(`./tests/v1.0/pass`, { withFileTypes: true })
+    readdirSync(`./tests/v${version}/pass`, { withFileTypes: true })
       .filter((entry) => entry.isFile() && /\.yaml$/.test(entry.name))
       .forEach((entry) => {
         test(entry.name, () => {
-          const instance = parseYamlFromFile(`./tests/v1.0/pass/${entry.name}`);
+          const instance = parseYamlFromFile(`./tests/v${version}/pass/${entry.name}`);
           const output = validateOverlay(instance, BASIC);
           expect(output.valid).to.equal(true);
         });
@@ -42,11 +43,11 @@ describe("v1.0", () => {
   });
 
   describe("Fail", () => {
-    readdirSync(`./tests/v1.0/fail`, { withFileTypes: true })
+    readdirSync(`./tests/v${version}/fail`, { withFileTypes: true })
       .filter((entry) => entry.isFile() && /\.yaml$/.test(entry.name))
       .forEach((entry) => {
         test(entry.name, () => {
-          const instance = parseYamlFromFile(`./tests/v1.0/fail/${entry.name}`);
+          const instance = parseYamlFromFile(`./tests/v${version}/fail/${entry.name}`);
           const output = validateOverlay(instance, BASIC);
           expect(output.valid).to.equal(false);
         });
