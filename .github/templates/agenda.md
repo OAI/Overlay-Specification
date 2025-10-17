@@ -3,7 +3,7 @@
 
 
 
- Meeting link: 
+ Meeting link: <https://zoom-lfx.platform.linuxfoundation.org/meeting/99628896838?password=f3ff9796-d6a0-4749-b39e-93dc7eafe7cd>
 
 
 
