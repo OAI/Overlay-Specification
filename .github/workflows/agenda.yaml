@@ -2,6 +2,9 @@ name: Create meeting template
 
 on:
   workflow_dispatch: {}
+  schedule:
+    # every two weeks on tuesday at 10AM PST (with DST)
+    - cron: '0 17 */14 * 2'
 
 jobs:
   create-discussion:
@@ -16,6 +19,11 @@ jobs:
           echo 'AGENDA<<EOF' >> $GITHUB_ENV
           cat .github/templates/agenda.md >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
+      - name: Get Next Meeting Date
+        id: get-next-meeting-date
+        run: |
+          NEXT_MEETING_DATE=$(date -d "next Tuesday" +%Y-%m-%d)
+          echo "NEXT_MEETING_DATE=$NEXT_MEETING_DATE" >> $GITHUB_ENV
       - name: Create discussion with agenda
         id: create-repository-discussion
         uses: octokit/graphql-action@v2.x
@@ -24,7 +32,7 @@ jobs:
         with:
           variables: | 
             body: "${{ env.AGENDA }}"
-            title: "Overlays Meeting"
+            title: "Overlays Meeting (${{ env.NEXT_MEETING_DATE }})"
             repositoryId: 'MDEwOlJlcG9zaXRvcnkzNTk4NjU5MDI='
             categoryId: 'DIC_kwDOFXMeLs4COVB8'
           query: |

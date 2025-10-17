@@ -1,6 +1,9 @@
 import { readdirSync, readFileSync } from "node:fs";
 import YAML from "yaml";
-import { validate, setMetaSchemaOutputFormat } from "@hyperjump/json-schema/draft-2020-12";
+import {
+  validate,
+  setMetaSchemaOutputFormat,
+} from "@hyperjump/json-schema/draft-2020-12";
 import { BASIC } from "@hyperjump/json-schema/experimental";
 import { describe, test, expect } from "vitest";
 
@@ -9,15 +12,18 @@ import { addMediaTypePlugin } from "@hyperjump/browser";
 import { buildSchemaDocument } from "@hyperjump/json-schema/experimental";
 
 addMediaTypePlugin("application/schema+yaml", {
-    parse: async (response) => {
-      const contentType = contentTypeParser.parse(response.headers.get("content-type") ?? "");
-      const contextDialectId = contentType.parameters.schema ?? contentType.parameters.profile;
-  
-      const foo = YAML.parse(await response.text());
-      return buildSchemaDocument(foo, response.url, contextDialectId);
-    },
-    fileMatcher: (path) => path.endsWith(".yaml")
-  });
+  parse: async (response) => {
+    const contentType = contentTypeParser.parse(
+      response.headers.get("content-type") ?? "",
+    );
+    const contextDialectId =
+      contentType.parameters.schema ?? contentType.parameters.profile;
+
+    const foo = YAML.parse(await response.text());
+    return buildSchemaDocument(foo, response.url, contextDialectId);
+  },
+  fileMatcher: (path) => path.endsWith(".yaml"),
+});
 
 const parseYamlFromFile = (filePath) => {
   const schemaYaml = readFileSync(filePath, "utf8");
@@ -26,7 +32,13 @@ const parseYamlFromFile = (filePath) => {
 
 setMetaSchemaOutputFormat(BASIC);
 
-const validateOverlay = await validate("./schemas/v1.0/schema.yaml");
+let validateOverlay;
+try {
+  validateOverlay = await validate("./schemas/v1.0/schema.yaml");
+} catch (error) {
+  console.error(error.output);
+  process.exit(1);
+}
 
 describe("v1.0", () => {
   describe("Pass", () => {
@@ -36,7 +48,7 @@ describe("v1.0", () => {
         test(entry.name, () => {
           const instance = parseYamlFromFile(`./tests/v1.0/pass/${entry.name}`);
           const output = validateOverlay(instance, BASIC);
-          expect(output.valid).to.equal(true);
+          expect(output).to.deep.equal({ valid: true });
         });
       });
   });
