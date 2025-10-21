@@ -3,8 +3,8 @@ name: Create meeting template
 on:
   workflow_dispatch: {}
   schedule:
-    # every two weeks on tuesday at 10AM PST (with DST)
-    - cron: '0 17 */14 * 2'
+    # every week on tuesday at 10AM PST (with DST)
+    - cron: '0 17 * * 2'
 
 jobs:
   create-discussion:
@@ -13,18 +13,34 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v5
+      - name: Check if it's an alternate week
+        id: check-week
+        run: |
+          # Get ISO week number (1-53)
+          WEEK_NUMBER=$(date +%V)
+          # Check if week number is odd or even to run workflow and create agenda for next week's meeting
+          if [ $((WEEK_NUMBER % 2)) -eq 0 ]; then
+            echo "Should run this week (even week: $WEEK_NUMBER)"
+            echo "should_run=true" >> $GITHUB_OUTPUT
+          else
+            echo "Skipping odd week: $WEEK_NUMBER"
+            echo "should_run=false" >> $GITHUB_OUTPUT
+          fi
       - name: Get agenda text from template
+        if: steps.check-week.outputs.should_run == 'true'
         id: get-agenda
         run: |
           echo 'AGENDA<<EOF' >> $GITHUB_ENV
           cat .github/templates/agenda.md >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
       - name: Get Next Meeting Date
+        if: steps.check-week.outputs.should_run == 'true'
         id: get-next-meeting-date
         run: |
           NEXT_MEETING_DATE=$(date -d "next Tuesday" +%Y-%m-%d)
           echo "NEXT_MEETING_DATE=$NEXT_MEETING_DATE" >> $GITHUB_ENV
       - name: Create discussion with agenda
+        if: steps.check-week.outputs.should_run == 'true'
         id: create-repository-discussion
         uses: octokit/graphql-action@v2.x
         env:
