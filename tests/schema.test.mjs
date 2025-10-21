@@ -8,13 +8,13 @@ const parseYamlFromFile = (filePath) => {
 };
 
 function runTestSuite(version, suite) {
-  const schema = `./schemas/${version}/schema.yaml`;
+  const schema = `./schemas/v${version}/schema.yaml`;
   describe(suite, () => {
-    readdirSync(`./tests/${version}/${suite}`, { withFileTypes: true })
+    readdirSync(`./tests/v${version}/${suite}`, { withFileTypes: true })
       .filter((entry) => entry.isFile() && /\.yaml$/.test(entry.name))
       .forEach((entry) => {
         test(entry.name, async () => {
-          const instance = parseYamlFromFile(`./tests/${version}/${suite}/${entry.name}`);
+          const instance = parseYamlFromFile(`./tests/v${version}/${suite}/${entry.name}`);
           if (suite === "pass") {
             await expect(instance).to.matchJsonSchema(schema);
           } else {
@@ -25,9 +25,9 @@ function runTestSuite(version, suite) {
   });
 }
 
-const version = "v1.0";
+const versions = ["1.0", "1.1"];
 
-describe(version, () => {
+describe.each(versions)("v%s", (version) => {
   runTestSuite(version, "pass");
   runTestSuite(version, "fail");
 });
