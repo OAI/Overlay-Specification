@@ -14,7 +14,7 @@
   "license": "Apache-2.0",
   "readmeFilename": "README.md",
   "dependencies": {
-    "cheerio": "^1.0.0-rc.5",
+    "cheerio": "^1.1.2",
     "highlight.js": "^11.11.1",
     "markdown-it": "^14.1.0",
     "respec": "35.1.1",
