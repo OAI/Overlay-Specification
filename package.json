@@ -18,7 +18,7 @@
     "highlight.js": "^11.10.0",
     "markdown-it": "^14.1.0",
     "respec": "35.1.1",
-    "yargs": "^17.7.2"
+    "yargs": "^18.0.0"
   },
   "devDependencies": {
     "@hyperjump/json-schema": "^1.9.9",
