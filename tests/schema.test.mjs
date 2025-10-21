@@ -30,38 +30,38 @@ const parseYamlFromFile = (filePath) => {
   return YAML.parse(schemaYaml, { prettyErrors: true });
 };
 
-setMetaSchemaOutputFormat(BASIC);
-
-let validateOverlay;
-try {
-  validateOverlay = await validate("./schemas/v1.0/schema.yaml");
-} catch (error) {
-  console.error(error.output);
-  process.exit(1);
+const runTestSuite = (version, validateOverlay, suite = "pass") => {
+  readdirSync(`./tests/v${version}/${suite}`, { withFileTypes: true })
+    .filter((entry) => entry.isFile() && /\.yaml$/.test(entry.name))
+    .forEach((entry) => {
+      test(entry.name, () => {
+        const instance = parseYamlFromFile(`./tests/v${version}/${suite}/${entry.name}`);
+        const output = validateOverlay(instance, BASIC);
+        if (suite === "pass")
+          expect(output).to.deep.equal({ valid: true });
+        else
+          expect(output.valid).to.equal(false);
+      });
+    });
 }
 
-describe("v1.0", () => {
+setMetaSchemaOutputFormat(BASIC);
+
+const versions = ["1.0", "1.1"];
+
+describe.each(versions)("v%s", async (version) => {
+  let validateOverlay;
+  try {
+    validateOverlay = await validate(`./schemas/v${version}/schema.yaml`);
+  } catch (error) {
+    console.error(error.output);
+    process.exit(1);
+  }
   describe("Pass", () => {
-    readdirSync(`./tests/v1.0/pass`, { withFileTypes: true })
-      .filter((entry) => entry.isFile() && /\.yaml$/.test(entry.name))
-      .forEach((entry) => {
-        test(entry.name, () => {
-          const instance = parseYamlFromFile(`./tests/v1.0/pass/${entry.name}`);
-          const output = validateOverlay(instance, BASIC);
-          expect(output).to.deep.equal({ valid: true });
-        });
-      });
+    runTestSuite(version, validateOverlay);
   });
 
   describe("Fail", () => {
-    readdirSync(`./tests/v1.0/fail`, { withFileTypes: true })
-      .filter((entry) => entry.isFile() && /\.yaml$/.test(entry.name))
-      .forEach((entry) => {
-        test(entry.name, () => {
-          const instance = parseYamlFromFile(`./tests/v1.0/fail/${entry.name}`);
-          const output = validateOverlay(instance, BASIC);
-          expect(output.valid).to.equal(false);
-        });
-      });
+    runTestSuite(version, validateOverlay, "fail");
   });
 });

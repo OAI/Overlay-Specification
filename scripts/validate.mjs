@@ -38,12 +38,13 @@ const args = process.argv.reduce((acc, arg) => {
 
 const schemaType = args.schema || "schema";
 const outputFormat = args.format || defaultOutputFormat;
+const version = args.version || "1.0";
 
 // Config
 setMetaSchemaOutputFormat(outputFormat);
 
 // Compile / meta-validate
-const validateOverlay = await validate(`./schemas/v1.0/${schemaType}.yaml`);
+const validateOverlay = await validate(`./schemas/v${version}/${schemaType}.yaml`);
 
 // Validate instance
 const instanceYaml = await readFile(`${process.argv[process.argv.length - 1]}`, "utf8");
