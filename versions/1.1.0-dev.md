@@ -277,6 +277,11 @@ The extension properties are implemented as patterned fields that are always pre
 
 The extensions may or may not be supported by the available tooling, but those may be extended as well to add requested support (if tools are internal or open-sourced).
 
+### File Naming Convention
+
+Overlay files MAY choose to follow the convention of a `purpose.overlay.yaml` file naming pattern.
+Other file naming conventions are also supported.
+
 ## Appendix A: Revision History
 
 | Version | Date | Notes |
