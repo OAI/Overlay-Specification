@@ -15,7 +15,7 @@
   "readmeFilename": "README.md",
   "dependencies": {
     "cheerio": "^1.0.0-rc.5",
-    "highlight.js": "^11.10.0",
+    "highlight.js": "^11.11.1",
     "markdown-it": "^14.1.0",
     "respec": "35.1.1",
     "yargs": "^18.0.0"
