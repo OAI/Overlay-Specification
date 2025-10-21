@@ -5,4 +5,3 @@ info:
 actions:
   - target: '$' # Root of document
     description: this is an action description
-    update: {}
