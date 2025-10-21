@@ -53,12 +53,12 @@ jobs:
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ steps.generate-token.outputs.token }}
-          branch: publish-overlay-schema-iteration
+          branch: publish-overlay-schema-iterations
           base: gh-pages
           delete-branch: true
           path: deploy
           labels: Housekeeping,Schema
-          reviewers: darrelmiller,webron,earth2marsh,lornajane,mikekistler,miqui,handrews,ralfhandl
+          reviewers: earth2marsh,lornajane,mikekistler,miqui,baywet,ralfhandl
           title: Overlay - Publish Schema Iterations
           commit-message: New Overlay schema iterations
           signoff: true

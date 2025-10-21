@@ -6,6 +6,12 @@
 
 for schemaDir in schemas/v* ; do
   vVersion=$(basename "$schemaDir")
+
+  if [[ "$vVersion" =~ -dev$ ]] ; then
+    echo "Skipping dev version $vVersion"
+    continue
+  fi
+
   version=${vVersion:1}
   echo $version
 
