@@ -5,3 +5,4 @@ info:
 actions:
   - target: '$' # Root of document
     x-myActionsExtension: {}
+    update: {}

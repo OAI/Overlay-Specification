@@ -5,3 +5,4 @@ info:
   x-myInfoExtension: {}
 actions:
   - target: '$' # Root of document
+    update: {}
