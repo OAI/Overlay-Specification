@@ -4,13 +4,15 @@ name: respec
 # issue: https://github.com/OAI/OpenAPI-Specification/issues/1564
 
 #
-# This workflow updates the respec 'pretty' rendered versions of the spec 
+# This workflow updates the respec 'pretty' rendered versions of the spec
 # on the gh-pages branch when the corresponding markdown files change.
 #
 
-# run this on push to main
+# run this on push of new spec versions to main
 on:
   push:
+    paths:
+      - "versions/**"
     branches:
       - main
   workflow_dispatch: {}
@@ -18,54 +20,54 @@ on:
 jobs:
   respec:
     if: github.repository == 'OAI/Overlay-Specification'
-    
+
     runs-on: ubuntu-22.04
 
     steps:
-    - name: Generate access token
-      id: generate-token
-      uses: actions/create-github-app-token@v1
-      with:
-        app-id: ${{ secrets.OAI_SPEC_PUBLISHER_APPID }}
-        private-key: ${{ secrets.OAI_SPEC_PUBLISHER_PRIVATE_KEY }}
-        owner: OAI
-        repositories: OpenAPI-Specification
-          
-    - uses: actions/checkout@v4 # checkout main branch
-      with:
-        fetch-depth: 0
+      - name: Generate access token
+        id: generate-token
+        uses: actions/create-github-app-token@v1
+        with:
+          app-id: ${{ secrets.OAI_SPEC_PUBLISHER_APPID }}
+          private-key: ${{ secrets.OAI_SPEC_PUBLISHER_PRIVATE_KEY }}
+          owner: OAI
+          repositories: OpenAPI-Specification
 
-    - uses: actions/setup-node@v4 # setup Node.js
-      with:
-        node-version: '20.x'
-    
-    - name: Install dependencies
-      run: npm ci
+      - uses: actions/checkout@v5 # checkout main branch
+        with:
+          fetch-depth: 0
 
-    - uses: actions/checkout@v4 # checkout gh-pages branch
-      with:
-        token: ${{ steps.generate-token.outputs.token }}
-        repository: OAI/OpenAPI-Specification  # TODO: change to OAI/...
-        ref: gh-pages
-        path: deploy
+      - uses: actions/setup-node@v6 # setup Node.js
+        with:
+          node-version: "22.x"
 
-    - name: run main script
-      run: scripts/md2html/build.sh
+      - name: Install dependencies
+        run: npm ci
 
-    - name: Create Pull Request
-      uses: peter-evans/create-pull-request@v7
-      with:
-        token: ${{ steps.generate-token.outputs.token }}
-        branch: update-overlay-respec-version
-        base: gh-pages
-        delete-branch: true
-        path: deploy
-        labels: Housekeeping
-        reviewers: darrelmiller,webron,earth2marsh,lornajane,mikekistler,miqui,handrews,ralfhandl
-        title: Overlay - Update ReSpec-rendered specification versions
-        commit-message: Update ReSpec-rendered specification versions
-        signoff: true
-        body: |
-          This pull request is automatically triggered by GitHub action `respec` in the OAI/Overlay-Specification repo.
+      - uses: actions/checkout@v5 # checkout gh-pages branch
+        with:
+          token: ${{ steps.generate-token.outputs.token }}
+          repository: OAI/OpenAPI-Specification # TODO: change to OAI/...
+          ref: gh-pages
+          path: deploy
 
-          The `versions/*.md` files have changed, so the HTML files are automatically being regenerated.
+      - name: run main script
+        run: scripts/md2html/build.sh
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ steps.generate-token.outputs.token }}
+          branch: update-overlay-respec-version
+          base: gh-pages
+          delete-branch: true
+          path: deploy
+          labels: Housekeeping
+          reviewers: darrelmiller,webron,earth2marsh,lornajane,mikekistler,miqui,handrews,ralfhandl
+          title: Overlay - Update ReSpec-rendered specification versions
+          commit-message: Update ReSpec-rendered specification versions
+          signoff: true
+          body: |
+            This pull request is automatically triggered by GitHub action `respec` in the OAI/Overlay-Specification repo.
+
+            The `versions/*.md` files have changed, so the HTML files are automatically being regenerated.
