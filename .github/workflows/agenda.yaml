@@ -3,7 +3,7 @@ name: Create meeting template
 on:
   workflow_dispatch: {}
   schedule:
-    # every two weeks on tuesday at 10AM PST (with DST)
+    # every week on tuesday at 10AM PST (with DST)
     - cron: '0 17 * * 2'
 
 jobs:
