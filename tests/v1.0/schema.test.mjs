@@ -7,26 +7,27 @@ const parseYamlFromFile = (filePath) => {
   return YAML.parse(schemaYaml, { prettyErrors: true });
 };
 
-describe("v1.0", () => {
-  describe("Pass", () => {
-    readdirSync(`./tests/v1.0/pass`, { withFileTypes: true })
+function runTestSuite(version, suite) {
+  const schema = `./schemas/${version}/schema.yaml`;
+  describe(suite, () => {
+    readdirSync(`./tests/${version}/${suite}`, { withFileTypes: true })
       .filter((entry) => entry.isFile() && /\.yaml$/.test(entry.name))
       .forEach((entry) => {
         test(entry.name, async () => {
-          const instance = parseYamlFromFile(`./tests/v1.0/pass/${entry.name}`);
-          await expect(instance).to.matchJsonSchema("./schemas/v1.0/schema.yaml");
+          const instance = parseYamlFromFile(`./tests/${version}/${suite}/${entry.name}`);
+          if (suite === "pass") {
+            await expect(instance).to.matchJsonSchema(schema);
+          } else {
+            await expect(instance).to.not.matchJsonSchema(schema);
+          }
         });
       });
   });
+}
 
-  describe("Fail", () => {
-    readdirSync(`./tests/v1.0/fail`, { withFileTypes: true })
-      .filter((entry) => entry.isFile() && /\.yaml$/.test(entry.name))
-      .forEach((entry) => {
-        test(entry.name, async () => {
-          const instance = parseYamlFromFile(`./tests/v1.0/fail/${entry.name}`);
-          await expect(instance).to.not.matchJsonSchema("./schemas/v1.0/schema.yaml");
-        });
-      });
-  });
+const version = "v1.0";
+
+describe(version, () => {
+  runTestSuite(version, "pass");
+  runTestSuite(version, "fail");
 });
