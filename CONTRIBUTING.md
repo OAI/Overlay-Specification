@@ -34,10 +34,14 @@ Pull requests must come from a fork; create a fresh branch on your fork based on
 
 Overview of branches:
 
-- `main` holds the published versions of the specification, utility scripts and supporting documentation.
-- `dev` is for development infrastructure and other changes that apply to multiple versions of development.
-- Branches named `vX.Y-dev` are the active development branches for future releases.
-  All changes should be applied to the _earliest_ branch where the changes are relevant in the first instance.
+The `main` branch holds 
+- published versions of the specification in the `versions` folder,
+- sources for published schema versions in  `schemas/vX.Y` folders and their tests in `tests/vX.Y` folders,
+- work-in-progress versions of the specification in the `dev-versions` folder,
+- sources for work-in-progress schema versions in `schemas/vX.Y-dev` folders and their tests in `tests/vX.Y-dev` folders,
+- utility scripts and supporting documentation.
+
+Other branches are usually short-lived, for example and for maintaining utility scripts.
 
 ## Build the HTML version to publish
 
