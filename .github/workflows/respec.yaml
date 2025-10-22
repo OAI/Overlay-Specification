@@ -7,7 +7,7 @@ name: respec
 # This workflow creates a pull request for publishing HTML spec versions to the spec.openapis.org site.
 #
 
-# run this manually or on push to main
+# run this manually or on push of new spec versions to main
 on:
   push:
     paths:
@@ -25,7 +25,7 @@ jobs:
     steps:
       - name: Generate access token
         id: generate-token
-        uses: actions/create-github-app-token@v1
+        uses: actions/create-github-app-token@v2
         with:
           app-id: ${{ secrets.OAI_SPEC_PUBLISHER_APPID }}
           private-key: ${{ secrets.OAI_SPEC_PUBLISHER_PRIVATE_KEY }}
