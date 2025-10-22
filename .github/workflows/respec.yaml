@@ -17,7 +17,7 @@ on:
   workflow_dispatch: {}
 
 jobs:
-  publish:
+  respec:
     if: github.repository == 'OAI/Overlay-Specification'
 
     runs-on: ubuntu-22.04
@@ -62,7 +62,7 @@ jobs:
           delete-branch: true
           path: deploy
           labels: Overlay,Specification
-          reviewers: earth2marsh,lornajane,mikekistler,miqui,handrews,ralfhandl
+          reviewers: earth2marsh,lornajane,mikekistler,miqui,baywet,ralfhandl
           title: Overlay - update ReSpec-rendered specification versions
           commit-message: Update ReSpec-rendered specification versions
           signoff: true
