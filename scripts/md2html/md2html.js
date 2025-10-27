@@ -36,7 +36,8 @@ const md = require('markdown-it')({
       '</code></pre>';
     }
 
-    return '<pre class="highlight '+lang+'" tabindex="0"><code>' + md.utils.escapeHtml(str) + '</code></pre>';
+    if (lang) console.warn('highlight.js does not support language',lang);
+    return '<pre class="nohighlight" tabindex="0"><code>' + md.utils.escapeHtml(str) + '</code></pre>';
   }
 });
 
@@ -87,16 +88,16 @@ function preface(title,options) {
         // }
     };
 
-    let preface = `<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>${md.utils.escapeHtml(title)}</title>`;
+    let preface = '<!DOCTYPE html><html lang="en"><head>\n'
+    preface += fs.readFileSync(path.resolve(__dirname,'./analytics/google.html'),'utf8');
+
+    // SEO
+    preface += `<meta charset="UTF-8">\n<title>${md.utils.escapeHtml(title)}</title>`;
 
     // ReSpec
     preface += '<script src="../js/respec-w3c.js" class="remove"></script>';
-    preface += `<script class="remove">var respecConfig = ${JSON.stringify(respec)};</script>`;
-    try {
-        preface += fs.readFileSync('./analytics/google.html','utf8');
-    }
-    catch (ex) {}
-    preface += '</head><body>';
+    preface += `<script class="remove">var respecConfig = ${JSON.stringify(respec)};</script>\n`;
+    preface += '</head>\n<body>';
     preface += '<style>';
     preface += '#respec-ui { visibility: hidden; }';
     preface += '#title { color: #578000; } #subtitle { color: #578000; }';
@@ -159,7 +160,7 @@ function getPublishDate(m) {
             let v = $(c[0]).text();
             let d = $(c[1]).text();
             argv.subtitle = v;
-            if (d !== 'TBA') result = new Date(d);
+            if (d !== 'TBD') result = new Date(d);
         }
     });
     return result;
