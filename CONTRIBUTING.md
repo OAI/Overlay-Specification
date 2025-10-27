@@ -35,9 +35,9 @@ Pull requests must come from a fork; create a fresh branch on your fork based on
 Overview of branches:
 
 The `main` branch holds 
-- published versions of the specification in the `versions` folder,
+- published versions of the specification, named `versions/X.Y.Z.md`,
+- work-in-progress versions of the specification, named `versions/X.Y.Z-dev.md`,
 - sources for published schema versions in  `schemas/vX.Y` folders and their tests in `tests/vX.Y` folders,
-- work-in-progress versions of the specification in the `dev-versions` folder,
 - sources for work-in-progress schema versions in `schemas/vX.Y-dev` folders and their tests in `tests/vX.Y-dev` folders,
 - utility scripts and supporting documentation.
 
