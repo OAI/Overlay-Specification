@@ -19,7 +19,7 @@ cp -p ../../node_modules/respec/builds/respec-w3c.* ../../deploy/js/
 latest=1.0.0
 latestCopied=none
 lastMinor="-"
-for filename in $(ls -1 ../../versions/[123456789].*.md | sort -r) ; do
+for filename in $(ls -1 ../../versions/[1-9].[0-9].[0-9].md | sort -r) ; do
   version=$(basename "$filename" .md)
   minorVersion=${version:0:3}
   tempfile=../../deploy/overlay/v$version-tmp.html
