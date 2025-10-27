@@ -25,9 +25,12 @@ function runTestSuite(version, suite) {
   });
 }
 
-const version = "v1.0";
-
-describe(version, () => {
-  runTestSuite(version, "pass");
-  runTestSuite(version, "fail");
-});
+readdirSync(`./schemas`, { withFileTypes: true })
+  .filter((dirEntry) => dirEntry.isDirectory() && /^v\d+\.\d+/.test(dirEntry.name))
+  .forEach((dirEntry) => {
+    const version = dirEntry.name;
+    describe(version, () => {
+      runTestSuite(version, "pass");
+      runTestSuite(version, "fail");
+    });
+  });
