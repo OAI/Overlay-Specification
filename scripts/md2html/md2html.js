@@ -15,12 +15,12 @@ const url = require('url');
 const hljs = require('highlight.js');
 const cheerio = require('cheerio');
 
-let argv = require('yargs')
+let argv = require('yargs')(process.argv.slice(2))
     .string('maintainers')
     .alias('m','maintainers')
     .describe('maintainers','path to MAINTAINERS.md')
     .demandCommand(1)
-    .argv;
+    .parse();
 const abstract = 'What is the Overlay Specification?';
 let maintainers = [];
 let emeritus = [];
