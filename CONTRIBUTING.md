@@ -43,7 +43,7 @@ The `main` branch holds
 
 Other branches are usually short-lived, for example and for maintaining utility scripts.
 
-## Build the HTML version to publish
+## Build the HTML versions locally
 
 We use ReSpec to render the markdown specification as HTML for publishing and easier reading.
 These instructions explain how you can build the HTML locally.
@@ -56,13 +56,17 @@ Install dependencies:
 npm install
 ```
 
-Produce stand-alone HTML files in the local `deploy/overlay` folder:
+Produce stand-alone HTML files for all final specifications in the local `deploy/overlay` folder:
 
 ```sh
 npm run build
 ```
 
-Note that Linux users may need to add `--no-sandbox` to run `npx respec` as found in the `scripts/md2html/build.sh` file.
+Produce stand-alone HTML files for all work-in-progress specifications in the local `deploy-preview` folder:
+
+```sh
+npm run build-dev
+```
 
 ## Style guide for Overlay Specification
 
