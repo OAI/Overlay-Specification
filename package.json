@@ -40,7 +40,7 @@
   ],
   "scripts": {
     "build": "bash ./scripts/md2html/build.sh",
-    "build-dev": "bash ./scripts/md2html/build.sh dev",
+    "build-dev": "bash ./scripts/md2html/build.sh dev && bash ./scripts/schema-publish.sh dev",
     "format-markdown": "bash ./scripts/format-markdown.sh ./versions/*.md",
     "test": "c8 --100 vitest run --coverage"
   }
