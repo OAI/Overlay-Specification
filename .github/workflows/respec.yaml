@@ -11,7 +11,7 @@ name: respec
 on:
   push:
     paths:
-      - "versions/**"
+      - "versions/[0-9].[0-9].[0-9].md"
     branches:
       - main
   workflow_dispatch: {}
