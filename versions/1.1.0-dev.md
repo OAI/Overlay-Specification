@@ -212,8 +212,8 @@ info:
 actions:
   - target: $.paths.*.get.parameters
     update:
-      name: newParam
-      in: query
+      - name: newParam
+        in: query
 ```
 
 ```yaml
@@ -252,7 +252,7 @@ info:
   title: Apply Traits
   version: 1.0.0
 actions:
-  - target: $.paths.*.get[?@.x-oai-traits.paged]
+  - target: $.paths[?@.get['x-oai-traits'][?@ == 'paged']].get
     update:
       parameters:
         - name: top
