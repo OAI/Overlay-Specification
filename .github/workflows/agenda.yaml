@@ -42,6 +42,12 @@ jobs:
         run: |
           NEXT_MEETING_DATE=$(date -d "next Tuesday" +%Y-%m-%d)
           echo "NEXT_MEETING_DATE=$NEXT_MEETING_DATE" >> $GITHUB_ENV
+      - name: Define discussion title
+        if: steps.check-week.outputs.should_run == 'true'
+        id: define-title
+        run: |
+          DISCUSSION_TITLE="Overlays Meeting (${{ env.NEXT_MEETING_DATE }})"
+          echo "DISCUSSION_TITLE=$DISCUSSION_TITLE" >> $GITHUB_ENV
       - name: Search for existing discussion
         if: steps.check-week.outputs.should_run == 'true'
         id: search-discussion
@@ -62,7 +68,7 @@ jobs:
             -f repositoryName="${{ github.event.repository.name }}" \
             -f categoryId="${{ env.CATEGORY_ID }}" \
             --jq '.data.repository.discussions.nodes[0].title')
-          if [ "$FOUND_DISCUSSION_TITLE" = "Overlays Meeting (${{ env.NEXT_MEETING_DATE }})" ]; then
+          if [ "$FOUND_DISCUSSION_TITLE" = "${{ env.DISCUSSION_TITLE }}" ]; then
             DISCUSSION_COUNT=1
           else
             DISCUSSION_COUNT=0
@@ -84,7 +90,7 @@ jobs:
                 }
               }
             }' \
-            -f title="Overlays Meeting (${{ env.NEXT_MEETING_DATE }})" \
+            -f title="${{ env.DISCUSSION_TITLE }}" \
             -f body="${{ env.AGENDA }}" \
             -f repositoryId="${{ env.REPOSITORY_ID }}" \
             -f categoryId="${{ env.CATEGORY_ID }}"
