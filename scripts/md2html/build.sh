@@ -54,7 +54,7 @@ for specification in $specifications; do
   echo === Building $version to $destination
 
   node scripts/md2html/md2html.js --maintainers $maintainers $specification "$allVersions" > $tempfile
-  npx respec --no-sandbox --use-local --src $tempfile --out $tempfile2
+  npx respec --no-sandbox --use-local --timeout 20 --src $tempfile --out $tempfile2
   # remove unwanted Google Tag Manager and Google Analytics scripts
   sed -e 's/<script type="text\/javascript" async="" src="https:\/\/www.google-analytics.com\/analytics.js"><\/script>//' \
       -e 's/<script type="text\/javascript" async="" src="https:\/\/www.googletagmanager.com\/gtag\/js?id=G-[^"]*"><\/script>//' \
