@@ -48,19 +48,25 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          DISCUSSION_COUNT=$(gh api graphql -f query='
-            query SearchDiscussionMutation ($title: String!, $repositoryOwner: String!, $repositoryName: String!, $categoryId: ID!) {
+          FOUND_DISCUSSION_TITLE=$(gh api graphql -f query='
+            query SearchDiscussionMutation ($repositoryOwner: String!, $repositoryName: String!, $categoryId: ID!) {
               repository(owner: $repositoryOwner, name: $repositoryName) {
-                discussions(first: 1, categoryId: $categoryId, filterBy: {title: $title}) {
-                  totalCount
+                discussions(first: 1, orderBy: {direction: DESC, field: CREATED_AT}, categoryId: $categoryId) {
+                  nodes {
+                    title
+                  }
                 }
               }
             }' \
-            -f title="Overlays Meeting (${{ env.NEXT_MEETING_DATE }})" \
             -f repositoryOwner="${{ github.repository_owner }}" \
             -f repositoryName="${{ github.event.repository.name }}" \
             -f categoryId="${{ env.CATEGORY_ID }}" \
-            --jq '.data.repository.discussions.totalCount')
+            --jq '.data.repository.discussions.nodes[0].title')
+          if [ "$FOUND_DISCUSSION_TITLE" = "Overlays Meeting (${{ env.NEXT_MEETING_DATE }})" ]; then
+            DISCUSSION_COUNT=1
+          else
+            DISCUSSION_COUNT=0
+          fi
           echo "DISCUSSION_COUNT=$DISCUSSION_COUNT" >> $GITHUB_OUTPUT
           echo "Found $DISCUSSION_COUNT existing discussions"
       - name: Create discussion with agenda
