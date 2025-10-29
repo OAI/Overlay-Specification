@@ -11,6 +11,9 @@ jobs:
     permissions:
       discussions: write
     runs-on: ubuntu-22.04
+    env:
+      CATEGORY_ID: 'DIC_kwDOFXMeLs4COVB8'
+      REPOSITORY_ID: 'MDEwOlJlcG9zaXRvcnkzNTk4NjU5MDI='
     steps:
       - uses: actions/checkout@v5
       - name: Check if it's an alternate week
@@ -39,8 +42,27 @@ jobs:
         run: |
           NEXT_MEETING_DATE=$(date -d "next Tuesday" +%Y-%m-%d)
           echo "NEXT_MEETING_DATE=$NEXT_MEETING_DATE" >> $GITHUB_ENV
-      - name: Create discussion with agenda
+      - name: Search for existing discussion
         if: steps.check-week.outputs.should_run == 'true'
+        uses: octokit/graphql-action@v2.x
+        id: search-discussion
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          variables: | 
+            title: "Overlays Meeting (${{ env.NEXT_MEETING_DATE }})"
+            repositoryId: ${{ env.REPOSITORY_ID }}
+            categoryId: ${{ env.CATEGORY_ID }}
+        with:
+          query: |
+            query SearchDiscussionMutation ($title: String!, $repositoryId: ID!, $categoryId: ID!) {
+              repository(id: $repositoryId) {
+                discussions(first: 1, categoryId: $categoryId, filterBy: {title: $title}) {
+                  totalCount
+                }
+              }
+            }
+      - name: Create discussion with agenda
+        if: steps.check-week.outputs.should_run == 'true' && fromJSON(steps.search-discussion.outputs.data).repository.discussions.totalCount == 0
         id: create-repository-discussion
         uses: octokit/graphql-action@v2.x
         env:
@@ -49,8 +71,8 @@ jobs:
           variables: | 
             body: "${{ env.AGENDA }}"
             title: "Overlays Meeting (${{ env.NEXT_MEETING_DATE }})"
-            repositoryId: 'MDEwOlJlcG9zaXRvcnkzNTk4NjU5MDI='
-            categoryId: 'DIC_kwDOFXMeLs4COVB8'
+            repositoryId: ${{ env.REPOSITORY_ID }}
+            categoryId: ${{ env.CATEGORY_ID }}
           query: |
             mutation CreateDiscussionMutation ($title: String!, $body: String!, $repositoryId: ID!, $categoryId: ID!) {
               createDiscussion(input: { title: $title, body: $body, repositoryId: $repositoryId, categoryId: $categoryId }) {
