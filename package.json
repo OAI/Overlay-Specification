@@ -22,6 +22,7 @@
   },
   "devDependencies": {
     "@hyperjump/json-schema-coverage": "^1.1.2",
+    "@umbrelladocs/linkspector": "^0.4.7",
     "c8": "^10.1.3",
     "markdownlint-cli2": "^0.18.1",
     "prettier": "^3.6.2",
@@ -41,7 +42,7 @@
     "build": "bash ./scripts/md2html/build.sh",
     "build-dev": "npm run validate-markdown && bash ./scripts/md2html/build.sh dev && bash ./scripts/schema-publish.sh dev",
     "format-markdown": "bash ./scripts/format-markdown.sh *.md schemas/**/*.md versions/*.md",
-    "validate-markdown": "npx markdownlint-cli2 *.md schemas/**/*.md versions/*.md",
+    "validate-markdown": "markdownlint-cli2 *.md schemas/**/*.md versions/*.md && linkspector check",
     "test": "c8 --100 vitest run --coverage"
   }
 }

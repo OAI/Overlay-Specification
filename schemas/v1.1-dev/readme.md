@@ -23,7 +23,7 @@ The TSC will then:
 
 ## Tests
 
-The [test suite](../../tests/v1.1) is part of this package.
+The [test suite](../../tests/v1.1-dev) is part of this package.
 
 ```bash
 npm install
