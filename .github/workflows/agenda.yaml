@@ -44,41 +44,41 @@ jobs:
           echo "NEXT_MEETING_DATE=$NEXT_MEETING_DATE" >> $GITHUB_ENV
       - name: Search for existing discussion
         if: steps.check-week.outputs.should_run == 'true'
-        uses: octokit/graphql-action@v2.x
         id: search-discussion
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          variables: | 
-            title: "Overlays Meeting (${{ env.NEXT_MEETING_DATE }})"
-            repositoryId: ${{ env.REPOSITORY_ID }}
-            categoryId: ${{ env.CATEGORY_ID }}
-        with:
-          query: |
-            query SearchDiscussionMutation ($title: String!, $repositoryId: ID!, $categoryId: ID!) {
-              repository(id: $repositoryId) {
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          DISCUSSION_COUNT=$(gh api graphql -f query='
+            query SearchDiscussionMutation ($title: String!, $repositoryOwner: String!, $repositoryName: String!, $categoryId: ID!) {
+              repository(owner: $repositoryOwner, name: $repositoryName) {
                 discussions(first: 1, categoryId: $categoryId, filterBy: {title: $title}) {
                   totalCount
                 }
               }
-            }
+            }' \
+            -f title="Overlays Meeting (${{ env.NEXT_MEETING_DATE }})" \
+            -f repositoryOwner="${{ github.repository_owner }}" \
+            -f repositoryName="${{ github.event.repository.name }}" \
+            -f categoryId="${{ env.CATEGORY_ID }}" \
+            --jq '.data.repository.discussions.totalCount')
+          echo "DISCUSSION_COUNT=$DISCUSSION_COUNT" >> $GITHUB_OUTPUT
+          echo "Found $DISCUSSION_COUNT existing discussions"
       - name: Create discussion with agenda
-        if: steps.check-week.outputs.should_run == 'true' && fromJSON(steps.search-discussion.outputs.data).repository.discussions.totalCount == 0
+        if: steps.check-week.outputs.should_run == 'true' && steps.search-discussion.outputs.DISCUSSION_COUNT == '0'
         id: create-repository-discussion
-        uses: octokit/graphql-action@v2.x
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          variables: | 
-            body: "${{ env.AGENDA }}"
-            title: "Overlays Meeting (${{ env.NEXT_MEETING_DATE }})"
-            repositoryId: ${{ env.REPOSITORY_ID }}
-            categoryId: ${{ env.CATEGORY_ID }}
-          query: |
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api graphql -f query='
             mutation CreateDiscussionMutation ($title: String!, $body: String!, $repositoryId: ID!, $categoryId: ID!) {
               createDiscussion(input: { title: $title, body: $body, repositoryId: $repositoryId, categoryId: $categoryId }) {
                 discussion {
                   title
+                  url
                 }
               }
-            }
-
+            }' \
+            -f title="Overlays Meeting (${{ env.NEXT_MEETING_DATE }})" \
+            -f body="${{ env.AGENDA }}" \
+            -f repositoryId="${{ env.REPOSITORY_ID }}" \
+            -f categoryId="${{ env.CATEGORY_ID }}"
