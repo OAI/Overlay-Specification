@@ -16,6 +16,7 @@ For example, the value of `$id: https://spec.openapis.org/overlay/1.0/schema/202
 To submit improvements to the schema, modify the `schema.yaml` and add test cases for your changes.
 
 The TSC will then:
+
 - Run tests on the updated schema
 - Update the iteration version
 - Publish the new version

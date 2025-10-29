@@ -16,13 +16,14 @@ For example, the value of `$id: https://spec.openapis.org/overlay/1.1/schema/202
 To submit improvements to the schema, modify the `schema.yaml` and add test cases for your changes.
 
 The TSC will then:
+
 - Run tests on the updated schema
 - Update the iteration version
 - Publish the new version
 
 ## Tests
 
-The [test suite](../../tests/v1.1) is part of this package.
+The [test suite](../../tests/v1.1-dev) is part of this package.
 
 ```bash
 npm install
