@@ -55,6 +55,9 @@ jobs:
 
   create-discussion:
     needs: get-next-dates
+    strategy:
+      matrix:
+        next_meeting_date: ${{ fromJson(needs.get-next-dates.outputs.meeting_dates) }}
     runs-on: ubuntu-22.04
     env:
       CATEGORY_ID: 'DIC_kwDOFXMeLs4COVB8'
@@ -73,7 +76,7 @@ jobs:
       - name: Define discussion title
         id: define-title
         run: |
-          DISCUSSION_TITLE="Overlays Meeting (${{ env.NEXT_MEETING_DATE }})"
+          DISCUSSION_TITLE="Overlays Meeting (${{ matrix.next_meeting_date }})"
           echo "DISCUSSION_TITLE=$DISCUSSION_TITLE" >> $GITHUB_ENV
       - name: Search for existing discussion
         id: search-discussion
