@@ -34,7 +34,7 @@ jobs:
         id: get-next-meeting-dates
         run: |
           # Generate multiple meeting dates based on NUMBER_OF_INSTANCES
-          MEETING_DATES=""
+          MEETING_DATES="["
           for i in $(seq 1 $NUMBER_OF_INSTANCES); do
             # Calculate the date for the i-th Tuesday from now
             # For i=1, get next Tuesday; for i=2, get Tuesday after next, etc.
@@ -45,12 +45,13 @@ jobs:
               DATE_CMD="next Tuesday +${WEEKS_AHEAD} weeks"
             fi
             MEETING_DATE=$(date -d "$DATE_CMD" +%Y-%m-%d)
-            if [ -z "$MEETING_DATES" ]; then
-              MEETING_DATES="$MEETING_DATE"
+            if [ $i -eq 1 ]; then
+              MEETING_DATES="$MEETING_DATES\"$MEETING_DATE\""
             else
-              MEETING_DATES="$MEETING_DATES,$MEETING_DATE"
+              MEETING_DATES="$MEETING_DATES,\"$MEETING_DATE\""
             fi
           done
+          MEETING_DATES="$MEETING_DATES]"
           echo "MEETING_DATES=$MEETING_DATES" >> $GITHUB_OUTPUT
 
   create-discussion:
