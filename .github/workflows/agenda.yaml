@@ -53,6 +53,10 @@ jobs:
           done
           MEETING_DATES="$MEETING_DATES]"
           echo "MEETING_DATES=$MEETING_DATES" >> $GITHUB_OUTPUT
+      - name: Set No Next Meeting Dates
+        if: steps.check-week.outputs.should_run == 'false'
+        run: |
+          echo "MEETING_DATES=[]" >> $GITHUB_OUTPUT
 
   create-discussion:
     needs: get-next-dates
