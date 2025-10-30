@@ -84,10 +84,10 @@ jobs:
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          FOUND_DISCUSSION_TITLE=$(gh api graphql -f query='
+          FOUND_DISCUSSIONS=$(gh api graphql -f query='
             query SearchDiscussionMutation ($repositoryOwner: String!, $repositoryName: String!, $categoryId: ID!) {
               repository(owner: $repositoryOwner, name: $repositoryName) {
-                discussions(first: 1, orderBy: {direction: DESC, field: CREATED_AT}, categoryId: $categoryId) {
+                discussions(first: 10, orderBy: {direction: DESC, field: CREATED_AT}, categoryId: $categoryId) {
                   nodes {
                     title
                   }
@@ -97,14 +97,21 @@ jobs:
             -f repositoryOwner="${{ github.repository_owner }}" \
             -f repositoryName="${{ github.event.repository.name }}" \
             -f categoryId="${{ env.CATEGORY_ID }}" \
-            --jq '.data.repository.discussions.nodes[0].title')
-          if [ "$FOUND_DISCUSSION_TITLE" = "${{ env.DISCUSSION_TITLE }}" ]; then
-            DISCUSSION_COUNT=1
-          else
-            DISCUSSION_COUNT=0
-          fi
+            --jq '.data.repository.discussions.nodes[].title')
+          
+          DISCUSSION_COUNT=0
+          TARGET_TITLE="${{ env.DISCUSSION_TITLE }}"
+          
+          # Iterate through all returned discussion titles
+          while IFS= read -r discussion_title; do
+            if [ "$discussion_title" = "$TARGET_TITLE" ]; then
+              DISCUSSION_COUNT=1
+              break
+            fi
+          done <<< "$FOUND_DISCUSSIONS"
+          
           echo "DISCUSSION_COUNT=$DISCUSSION_COUNT" >> $GITHUB_OUTPUT
-          echo "Found $DISCUSSION_COUNT existing discussions"
+          echo "Found $DISCUSSION_COUNT existing discussions with title: $TARGET_TITLE"
       - name: Create discussion with agenda
         if: steps.search-discussion.outputs.DISCUSSION_COUNT == '0'
         id: create-repository-discussion
