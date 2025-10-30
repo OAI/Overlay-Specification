@@ -7,15 +7,12 @@ on:
     - cron: '0 17 * * 2'
 
 jobs:
-  create-discussion:
-    permissions:
-      discussions: write
+  get-next-dates:
+    permissions: {}
     runs-on: ubuntu-22.04
     env:
-      CATEGORY_ID: 'DIC_kwDOFXMeLs4COVB8'
-      REPOSITORY_ID: 'MDEwOlJlcG9zaXRvcnkzNTk4NjU5MDI='
+      NUMBER_OF_INSTANCES: 2
     steps:
-      - uses: actions/checkout@v5
       - name: Check if it's an alternate week
         id: check-week
         run: |
@@ -29,27 +26,36 @@ jobs:
             echo "Skipping odd week: $WEEK_NUMBER"
             echo "should_run=false" >> $GITHUB_OUTPUT
           fi
-      - name: Get agenda text from template
-        if: steps.check-week.outputs.should_run == 'true'
-        id: get-agenda
-        run: |
-          echo 'AGENDA<<EOF' >> $GITHUB_ENV
-          cat .github/templates/agenda.md >> $GITHUB_ENV
-          echo 'EOF' >> $GITHUB_ENV
       - name: Get Next Meeting Date
         if: steps.check-week.outputs.should_run == 'true'
         id: get-next-meeting-date
         run: |
           NEXT_MEETING_DATE=$(date -d "next Tuesday" +%Y-%m-%d)
           echo "NEXT_MEETING_DATE=$NEXT_MEETING_DATE" >> $GITHUB_ENV
+
+  create-discussion:
+    needs: get-next-dates
+    runs-on: ubuntu-22.04
+    env:
+      CATEGORY_ID: 'DIC_kwDOFXMeLs4COVB8'
+      REPOSITORY_ID: 'MDEwOlJlcG9zaXRvcnkzNTk4NjU5MDI='
+    permissions:
+      discussions: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v5
+      - name: Get agenda text from template
+        id: get-agenda
+        run: |
+          echo 'AGENDA<<EOF' >> $GITHUB_ENV
+          cat .github/templates/agenda.md >> $GITHUB_ENV
+          echo 'EOF' >> $GITHUB_ENV
       - name: Define discussion title
-        if: steps.check-week.outputs.should_run == 'true'
         id: define-title
         run: |
           DISCUSSION_TITLE="Overlays Meeting (${{ env.NEXT_MEETING_DATE }})"
           echo "DISCUSSION_TITLE=$DISCUSSION_TITLE" >> $GITHUB_ENV
       - name: Search for existing discussion
-        if: steps.check-week.outputs.should_run == 'true'
         id: search-discussion
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -76,7 +82,7 @@ jobs:
           echo "DISCUSSION_COUNT=$DISCUSSION_COUNT" >> $GITHUB_OUTPUT
           echo "Found $DISCUSSION_COUNT existing discussions"
       - name: Create discussion with agenda
-        if: steps.check-week.outputs.should_run == 'true' && steps.search-discussion.outputs.DISCUSSION_COUNT == '0'
+        if: steps.search-discussion.outputs.DISCUSSION_COUNT == '0'
         id: create-repository-discussion
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
