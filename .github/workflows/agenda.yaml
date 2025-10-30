@@ -10,8 +10,11 @@ jobs:
   get-next-dates:
     permissions: {}
     runs-on: ubuntu-22.04
+    outputs:
+      meeting_dates: ${{ steps.get-next-meeting-dates.outputs.MEETING_DATES }}
     env:
       NUMBER_OF_INSTANCES: 2
+      MEETING_INTERVAL_WEEKS: 2
     steps:
       - name: Check if it's an alternate week
         id: check-week
@@ -26,12 +29,29 @@ jobs:
             echo "Skipping odd week: $WEEK_NUMBER"
             echo "should_run=false" >> $GITHUB_OUTPUT
           fi
-      - name: Get Next Meeting Date
+      - name: Get Next Meeting Dates
         if: steps.check-week.outputs.should_run == 'true'
-        id: get-next-meeting-date
+        id: get-next-meeting-dates
         run: |
-          NEXT_MEETING_DATE=$(date -d "next Tuesday" +%Y-%m-%d)
-          echo "NEXT_MEETING_DATE=$NEXT_MEETING_DATE" >> $GITHUB_ENV
+          # Generate multiple meeting dates based on NUMBER_OF_INSTANCES
+          MEETING_DATES=""
+          for i in $(seq 1 $NUMBER_OF_INSTANCES); do
+            # Calculate the date for the i-th Tuesday from now
+            # For i=1, get next Tuesday; for i=2, get Tuesday after next, etc.
+            WEEKS_AHEAD=$(((i - 1)*MEETING_INTERVAL_WEEKS))
+            if [ $i -eq 1 ]; then
+              DATE_CMD="next Tuesday"
+            else
+              DATE_CMD="next Tuesday +${WEEKS_AHEAD} weeks"
+            fi
+            MEETING_DATE=$(date -d "$DATE_CMD" +%Y-%m-%d)
+            if [ -z "$MEETING_DATES" ]; then
+              MEETING_DATES="$MEETING_DATE"
+            else
+              MEETING_DATES="$MEETING_DATES,$MEETING_DATE"
+            fi
+          done
+          echo "MEETING_DATES=$MEETING_DATES" >> $GITHUB_OUTPUT
 
   create-discussion:
     needs: get-next-dates
