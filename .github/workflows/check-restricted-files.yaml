@@ -33,6 +33,6 @@ jobs:
 
           echo This PR contains changes to files that should not be changed:
           echo
-          git diff --compact-summary origin/${{ github.event.pull_request.base.ref }} origin/${{ github.event.pull_request.head.ref }} -- versions/[0-9].[0-9].[0-9].md
+          git diff --compact-summary origin/${{ github.event.pull_request.base.ref }} -- versions/[0-9].[0-9].[0-9].md
 
           exit 1

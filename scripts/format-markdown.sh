@@ -11,5 +11,5 @@ for filename in $*; do
   sed -E -e "s/  +\|/ |/g" -e "s/\|  +/| /g" -e "s/-----+/----/g" $filename > $filename.tmp && mv $filename.tmp $filename
 
   # repair the bullet lists and various other markdown formatting issues
-  npx --yes markdownlint-cli --fix --config $SRCDIR/../.markdownlint.yaml $filename
+  npx --yes markdownlint-cli2 --fix --config $SRCDIR/../.markdownlint.yaml $filename
 done
