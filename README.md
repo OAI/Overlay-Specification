@@ -32,7 +32,7 @@ If you are looking for tools to use with Overlays, try these:
 
 ## Support for RFC9535 JSONPath
 
-[[RFC9535]] is a recent specification and libraries implementing JSONPath support might predate the RFC. Those libraries might differ entirely (expressions syntax is incompatible), implement additional capabilities (superset of the RFC), or support only a subset of the RFC.
+[RFC9535](https://www.rfc-editor.org/rfc/rfc9535) is a recent specification and libraries implementing JSONPath support might predate the RFC. Those libraries might differ entirely (expressions syntax is incompatible), implement additional capabilities (superset of the RFC), or support only a subset of the RFC.
 
 In case the tool being use is not fully compliant with RFC9535, users MIGHT have to update some JSONPath query expressions to accommodate for the implementation in use.
 
