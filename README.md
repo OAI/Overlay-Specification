@@ -30,6 +30,24 @@ If you are looking for tools to use with Overlays, try these:
 
 (Is something missing from the list? Send us a pull request to add it!)
 
+## Support for RFC9535 JSONPath
+
+[RFC9535](https://www.rfc-editor.org/rfc/rfc9535) is a recent specification and libraries implementing JSONPath support might predate the RFC. Those libraries might differ entirely (expressions syntax is incompatible), implement additional capabilities (superset of the RFC), or support only a subset of the RFC.
+
+In case the tool being use is not fully compliant with RFC9535, users MIGHT have to update some JSONPath query expressions to accommodate for the implementation in use.
+
+This example JSONPath query expression:
+
+```jsonpath
+$.paths.*.get.parameters[?@.name=='filter' && @.in=='query']
+```
+
+might require additional optional parenthesis with some implementations like so:
+
+```jsonpath
+$.paths.*.get.parameters[?(@.name=='filter' && @.in=='query)']
+```
+
 ## Licensing
 
 See: [License (Apache-2.0)](./LICENSE)
