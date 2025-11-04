@@ -31,9 +31,15 @@ jobs:
             echo "should_run=false" >> $GITHUB_OUTPUT
           fi
       - name: Get Next Meeting Dates
-        if: steps.check-week.outputs.should_run == 'true'
         id: get-next-meeting-dates
+        env:
+          SHOULD_RUN: ${{ steps.check-week.outputs.should_run }}
         run: |
+          if [ "$SHOULD_RUN" != "true" ]; then
+            echo "MEETING_DATES=[]" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
           # Generate multiple meeting dates based on NUMBER_OF_INSTANCES
           MEETING_DATES="["
           for i in $(seq 1 $NUMBER_OF_INSTANCES); do
@@ -54,10 +60,6 @@ jobs:
           done
           MEETING_DATES="$MEETING_DATES]"
           echo "MEETING_DATES=$MEETING_DATES" >> $GITHUB_OUTPUT
-      - name: Set No Next Meeting Dates
-        if: steps.check-week.outputs.should_run == 'false'
-        run: |
-          echo "MEETING_DATES=[]" >> $GITHUB_OUTPUT
 
   create-discussion:
     if: github.repository == 'OAI/Overlay-Specification'
