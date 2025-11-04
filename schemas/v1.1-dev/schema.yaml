@@ -51,6 +51,8 @@ $defs:
           - array
           - number
           - "null"
+      copy:
+        type: string
       remove:
         type: boolean
         default: false

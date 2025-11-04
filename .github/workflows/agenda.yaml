@@ -7,12 +7,15 @@ on:
     - cron: '0 17 * * 2'
 
 jobs:
-  create-discussion:
-    permissions:
-      discussions: write
+  get-next-dates:
+    permissions: {}
     runs-on: ubuntu-22.04
+    outputs:
+      meeting_dates: ${{ steps.get-next-meeting-dates.outputs.MEETING_DATES }}
+    env:
+      NUMBER_OF_INSTANCES: 2
+      MEETING_INTERVAL_WEEKS: 2
     steps:
-      - uses: actions/checkout@v5
       - name: Check if it's an alternate week
         id: check-week
         run: |
@@ -26,37 +29,109 @@ jobs:
             echo "Skipping odd week: $WEEK_NUMBER"
             echo "should_run=false" >> $GITHUB_OUTPUT
           fi
-      - name: Get agenda text from template
+      - name: Get Next Meeting Dates
         if: steps.check-week.outputs.should_run == 'true'
+        id: get-next-meeting-dates
+        run: |
+          # Generate multiple meeting dates based on NUMBER_OF_INSTANCES
+          MEETING_DATES="["
+          for i in $(seq 1 $NUMBER_OF_INSTANCES); do
+            # Calculate the date for the i-th Tuesday from now
+            # For i=1, get next Tuesday; for i=2, get Tuesday after next, etc.
+            WEEKS_AHEAD=$(((i - 1)*MEETING_INTERVAL_WEEKS))
+            if [ $i -eq 1 ]; then
+              DATE_CMD="next Tuesday"
+            else
+              DATE_CMD="next Tuesday +${WEEKS_AHEAD} weeks"
+            fi
+            MEETING_DATE=$(date -d "$DATE_CMD" +%Y-%m-%d)
+            if [ $i -eq 1 ]; then
+              MEETING_DATES="$MEETING_DATES\"$MEETING_DATE\""
+            else
+              MEETING_DATES="$MEETING_DATES,\"$MEETING_DATE\""
+            fi
+          done
+          MEETING_DATES="$MEETING_DATES]"
+          echo "MEETING_DATES=$MEETING_DATES" >> $GITHUB_OUTPUT
+      - name: Set No Next Meeting Dates
+        if: steps.check-week.outputs.should_run == 'false'
+        run: |
+          echo "MEETING_DATES=[]" >> $GITHUB_OUTPUT
+
+  create-discussion:
+    needs: get-next-dates
+    strategy:
+      matrix:
+        next_meeting_date: ${{ fromJson(needs.get-next-dates.outputs.meeting_dates) }}
+    runs-on: ubuntu-22.04
+    env:
+      CATEGORY_ID: 'DIC_kwDOFXMeLs4COVB8'
+      REPOSITORY_ID: 'MDEwOlJlcG9zaXRvcnkzNTk4NjU5MDI='
+    permissions:
+      discussions: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v5
+      - name: Get agenda text from template
         id: get-agenda
         run: |
           echo 'AGENDA<<EOF' >> $GITHUB_ENV
           cat .github/templates/agenda.md >> $GITHUB_ENV
           echo 'EOF' >> $GITHUB_ENV
-      - name: Get Next Meeting Date
-        if: steps.check-week.outputs.should_run == 'true'
-        id: get-next-meeting-date
+      - name: Define discussion title
+        id: define-title
         run: |
-          NEXT_MEETING_DATE=$(date -d "next Tuesday" +%Y-%m-%d)
-          echo "NEXT_MEETING_DATE=$NEXT_MEETING_DATE" >> $GITHUB_ENV
-      - name: Create discussion with agenda
-        if: steps.check-week.outputs.should_run == 'true'
-        id: create-repository-discussion
-        uses: octokit/graphql-action@v2.x
+          DISCUSSION_TITLE="Overlays Meeting (${{ matrix.next_meeting_date }})"
+          echo "DISCUSSION_TITLE=$DISCUSSION_TITLE" >> $GITHUB_ENV
+      - name: Search for existing discussion
+        id: search-discussion
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          variables: | 
-            body: "${{ env.AGENDA }}"
-            title: "Overlays Meeting (${{ env.NEXT_MEETING_DATE }})"
-            repositoryId: 'MDEwOlJlcG9zaXRvcnkzNTk4NjU5MDI='
-            categoryId: 'DIC_kwDOFXMeLs4COVB8'
-          query: |
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          FOUND_DISCUSSIONS=$(gh api graphql -f query='
+            query SearchDiscussionMutation ($repositoryOwner: String!, $repositoryName: String!, $categoryId: ID!) {
+              repository(owner: $repositoryOwner, name: $repositoryName) {
+                discussions(first: 10, orderBy: {direction: DESC, field: CREATED_AT}, categoryId: $categoryId) {
+                  nodes {
+                    title
+                  }
+                }
+              }
+            }' \
+            -f repositoryOwner="${{ github.repository_owner }}" \
+            -f repositoryName="${{ github.event.repository.name }}" \
+            -f categoryId="${{ env.CATEGORY_ID }}" \
+            --jq '.data.repository.discussions.nodes[].title')
+          
+          DISCUSSION_COUNT=0
+          TARGET_TITLE="${{ env.DISCUSSION_TITLE }}"
+          
+          # Iterate through all returned discussion titles
+          while IFS= read -r discussion_title; do
+            if [ "$discussion_title" = "$TARGET_TITLE" ]; then
+              DISCUSSION_COUNT=1
+              break
+            fi
+          done <<< "$FOUND_DISCUSSIONS"
+          
+          echo "DISCUSSION_COUNT=$DISCUSSION_COUNT" >> $GITHUB_OUTPUT
+          echo "Found $DISCUSSION_COUNT existing discussions with title: $TARGET_TITLE"
+      - name: Create discussion with agenda
+        if: steps.search-discussion.outputs.DISCUSSION_COUNT == '0'
+        id: create-repository-discussion
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh api graphql -f query='
             mutation CreateDiscussionMutation ($title: String!, $body: String!, $repositoryId: ID!, $categoryId: ID!) {
               createDiscussion(input: { title: $title, body: $body, repositoryId: $repositoryId, categoryId: $categoryId }) {
                 discussion {
                   title
+                  url
                 }
               }
-            }
-
+            }' \
+            -f title="${{ env.DISCUSSION_TITLE }}" \
+            -f body="${{ env.AGENDA }}" \
+            -f repositoryId="${{ env.REPOSITORY_ID }}" \
+            -f categoryId="${{ env.CATEGORY_ID }}"
