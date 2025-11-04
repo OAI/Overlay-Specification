@@ -8,6 +8,7 @@ on:
 
 jobs:
   get-next-dates:
+    if: github.repository == 'OAI/Overlay-Specification'
     permissions: {}
     runs-on: ubuntu-22.04
     outputs:
@@ -59,6 +60,7 @@ jobs:
           echo "MEETING_DATES=[]" >> $GITHUB_OUTPUT
 
   create-discussion:
+    if: github.repository == 'OAI/Overlay-Specification'
     needs: get-next-dates
     strategy:
       matrix:
