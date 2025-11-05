@@ -93,32 +93,21 @@ function preface(title,options) {
 
     // SEO
     preface += `<meta charset="UTF-8">\n<title>${md.utils.escapeHtml(title)}</title>`;
+    preface += '<meta name="description" content="The Overlay Specification defines a document format for information that augments an existing OpenAPI description yet remains separate from the OpenAPI description\'s source document(s).">\n';
 
     // ReSpec
+    preface += '<meta name="color-scheme" content="light dark">';
     preface += '<script src="../js/respec-w3c.js" class="remove"></script>';
     preface += `<script class="remove">var respecConfig = ${JSON.stringify(respec)};</script>\n`;
     preface += '</head>\n<body>';
     preface += '<style>';
-    preface += '#respec-ui { visibility: hidden; }';
-    preface += '#title { color: #578000; } #subtitle { color: #578000; }';
-    preface += '.dt-published { color: #578000; } .dt-published::before { content: "Published "; }';
-    preface += 'h1,h2,h3,h4,h5,h6 { color: #578000; font-weight: normal; font-style: normal; }';
-    preface += 'a[href] { color: #45512c; }';
-    preface += 'body:not(.toc-inline) #toc h2 { color: #45512c; }';
-    preface += 'table { display: block; width: 100%; overflow: auto; }';
-    preface += 'table th { font-weight: 600; }';
-    preface += 'table th, table td { padding: 6px 13px; border: 1px solid #dfe2e5; }';
-    preface += 'table tr { background-color: #fff; border-top: 1px solid #c6cbd1; }';
-    preface += 'table tr:nth-child(2n) { background-color: #f6f8fa; }';
-    preface += 'pre { background-color: #f6f8fa !important; }';
-    preface += 'code { color: #c83500 } th code { color: inherit }';
-    preface += 'a.bibref { text-decoration: underline;}';
+    preface += fs.readFileSync(path.resolve(__dirname,'main.css'),'utf8').split(/\r?\n/).join(' ');
     preface += fs.readFileSync(path.resolve(__dirname,'gist.css'),'utf8').split(/\r?\n/).join(' ');
     preface += '</style>';
     preface += `<h1 id="title">${title.split('|')[0]}</h1>`;
     preface += `<p class="copyright">Copyright © ${options.publishDate.getFullYear()} the Linux Foundation</p>`;
-    preface += `<section class="notoc" id="abstract"><h2>${abstract}</h2>\n`;
-    preface += options.abstract.join('\n');
+    preface += `<section class="notoc" id="abstract"><h2>${abstract}</h2>`;
+    preface += 'The Overlay Specification defines a document format for information that augments an existing [[OpenAPI]] description yet remains separate from the OpenAPI description’s source document(s).';
     preface += '</section>';
     preface += '<section class="override" id="sotd" data-max-toc="0">';
     preface += '<h2>Status of This Document</h2>';
@@ -160,7 +149,7 @@ function getPublishDate(m) {
             let v = $(c[0]).text();
             let d = $(c[1]).text();
             argv.subtitle = v;
-            if (d !== 'TBD') result = new Date(d);
+            if (d !== 'TBA') result = new Date(d);
         }
     });
     return result;
@@ -181,23 +170,10 @@ let inTOC = false;
 let inDefs = false;
 let inCodeBlock = false;
 let indents = [0];
-let inAbstract = false;
-argv.abstract = [];
 
 // process the markdown
 for (let l in lines) {
     let line = lines[l];
-
-    // extract Abstract
-    if (line.startsWith('## Abstract')) { 
-        inAbstract = true;
-        line = '';
-    }
-    else if (line.startsWith('#')) inAbstract = false; 
-    else if (inAbstract) { 
-        argv.abstract.push(line);
-        line = '';
-    }
 
     // remove TOC from older spec versions, respec will generate a new one
     if (line.startsWith('## Table of Contents')) inTOC = true;
@@ -313,4 +289,5 @@ for (let l in lines) {
 
 s = preface(`Overlay Specification v${argv.subtitle} | Introduction, Definitions, & More`,argv)+'\n\n'+lines.join('\n');
 let out = md.render(s);
+out = out.replace(/\[([RGB])\]/g,'&#91;$1&#93;');
 console.log(out);
