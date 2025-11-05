@@ -31,6 +31,8 @@ $defs:
         type: string
       version:
         type: string
+      description:
+        type: string
     required:
       - title
       - version
