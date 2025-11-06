@@ -93,7 +93,6 @@ function preface(title,options) {
 
     // SEO
     preface += `<meta charset="UTF-8">\n<title>${md.utils.escapeHtml(title)}</title>`;
-    preface += '<meta name="description" content="The Overlay Specification defines a document format for information that augments an existing OpenAPI description yet remains separate from the OpenAPI description\'s source document(s).">\n';
 
     // ReSpec
     preface += '<meta name="color-scheme" content="light dark">';
@@ -106,8 +105,8 @@ function preface(title,options) {
     preface += '</style>';
     preface += `<h1 id="title">${title.split('|')[0]}</h1>`;
     preface += `<p class="copyright">Copyright © ${options.publishDate.getFullYear()} the Linux Foundation</p>`;
-    preface += `<section class="notoc" id="abstract"><h2>${abstract}</h2>`;
-    preface += 'The Overlay Specification defines a document format for information that augments an existing [[OpenAPI]] description yet remains separate from the OpenAPI description’s source document(s).';
+    preface += `<section class="notoc" id="abstract"><h2>${abstract}</h2>\n`;
+    preface += options.abstract.join('\n');
     preface += '</section>';
     preface += '<section class="override" id="sotd" data-max-toc="0">';
     preface += '<h2>Status of This Document</h2>';
@@ -149,7 +148,7 @@ function getPublishDate(m) {
             let v = $(c[0]).text();
             let d = $(c[1]).text();
             argv.subtitle = v;
-            if (d !== 'TBA') result = new Date(d);
+            if (d !== 'TBD') result = new Date(d);
         }
     });
     return result;
@@ -170,10 +169,23 @@ let inTOC = false;
 let inDefs = false;
 let inCodeBlock = false;
 let indents = [0];
+let inAbstract = false;
+argv.abstract = [];
 
 // process the markdown
 for (let l in lines) {
     let line = lines[l];
+
+    // extract Abstract
+    if (line.startsWith('## Abstract')) { 
+        inAbstract = true;
+        line = '';
+    }
+    else if (line.startsWith('#')) inAbstract = false; 
+    else if (inAbstract) { 
+        argv.abstract.push(line);
+        line = '';
+    }
 
     // remove TOC from older spec versions, respec will generate a new one
     if (line.startsWith('## Table of Contents')) inTOC = true;
@@ -289,5 +301,4 @@ for (let l in lines) {
 
 s = preface(`Overlay Specification v${argv.subtitle} | Introduction, Definitions, & More`,argv)+'\n\n'+lines.join('\n');
 let out = md.render(s);
-out = out.replace(/\[([RGB])\]/g,'&#91;$1&#93;');
 console.log(out);
