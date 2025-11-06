@@ -44,6 +44,12 @@ The `main` branch holds
 
 Other branches are usually short-lived, for example and for maintaining utility scripts.
 
+### Reviewers
+
+All pull requests must be reviewed and approved by one member of the Overlay-Maintainers team. Reviews from other contributors are always welcome.
+
+Additionally, all pull requests that change specification files in the `versions` folder must be approved by two Overlay-Maintainers team members.
+
 ## Build the HTML versions locally
 
 We use ReSpec to render the markdown specification as HTML for publishing and easier reading.
