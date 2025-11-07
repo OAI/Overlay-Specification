@@ -1,0 +1,12 @@
+overlay: 1.1.0
+info:
+  title: Invalid Parameters - Environment Source with Values
+  version: 1.0.0
+actions:
+  - target: $.paths.*.get
+    parameters:
+      - name: testParam
+        source: environment
+        values: 
+          - "value1"
+          - "value2"

@@ -1,0 +1,13 @@
+overlay: 1.1.0
+info:
+  title: Invalid Parameters - Inline Source with Separator
+  version: 1.0.0
+actions:
+  - target: $.paths.*.get
+    parameters:
+      - name: testParam
+        source: inline
+        separator: ","
+        values: 
+          - "value1"
+          - "value2"
