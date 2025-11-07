@@ -1,0 +1,18 @@
+overlay: 1.1.0
+info:
+  title: Valid Parameters - Multiple Parameters
+  version: 1.0.0
+actions:
+  - target: $.paths.*.get
+    parameters:
+      - name: inlineParam
+        source: inline
+        values: 
+          - "dev"
+          - "staging"
+          - "prod"
+      - name: envParam1
+        source: environment
+      - name: envParam2
+        source: environment
+        separator: ";"

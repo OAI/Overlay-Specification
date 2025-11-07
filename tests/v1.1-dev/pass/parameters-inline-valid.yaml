@@ -1,0 +1,13 @@
+overlay: 1.1.0
+info:
+  title: Valid Parameters - Inline Source
+  version: 1.0.0
+actions:
+  - target: $.paths.*.get
+    parameters:
+      - name: param1
+        source: inline
+        values: 
+          - "value1"
+          - "value2"
+          - "value3"
