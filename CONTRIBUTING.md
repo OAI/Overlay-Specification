@@ -79,7 +79,7 @@ npm run build-dev
 
 ### Specification Versions
 
-The specification versions are published to the [spec site](https://spec.openapis.org) by creating an `vX.Y.Z-rel` branch where `versions/X.Y.Z-dev.md` is renamed to `versions/X.Y.Z.md` and then merged to `main`.
+The specification versions are published to the [spec site](https://spec.openapis.org) by creating an `vX.Y.Z-rel` branch where `versions/X.Y.Z-dev.md` is renamed to `versions/X.Y.Z.md` and then merged into `main`.
 This renaming preserves the commit history when using `git log --follow`.
 
 The steps for creating a `vX.Y.Z-rel` branch are:
@@ -98,38 +98,36 @@ The steps for creating a `vX.Y.Z-rel` branch are:
      - for an X.Y.0 release
        - move folder `schemas/vX.Y-dev` to `schemas/vX.Y`
        - move folder `tests/vX.Y-dev` to `tests/vX.Y`
-4. Merge `vX.Y.Z-rel` into `main` via pull request
+4. Commit, push, and merge `vX.Y.Z-rel` into `main` via pull request
 5. Archive branch `vX.Y.Z-rel`
 
 HTML renderings of the specification versions are generated from the `versions` folder on `main` by the `respec` workflow on changes to files in that folder, which generates a pull request for publishing the HTML renderings to the [spec site](https://spec.openapis.org/overlay). The workflow can be run manually if required.
 
 Schema iterations are generated from the YAML source files in `schemas/vX.Y` by converting them to JSON, renaming to the relevant last-changed dates, and replacing the `WORK-IN-PROGRESS` placeholders with these dates. This is done by the `schema-publish` workflow on changes to files in these folders, which generates a pull request for publishing the new schema iterations to the [spec site](https://spec.openapis.org/overlay). The workflow can be run manually if required.
 
-<!-- #### Start Next Patch Version
+#### Start Next Patch Version
 
 Once the released specification version is published, the next patch version X.Y.(Z+1) can be started:
 
-1. Run bash script `scripts/start-release.sh` in branch `main` to
-   - create branch `vX.Y-dev-start-X.Y.(Z+1)`
-   - initialize `src/oas.md` with empty history and content from `versions/X.Y.Z.md`
-   - change version heading to X.Y.(Z+1) and add a new line to the version history table in Appendix A of `src/oas.md`
-   - commit and push changes
-2. Merge changes into `main` via pull request
+1. Run bash script `scripts/start-release.sh X.Y.(Z+1)` in branch `main` to
+   - create branch `start-X.Y.(Z+1)`
+   - initialize `versions/X.Y.(Z+1)-dev.md` with empty history and content from `versions/X.Y.Z.md`
+   - change version heading to X.Y.(Z+1) and add a new line to the version history table in Appendix A
+   - commit changes
+2. Push branch `start-X.Y.(Z+1)` and merge into `main` via pull request
 
 #### Start New Minor or Major Version
 
 A new minor version X.(Y+1).0 or major version (X+1).0.0 is started similarly:
 
-1. Create branch `vX'.Y'-dev` from `vX.Y-dev`
-2. Run bash script `scripts/start-release.sh` in the new branch to
-   - create branch `vX'.Y'-dev-start-X'.Y'.0`
-   - initialize `src/oas.md` with empty history and content from `versions/X.Y.Z.md`
-   - change version heading to X'.Y'.0 and add a new line to the version history table in Appendix A of `src/oas.md`
-   - change version in all schema files `src/schemas/validation/.yaml`
-   - change version in schema test script `tests/schema/schema.test.mjs`
-   - change version in schema test fixtures in folders `tests/schema/pass` and `tests/schema/fail`
-   - commit and push changes
-3. Merge `vX'.Y'-dev-start-X'.Y'.0` into `vX'.Y'-dev` via pull request -->
+1. Run bash script `scripts/start-release.sh X'.Y'.0` in branch `main` to
+   - create branch `start-X'.Y'.0`
+   - initialize `versions/X'.Y'.0-dev.md` with empty history and content from `versions/X.Y.Z.md`
+   - change version heading to X'.Y'.0 and add a new line to the version history table in Appendix A
+   - copy schema files `schemas/vX.Y` to `schemas/vX'.YY'-dev` and change version in all schema files
+   - copy schema tests `tests/vX.Y` to `tests/vX'.YY'-dev` and change version in all test files
+   - commit changes
+2. Push branch `start-X'.Y'.0` and merge into `main` via pull request
 
 ## Style guide for Overlay Specification
 
