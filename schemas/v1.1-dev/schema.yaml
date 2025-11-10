@@ -71,25 +71,12 @@ $defs:
       name:
         type: string
         matches: '^[a-zA-Z0-9]+$'
-    oneOf:
-      - properties:
-          source:
-            const: inline
-          values:
-            type: array
-            items:
-              type: string
-            uniqueItems: true
-        required:
-          - source
-          - values
-      - properties:
-          source:
-            const: environment
-          separator:
-            type: string
-        required:
-          - source
+      defaultValues:
+        type: array
+        items:
+          type: string
+      separator:
+        type: string
     required:
       - name
     $ref: "#/$defs/specification-extensions"

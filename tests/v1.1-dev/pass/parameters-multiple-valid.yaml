@@ -6,13 +6,10 @@ actions:
   - target: $.paths.*.get
     parameters:
       - name: inlineParam
-        source: inline
-        values: 
+        defaultValues: 
           - "dev"
           - "staging"
           - "prod"
       - name: envParam1
-        source: environment
       - name: envParam2
-        source: environment
         separator: ";"

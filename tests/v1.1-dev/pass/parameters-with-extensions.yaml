@@ -6,8 +6,7 @@ actions:
   - target: $.paths.*.get
     parameters:
       - name: paramWithExt
-        source: inline
-        values: 
+        defaultValues: 
           - "value1"
           - "value2"
         x-custom-extension: "custom value"

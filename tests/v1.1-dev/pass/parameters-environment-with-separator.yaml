@@ -1,10 +1,9 @@
 overlay: 1.1.0
 info:
-  title: Valid Parameters - Environment Source with Separator
+  title: Valid Parameters - Environment with Separator
   version: 1.0.0
 actions:
   - target: $.paths.*.get
     parameters:
       - name: envParamWithSep
-        source: environment
         separator: ","
