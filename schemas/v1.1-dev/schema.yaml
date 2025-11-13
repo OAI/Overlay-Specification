@@ -74,9 +74,11 @@ $defs:
       defaultValues:
         type: array
         items:
-          type: string
-      separator:
-        type: string
+          oneOf:
+            - type: string
+            - type: object
+              additionalProperties:
+                type: string
     required:
       - name
     $ref: "#/$defs/specification-extensions"
