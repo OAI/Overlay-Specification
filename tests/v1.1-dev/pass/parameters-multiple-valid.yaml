@@ -12,4 +12,3 @@ actions:
           - "prod"
       - name: envParam1
       - name: envParam2
-        separator: ";"
