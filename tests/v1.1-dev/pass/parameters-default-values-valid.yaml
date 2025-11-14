@@ -1,0 +1,12 @@
+overlay: 1.1.0
+info:
+  title: Valid Parameters - Default values
+  version: 1.0.0
+actions:
+  - target: $.paths.*.get
+    parameters:
+      - name: param1
+        defaultValues: 
+          - "value1"
+          - "value2"
+          - "value3"
