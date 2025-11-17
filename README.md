@@ -45,7 +45,7 @@ $.paths.*.get.parameters[?@.name=='filter' && @.in=='query']
 might require additional optional parenthesis with some implementations like so:
 
 ```jsonpath
-$.paths.*.get.parameters[?(@.name=='filter' && @.in=='query)']
+$.paths.*.get.parameters[?(@.name=='filter' && @.in=='query')]
 ```
 
 ## Licensing
