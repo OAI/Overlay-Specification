@@ -62,7 +62,7 @@ jobs:
           echo "MEETING_DATES=$MEETING_DATES" >> $GITHUB_OUTPUT
 
   create-discussion:
-    if: github.repository == 'OAI/Overlay-Specification'
+    if: github.repository == 'OAI/Overlay-Specification' && needs.get-next-dates.outputs.meeting_dates != '[]'
     needs: get-next-dates
     strategy:
       matrix:
