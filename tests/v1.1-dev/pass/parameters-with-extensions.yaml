@@ -1,0 +1,13 @@
+overlay: 1.1.0
+info:
+  title: Valid Parameters - With Extensions
+  version: 1.0.0
+actions:
+  - target: $.paths.*.get
+    parameters:
+      - name: paramWithExt
+        defaultValues: 
+          - "value1"
+          - "value2"
+        x-custom-extension: "custom value"
+        x-another-extension: 42
