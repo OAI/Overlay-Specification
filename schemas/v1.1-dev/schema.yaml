@@ -58,8 +58,31 @@ $defs:
       remove:
         type: boolean
         default: false
+      parameters:
+        type: array
+        items:
+          $ref: "#/$defs/parameter-object"
+        uniqueItems: true
     required:
       - target
+    $ref: "#/$defs/specification-extensions"
+    unevaluatedProperties: false
+  parameter-object:
+    type: object
+    properties:
+      name:
+        type: string
+        matches: '^[a-zA-Z0-9]+$'
+      defaultValues:
+        type: array
+        items:
+          oneOf:
+            - type: string
+            - type: object
+              additionalProperties:
+                type: string
+    required:
+      - name
     $ref: "#/$defs/specification-extensions"
     unevaluatedProperties: false
   specification-extensions:
