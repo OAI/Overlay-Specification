@@ -4,6 +4,7 @@
 
 - Lorna Mitchell [@lornajane](https://github.com/lornajane)
 - Mike Kistler [@mikekistler](https://github.com/mikekistler)
+- Ralf Handl [@ralfhandl](https://github.com/ralfhandl)
 - Vincent Biret [@baywet](https://github.com/baywet)
 
 ## Emeritus
