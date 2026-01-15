@@ -1,0 +1,13 @@
+overlay: 1.1.0
+info:
+  title: Invalid Parameters - Default Values with nested objects
+  version: 1.0.0
+actions:
+  - target: $.paths.*.get
+    parameters:
+      - name: testParam
+        defaultValues: 
+          - value1:
+              key1:
+                subKey2: "sub-value2"
+          - "value2"

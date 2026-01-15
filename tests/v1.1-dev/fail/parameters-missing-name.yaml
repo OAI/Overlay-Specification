@@ -1,0 +1,10 @@
+overlay: 1.1.0
+info:
+  title: Invalid Parameters - Missing Name
+  version: 1.0.0
+actions:
+  - target: $.paths.*.get
+    parameters:
+      - values: 
+          - "value1"
+          - "value2"
