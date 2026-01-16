@@ -129,6 +129,14 @@ A new minor version X.(Y+1).0 or major version (X+1).0.0 is started similarly:
    - commit changes
 2. Push branch `start-X'.Y'.0` and merge into `main` via pull request
 
+### Publishing using WSL
+
+If you are running those scripts using Windows Subsystems for Linux (WSL), and cloned the repository under windows, you'll need to make a few adjustments before you can run these procedures:
+
+1. Save the scripts using LF, not CRLF to avoid parsing issues. You can use VSCode or any other editor to do that. Alternatively, you may clone the repository again from WSL to workaround the line return issue.
+1. Make sure you run the npm install from WSL and not from windows.
+1. If you run into issues launching chrome, [review this StackOverflow answer](https://stackoverflow.com/a/78776116/3808675).
+
 ## Style guide for Overlay Specification
 
 Some terminology and when to use it:
