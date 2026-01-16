@@ -4,6 +4,8 @@
 
 # Run this script from the root of the repo. It is designed to be run by a GitHub workflow.
 
+shopt -s nullglob
+
 if [ -z "$1" ]; then
   schemaDirs=(schemas/v[1-9].[0-9])
   deployRoot="./deploy/overlay"
@@ -59,7 +61,7 @@ publish_schema() {
   fi
 }
 
-for schemaDir in $schemaDirs; do
+for schemaDir in "${schemaDirs[@]}"; do
   vVersion=$(basename "$schemaDir")
   version=${vVersion:1}
   deploydir="$deployRoot/$version"
