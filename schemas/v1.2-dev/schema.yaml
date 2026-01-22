@@ -1,0 +1,67 @@
+$id: https://spec.openapis.org/overlay/1.2/schema/WORK-IN-PROGRESS
+$schema: https://json-schema.org/draft/2020-12/schema
+description: The description of Overlay v1.2.x documents
+type: object
+properties:
+  overlay:
+    type: string
+    pattern: ^1\.2\.\d+$
+  info:
+    $ref: "#/$defs/info-object"
+  extends:
+    type: string
+    format: uri-reference
+  actions:
+    type: array
+    minItems: 1
+    uniqueItems: true
+    items:
+      $ref: "#/$defs/action-object"
+required:
+  - overlay
+  - info
+  - actions
+$ref: "#/$defs/specification-extensions"
+unevaluatedProperties: false
+$defs:
+  info-object:
+    type: object
+    properties:
+      title:
+        type: string
+      version:
+        type: string
+      description:
+        type: string
+    required:
+      - title
+      - version
+    $ref: "#/$defs/specification-extensions"
+    unevaluatedProperties: false
+  action-object:
+    properties:
+      target:
+        type: string
+        pattern: ^\$
+      description:
+        type: string
+      update:
+        type:
+          - string
+          - boolean
+          - object
+          - array
+          - number
+          - "null"
+      copy:
+        type: string
+      remove:
+        type: boolean
+        default: false
+    required:
+      - target
+    $ref: "#/$defs/specification-extensions"
+    unevaluatedProperties: false
+  specification-extensions:
+    patternProperties:
+      ^x-: true
