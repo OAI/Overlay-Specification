@@ -27,6 +27,7 @@ If you are looking for tools to use with Overlays, try these:
 - [Specmatic](https://specmatic.io/) - [Docs](https://docs.specmatic.io/documentation/contract_tests.html#overlays)
 - [BinkyLabs.OpenApi.Overlays - dotnet](https://github.com/BinkyLabs/openapi-overlays-dotnet)
 - [Legba - Clojure OpenAPI toolkit](https://github.com/mpenet/legba?tab=readme-ov-file#openapi-overlay-support)
+- [Zuplo CLI](https://zuplo.com/docs/guides/openapi-overlays)
 
 (Is something missing from the list? Send us a pull request to add it!)
 
