@@ -13,6 +13,13 @@ Overlays support a range of scenarios, including:
 - Providing default responses or parameters where they were not explicitly provided
 - Applying configuration data globally or based on filter conditions
 
+## Overlay Document Schema
+
+A JSON Schema is hosted on [spec.openapis.org](https://spec.openapis.org/overlay/) for informational
+purposes and to assist tooling.
+The specification is the only normative description of the document format. If the JSON Schema
+differs from the specification, then the specification MUST be considered authoritative.
+
 ## Tools that Support Overlays
 
 If you are looking for tools to use with Overlays, try these:
