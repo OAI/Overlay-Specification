@@ -26,7 +26,7 @@
     "c8": "^11.0.0",
     "markdownlint-cli2": "^0.22.0",
     "prettier": "^3.8.1",
-    "vitest": "^4.1.0",
+    "vitest": "^4.1.1",
     "yaml": "^2.8.3"
   },
   "keywords": [
