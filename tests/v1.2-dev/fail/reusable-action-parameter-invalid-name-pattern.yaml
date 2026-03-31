@@ -1,0 +1,16 @@
+overlay: 1.2.0
+info:
+  title: Reusable action parameter name must start with a letter and be alphanumeric
+  version: 1.0.0
+components:
+  actions:
+    setTitle:
+      target: '$.info'
+      parameters:
+        - name: 1titleValue
+      update:
+        title: Example
+actions:
+  - target: '$.info'
+    update:
+      description: Invalid reusable action parameter name

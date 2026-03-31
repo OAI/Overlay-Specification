@@ -44,7 +44,7 @@ $defs:
     properties:
       $ref:
         type: string
-        pattern: ^#\/components\/actions\/\w+
+        pattern: ^#\/components\/actions\/(?:[^~/]|~0|~1)+$
       parameterValues:
         type: object
         additionalProperties:
@@ -58,6 +58,7 @@ $defs:
     properties:
       name:
         type: string
+        pattern: ^[A-Za-z][A-Za-z0-9]*$
       default:
         $ref: "#/$defs/json-node"
     required:
