@@ -18,7 +18,7 @@ properties:
     items:
       oneOf:
         - $ref: "#/$defs/reusable-action-reference-object"
-        - $ref: "#/$defs/reusable-action-object"
+        - $ref: "#/$defs/action-object"
   components:
     $ref: "#/$defs/components-object"
 required:
