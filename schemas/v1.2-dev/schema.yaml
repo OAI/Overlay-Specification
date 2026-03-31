@@ -28,6 +28,14 @@ required:
 $ref: "#/$defs/specification-extensions"
 unevaluatedProperties: false
 $defs:
+  json-node:
+    type:
+      - string
+      - boolean
+      - object
+      - array
+      - number
+      - "null"
   reusable-action-reference-object:
     type: object
     allOf:
@@ -37,6 +45,10 @@ $defs:
       $ref:
         type: string
         pattern: ^#\/components\/actions\/\w+
+      parameterValues:
+        type: object
+        additionalProperties:
+          $ref: "#/$defs/json-node"
     required:
       - $ref
     $ref: "#/$defs/specification-extensions"
@@ -47,13 +59,7 @@ $defs:
       name:
         type: string
       default:
-        type:
-          - string
-          - boolean
-          - object
-          - array
-          - number
-          - "null"
+        $ref: "#/$defs/json-node"
     required:
       - name
     description: A parameter to be used in a reusable action object
@@ -105,13 +111,7 @@ $defs:
       description:
         type: string
       update:
-        type:
-          - string
-          - boolean
-          - object
-          - array
-          - number
-          - "null"
+        $ref: "#/$defs/json-node"
       copy:
         type: string
       remove:
