@@ -1,0 +1,16 @@
+overlay: 1.2.0
+info:
+  title: Reusable action parameter extensions
+  version: 1.0.0
+components:
+  actions:
+    setTitle:
+      target: '$.info'
+      parameters:
+        - name: titleValue
+          x-parameter-extension:
+            source: template
+      update:
+        title: '%param.titleValue%'
+actions:
+  - target: '$.info'
