@@ -17,6 +17,8 @@ properties:
     uniqueItems: true
     items:
       $ref: "#/$defs/action-object"
+  components:
+    $ref: "#/$defs/components-object"
 required:
   - overlay
   - info
@@ -24,6 +26,61 @@ required:
 $ref: "#/$defs/specification-extensions"
 unevaluatedProperties: false
 $defs:
+  reusable-action-reference-object:
+    type: object
+    allOf:
+      - $ref: "#/$defs/specification-extensions"
+      - $ref: "#/$defs/action-object"
+    properties:
+      $ref:
+        type: string
+        pattern: ^#\/components\/actions\/\w+
+    required:
+      - $ref
+    $ref: "#/$defs/specification-extensions"
+    unevaluatedProperties: false
+  reusable-action-object-parameter:
+    type: object
+    properties:
+      name:
+        type: string
+      default:
+        type:
+          - string
+          - boolean
+          - object
+          - array
+          - number
+          - "null"
+    required:
+      - name
+    description: A parameter to be used in a reusable action object
+    $ref: "#/$defs/specification-extensions"
+    unevaluatedProperties: false
+  reusable-action-object:
+    type: object
+    allOf:
+      - $ref: "#/$defs/specification-extensions"
+      - $ref: "#/$defs/action-object"
+    properties:
+      parameters:
+        type: array
+        items:
+          $ref: "#/$defs/reusable-action-object-parameter"
+      environmentVariables:
+        type: array
+        items:
+          $ref: "#/$defs/reusable-action-object-parameter"
+    unevaluatedProperties: false
+  components-object:
+    type: object
+    properties:
+      actions:
+        type: object
+        additionalProperties:
+          $ref: "#/$defs/reusable-action-object"
+    $ref: "#/$defs/specification-extensions"
+    unevaluatedProperties: false
   info-object:
     type: object
     properties:
@@ -59,7 +116,7 @@ $defs:
         type: boolean
         default: false
     required:
-      - target
+      - target #TODO this would be an issue for the reusable action and reference object, maybe move all the properties to a base?
     $ref: "#/$defs/specification-extensions"
     unevaluatedProperties: false
   specification-extensions:
