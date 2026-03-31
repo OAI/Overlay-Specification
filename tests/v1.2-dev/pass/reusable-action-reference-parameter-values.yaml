@@ -1,0 +1,20 @@
+overlay: 1.2.0
+info:
+  title: Reusable action reference with parameter values
+  version: 1.0.0
+components:
+  actions:
+    errorResponse:
+      target: "$.paths['%param.pathItem%'].%param.operation%.responses"
+      update:
+        '404':
+          description: Not Found
+      parameters:
+        - name: pathItem
+        - name: operation
+          default: get
+actions:
+  - $ref: '#/components/actions/errorResponse'
+    parameterValues:
+      pathItem: /items
+      operation: post
