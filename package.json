@@ -17,17 +17,17 @@
     "cheerio": "^1.2.0",
     "highlight.js": "^11.11.1",
     "markdown-it": "^14.1.1",
-    "respec": "35.8.0",
+    "respec": "35.9.0",
     "yargs": "^18.0.0"
   },
   "devDependencies": {
     "@hyperjump/json-schema-coverage": "^1.2.1",
     "@umbrelladocs/linkspector": "^0.4.7",
     "c8": "^11.0.0",
-    "markdownlint-cli2": "^0.21.0",
+    "markdownlint-cli2": "^0.22.0",
     "prettier": "^3.8.1",
-    "vitest": "^4.0.18",
-    "yaml": "^2.8.2"
+    "vitest": "^4.1.2",
+    "yaml": "^2.8.3"
   },
   "keywords": [
     "API",
