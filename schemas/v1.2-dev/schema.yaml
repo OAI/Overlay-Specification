@@ -16,7 +16,9 @@ properties:
     minItems: 1
     uniqueItems: true
     items:
-      $ref: "#/$defs/action-object"
+      oneOf:
+        - $ref: "#/$defs/reusable-action-reference-object"
+        - $ref: "#/$defs/reusable-action-object"
   components:
     $ref: "#/$defs/components-object"
 required:
