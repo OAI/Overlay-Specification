@@ -37,6 +37,7 @@ $defs:
     $ref: "#/$defs/specification-extensions"
     unevaluatedProperties: false
   action-object:
+    type: object
     properties:
       target:
         type: string
