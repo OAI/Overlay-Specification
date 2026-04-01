@@ -1,0 +1,14 @@
+overlay: 1.2.0
+info:
+  title: Reusable action parameter items must be objects
+  version: 1.0.0
+components:
+  actions:
+    setTitle:
+      target: '$.info'
+      parameters:
+        - invalid
+      update:
+        title: Example
+actions:
+  - target: '$'

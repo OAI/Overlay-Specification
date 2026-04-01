@@ -1,0 +1,14 @@
+overlay: 1.2.0
+info:
+  title: Reusable action parameters must be an array in components
+  version: 1.0.0
+components:
+  actions:
+    setTitle:
+      target: '$.info'
+      parameters:
+        name: titleValue
+      update:
+        title: Example
+actions:
+  - target: '$'

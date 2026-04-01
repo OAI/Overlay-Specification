@@ -16,7 +16,11 @@ properties:
     minItems: 1
     uniqueItems: true
     items:
-      $ref: "#/$defs/action-object"
+      oneOf:
+        - $ref: "#/$defs/reusable-action-reference-object"
+        - $ref: "#/$defs/action-object"
+  components:
+    $ref: "#/$defs/components-object"
 required:
   - overlay
   - info
@@ -24,6 +28,68 @@ required:
 $ref: "#/$defs/specification-extensions"
 unevaluatedProperties: false
 $defs:
+  json-node:
+    type:
+      - string
+      - boolean
+      - object
+      - array
+      - number
+      - "null"
+  reusable-action-reference-object:
+    type: object
+    allOf:
+      - $ref: "#/$defs/specification-extensions"
+      - $ref: "#/$defs/action-object-base"
+    properties:
+      $ref:
+        type: string
+        pattern: ^#\/components\/actions\/(?:[^~/]|~0|~1)+$
+      parameterValues:
+        type: object
+        additionalProperties:
+          $ref: "#/$defs/json-node"
+    required:
+      - $ref
+    $ref: "#/$defs/specification-extensions"
+    unevaluatedProperties: false
+  reusable-action-object-parameter:
+    type: object
+    properties:
+      name:
+        type: string
+        pattern: ^[A-Za-z][A-Za-z0-9]*$
+      default:
+        $ref: "#/$defs/json-node"
+    required:
+      - name
+    description: A parameter to be used in a reusable action object
+    $ref: "#/$defs/specification-extensions"
+    unevaluatedProperties: false
+  reusable-action-object:
+    type: object
+    allOf:
+      - $ref: "#/$defs/specification-extensions"
+      - $ref: "#/$defs/action-object-base"
+    properties:
+      parameters:
+        type: array
+        items:
+          $ref: "#/$defs/reusable-action-object-parameter"
+      environmentVariables:
+        type: array
+        items:
+          $ref: "#/$defs/reusable-action-object-parameter"
+    unevaluatedProperties: false
+  components-object:
+    type: object
+    properties:
+      actions:
+        type: object
+        additionalProperties:
+          $ref: "#/$defs/reusable-action-object"
+    $ref: "#/$defs/specification-extensions"
+    unevaluatedProperties: false
   info-object:
     type: object
     properties:
@@ -38,7 +104,7 @@ $defs:
       - version
     $ref: "#/$defs/specification-extensions"
     unevaluatedProperties: false
-  action-object:
+  action-object-base:
     type: object
     properties:
       target:
@@ -47,21 +113,19 @@ $defs:
       description:
         type: string
       update:
-        type:
-          - string
-          - boolean
-          - object
-          - array
-          - number
-          - "null"
+        $ref: "#/$defs/json-node"
       copy:
         type: string
       remove:
         type: boolean
         default: false
+  action-object:
+    type: object
+    allOf:
+      - $ref: "#/$defs/action-object-base"
+      - $ref: "#/$defs/specification-extensions"
     required:
       - target
-    $ref: "#/$defs/specification-extensions"
     unevaluatedProperties: false
   specification-extensions:
     patternProperties:

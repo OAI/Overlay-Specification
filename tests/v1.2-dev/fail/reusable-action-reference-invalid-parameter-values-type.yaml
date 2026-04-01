@@ -1,0 +1,7 @@
+overlay: 1.2.0
+info:
+  title: Reusable action reference parameter values must be an object
+  version: 1.0.0
+actions:
+  - $ref: '#/components/actions/errorResponse'
+    parameterValues: []
