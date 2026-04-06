@@ -1,10 +1,10 @@
 overlay: 1.2.0
 info:
-  title: Reusable action parameters must be an array
+  title: Non-reusable action objects can't have parameters
   version: 1.0.0
 actions:
   - target: '$.info'
     parameters:
-      - name: titleValue
+      - name: notAllowedHere
     update:
       title: Example

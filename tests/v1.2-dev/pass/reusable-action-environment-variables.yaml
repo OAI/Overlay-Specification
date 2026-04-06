@@ -7,11 +7,11 @@ components:
     setDescription:
       target: '$.info'
       environmentVariables:
-        - name: stageName
+        - name: STAGE_NAME
           default: dev
-        - name: regionName
+        - name: REGION_NAME
       update:
-        description: 'Deploy stage is %env.stageName% in %env.regionName%'
+        description: 'Deploy stage is %env.STAGE_NAME% in %env.REGION_NAME%'
 actions:
   - target: '$.info'
     update:

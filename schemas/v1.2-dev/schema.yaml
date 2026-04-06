@@ -58,7 +58,7 @@ $defs:
     properties:
       name:
         type: string
-        pattern: ^[A-Za-z][A-Za-z0-9]*$
+        pattern: ^[A-Za-z_][A-Za-z_0-9]*$
       default:
         $ref: "#/$defs/json-node"
     required:
