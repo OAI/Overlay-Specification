@@ -2,9 +2,13 @@ overlay: 1.2.0
 info:
   title: Parameter values are not allowed on reusable actions
   version: 1.0.0
+components:
+  actions:
+    setTitle:
+      target: '$.info'
+      parameterValues:
+        titleValue: Example
+      update:
+        title: '%param.titleValue%'
 actions:
-  - target: '$.info'
-    parameterValues:
-      titleValue: Example
-    update:
-      title: '%param.titleValue%'
+  - $ref: '#/components/actions/setTitle'
