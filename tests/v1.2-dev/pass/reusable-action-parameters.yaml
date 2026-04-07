@@ -9,7 +9,7 @@ components:
       parameters:
         - name: titleValue
         - name: versionValue
-          default: 1
+          default: '1'
       update:
         title: '%param.titleValue%'
         version: '%param.versionValue%'
