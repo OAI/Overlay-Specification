@@ -1,10 +1,10 @@
 overlay: 1.2.0
 info:
-  title: Reusable action environment variables must be an array
+  title: Non-reusable action objects cannot have environment variables
   version: 1.0.0
 actions:
   - target: '$.info'
     environmentVariables:
-      name: stageName
+      - name: stageName
     update:
       description: Example
