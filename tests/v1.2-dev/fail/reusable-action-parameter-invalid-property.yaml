@@ -1,0 +1,15 @@
+overlay: 1.2.0
+info:
+  title: Reusable action parameter invalid property
+  version: 1.0.0
+components:
+  actions:
+    setTitle:
+      target: '$.info'
+      parameters:
+        - name: titleValue
+          invalidProperty: true
+      update:
+        title: Example
+actions:
+  - target: '$.info'

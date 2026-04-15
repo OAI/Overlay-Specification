@@ -1,0 +1,14 @@
+overlay: 1.2.0
+info:
+  title: Reusable action parameter names must be strings in components
+  version: 1.0.0
+components:
+  actions:
+    setTitle:
+      target: '$.info'
+      parameters:
+        - name: 100
+      update:
+        title: Example
+actions:
+  - target: '$'
