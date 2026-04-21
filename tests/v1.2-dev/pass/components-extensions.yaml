@@ -7,8 +7,9 @@ components:
     enabled: true
   actions:
     setDescription:
-      target: '$.info'
-      update:
-        description: Updated
+      fields:
+        target: '$.info'
+        update:
+          description: Updated
 actions:
   - target: '$.info'

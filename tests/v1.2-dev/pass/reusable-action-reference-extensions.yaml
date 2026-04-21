@@ -5,9 +5,10 @@ info:
 components:
   actions:
     setDescription:
-      target: '$.info'
-      update:
-        description: Updated
+      fields:
+        target: '$.info'
+        update:
+          description: Updated
 actions:
   - $ref: '#/components/actions/setDescription'
     x-reference-extension:

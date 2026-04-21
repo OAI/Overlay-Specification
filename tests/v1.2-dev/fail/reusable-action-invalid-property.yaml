@@ -5,9 +5,10 @@ info:
 components:
   actions:
     setDescription:
-      target: '$.info'
+      fields:
+        target: '$.info'
+        update:
+          description: Updated
       invalidProperty: true
-      update:
-        description: Updated
 actions:
   - target: '$.info'

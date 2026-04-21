@@ -5,14 +5,15 @@ info:
 components:
   actions:
     errorResponse:
-      target: "$.paths['%param.pathItem%'].%param.operation%.responses"
-      update:
-        '404':
-          description: Not Found
       parameters:
         - name: pathItem
         - name: operation
           default: get
+      fields:
+        target: "$.paths['%param.pathItem%'].%param.operation%.responses"
+        update:
+          '404':
+            description: Not Found
 actions:
   - $ref: '#/components/actions/errorResponse'
     parameterValues:

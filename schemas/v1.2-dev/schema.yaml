@@ -58,11 +58,16 @@ $defs:
     description: A parameter to be used in a reusable action object
     $ref: "#/$defs/specification-extensions"
     unevaluatedProperties: false
+  reusable-action-fields-object:
+    type: object
+    allOf:
+      - $ref: "#/$defs/action-object-base"
+      - $ref: "#/$defs/specification-extensions"
+    unevaluatedProperties: false
   reusable-action-object:
     type: object
     allOf:
       - $ref: "#/$defs/specification-extensions"
-      - $ref: "#/$defs/action-object-base"
     properties:
       parameters:
         type: array
@@ -72,6 +77,8 @@ $defs:
         type: array
         items:
           $ref: "#/$defs/reusable-action-object-parameter"
+      fields:
+        $ref: "#/$defs/reusable-action-fields-object"
     unevaluatedProperties: false
   components-object:
     type: object

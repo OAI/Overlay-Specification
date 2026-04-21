@@ -5,10 +5,11 @@ info:
 components:
   actions:
     setTitle:
-      target: '$.info'
+      fields:
+        target: '$.info'
+        update:
+          title: '%param.titleValue%'
       parameterValues:
         titleValue: Example
-      update:
-        title: '%param.titleValue%'
 actions:
   - $ref: '#/components/actions/setTitle'

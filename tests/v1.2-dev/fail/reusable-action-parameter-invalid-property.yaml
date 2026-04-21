@@ -5,11 +5,12 @@ info:
 components:
   actions:
     setTitle:
-      target: '$.info'
       parameters:
         - name: titleValue
           invalidProperty: true
-      update:
-        title: Example
+      fields:
+        target: '$.info'
+        update:
+          title: Example
 actions:
   - target: '$.info'

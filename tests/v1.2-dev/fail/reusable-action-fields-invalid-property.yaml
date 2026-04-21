@@ -1,15 +1,14 @@
 overlay: 1.2.0
 info:
-  title: Reusable action extensions
+  title: Reusable action fields must not contain invalid properties
   version: 1.0.0
 components:
   actions:
     setDescription:
-      x-action-extension:
-        mode: reusable
       fields:
         target: '$.info'
+        invalidProperty: true
         update:
           description: Updated
 actions:
-  - target: '$.info'
+  - target: '$'

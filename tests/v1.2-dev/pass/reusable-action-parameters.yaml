@@ -5,14 +5,15 @@ info:
 components:
   actions:
     setTitle:
-      target: '$.info'
       parameters:
         - name: titleValue
         - name: versionValue
           default: '1'
-      update:
-        title: '%param.titleValue%'
-        version: '%param.versionValue%'
+      fields:
+        target: '$.info'
+        update:
+          title: '%param.titleValue%'
+          version: '%param.versionValue%'
 actions:
   - target: '$.info'
     update:

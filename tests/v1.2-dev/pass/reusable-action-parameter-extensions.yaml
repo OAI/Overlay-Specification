@@ -5,12 +5,13 @@ info:
 components:
   actions:
     setTitle:
-      target: '$.info'
       parameters:
         - name: titleValue
           x-parameter-extension:
             source: template
-      update:
-        title: '%param.titleValue%'
+      fields:
+        target: '$.info'
+        update:
+          title: '%param.titleValue%'
 actions:
   - target: '$.info'

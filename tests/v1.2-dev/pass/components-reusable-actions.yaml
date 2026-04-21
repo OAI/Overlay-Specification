@@ -5,10 +5,11 @@ info:
 components:
   actions:
     errorResponse:
-      description: Adds an error response
-      update:
-        '404':
-          description: Not Found
+      fields:
+        description: Adds an error response
+        update:
+          '404':
+            description: Not Found
 actions:
   - $ref: '#/components/actions/errorResponse'
     target: '$.paths.*.get.responses'

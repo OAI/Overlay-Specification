@@ -5,11 +5,12 @@ info:
 components:
   actions:
     setDescription:
-      target: '$.info'
       environmentVariables:
         - name: STAGE_NAME
           default: false
-      update:
-        description: Updated
+      fields:
+        target: '$.info'
+        update:
+          description: Updated
 actions:
   - target: '$'
