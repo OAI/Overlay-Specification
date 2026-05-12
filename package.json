@@ -27,7 +27,7 @@
     "markdownlint-cli2": "^0.22.1",
     "prettier": "^3.8.3",
     "vitest": "^4.1.5",
-    "yaml": "^2.8.4"
+    "yaml": "^2.9.0"
   },
   "keywords": [
     "API",
