@@ -1,0 +1,15 @@
+overlay: 1.2.0
+info:
+  title: Components extensions
+  version: 1.0.0
+components:
+  x-components-extension:
+    enabled: true
+  actions:
+    setDescription:
+      fields:
+        target: '$.info'
+        update:
+          description: Updated
+actions:
+  - target: '$.info'

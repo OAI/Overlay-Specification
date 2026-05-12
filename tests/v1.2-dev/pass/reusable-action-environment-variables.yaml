@@ -1,0 +1,19 @@
+overlay: 1.2.0
+info:
+  title: Reusable action with environment variables
+  version: 1.0.0
+components:
+  actions:
+    setDescription:
+      environmentVariables:
+        - name: STAGE_NAME
+          default: dev
+        - name: REGION_NAME
+      fields:
+        target: '$.info'
+        update:
+          description: 'Deploy stage is %env.STAGE_NAME% in %env.REGION_NAME%'
+actions:
+  - target: '$.info'
+    update:
+      description: Reusable action environment variables are declared in components

@@ -1,0 +1,20 @@
+overlay: 1.2.0
+info:
+  title: Reusable action with parameters
+  version: 1.0.0
+components:
+  actions:
+    setTitle:
+      parameters:
+        - name: titleValue
+        - name: versionValue
+          default: '1'
+      fields:
+        target: '$.info'
+        update:
+          title: '%param.titleValue%'
+          version: '%param.versionValue%'
+actions:
+  - target: '$.info'
+    update:
+      description: Reusable action parameters are declared in components

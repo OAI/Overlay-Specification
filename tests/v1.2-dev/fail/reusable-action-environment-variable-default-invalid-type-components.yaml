@@ -1,0 +1,16 @@
+overlay: 1.2.0
+info:
+  title: Reusable action environment variable default values must be strings in components
+  version: 1.0.0
+components:
+  actions:
+    setDescription:
+      environmentVariables:
+        - name: STAGE_NAME
+          default: false
+      fields:
+        target: '$.info'
+        update:
+          description: Updated
+actions:
+  - target: '$'

@@ -1,0 +1,16 @@
+overlay: 1.2.0
+info:
+  title: Reusable action parameter default values must be strings in components
+  version: 1.0.0
+components:
+  actions:
+    setTitle:
+      parameters:
+        - name: titleValue
+          default: 100
+      fields:
+        target: '$.info'
+        update:
+          title: Example
+actions:
+  - target: '$'

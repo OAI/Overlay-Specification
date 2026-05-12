@@ -1,0 +1,10 @@
+overlay: 1.2.0
+info:
+  title: Non-reusable action objects cannot have environment variables
+  version: 1.0.0
+actions:
+  - target: '$.info'
+    environmentVariables:
+      - name: stageName
+    update:
+      description: Example
