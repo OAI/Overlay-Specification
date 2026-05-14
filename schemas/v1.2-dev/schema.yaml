@@ -6,11 +6,18 @@ properties:
   overlay:
     type: string
     pattern: ^1\.2\.\d+$
+  $self:
+    type: string
+    format: uri-reference
+    $comment: MUST NOT contain a fragment
+    pattern: "^[^#]*$"
   info:
     $ref: "#/$defs/info-object"
   extends:
     type: string
     format: uri-reference
+    $comment: MUST NOT contain a fragment
+    pattern: "^[^#]*$"
   actions:
     type: array
     minItems: 1
