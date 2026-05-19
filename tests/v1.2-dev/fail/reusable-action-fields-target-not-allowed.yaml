@@ -1,12 +1,12 @@
 overlay: 1.2.0
 info:
-  title: Reusable action with invalid description type
+  title: Reusable action fields with target not allowed
   version: 1.0.0
 components:
   actions:
     setDescription:
-      description: 42
       fields:
+        target: '$.info'
         update:
           description: Updated by reusable action
 actions:

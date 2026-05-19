@@ -8,7 +8,6 @@ components:
       x-action-extension:
         mode: reusable
       fields:
-        target: '$.info'
         update:
           description: Updated
 actions:

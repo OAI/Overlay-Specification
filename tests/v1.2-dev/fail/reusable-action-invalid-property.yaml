@@ -6,7 +6,6 @@ components:
   actions:
     setDescription:
       fields:
-        target: '$.info'
         update:
           description: Updated
       invalidProperty: true

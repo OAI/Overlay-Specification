@@ -7,8 +7,8 @@ components:
     setDescription:
       description: A reusable action that updates the info description
       fields:
-        target: '$.info'
         update:
           description: Updated by reusable action
 actions:
   - $ref: '#/components/actions/setDescription'
+    target: '$.info'

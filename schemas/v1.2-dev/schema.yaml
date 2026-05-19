@@ -39,6 +39,7 @@ $defs:
         pattern: ^#\/components\/actions\/(?:[^~/]|~0|~1)+$
     required:
       - $ref
+      - target
     $ref: "#/$defs/specification-extensions"
     unevaluatedProperties: false
   reusable-action-fields-object:
@@ -46,6 +47,9 @@ $defs:
     allOf:
       - $ref: "#/$defs/action-object-base"
       - $ref: "#/$defs/specification-extensions"
+    not:
+      required:
+        - target
     unevaluatedProperties: false
   reusable-action-object:
     type: object
