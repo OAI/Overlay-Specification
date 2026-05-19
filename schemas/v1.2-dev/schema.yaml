@@ -37,25 +37,8 @@ $defs:
       $ref:
         type: string
         pattern: ^#\/components\/actions\/(?:[^~/]|~0|~1)+$
-      parameterValues:
-        type: object
-        additionalProperties:
-          type: string
     required:
       - $ref
-    $ref: "#/$defs/specification-extensions"
-    unevaluatedProperties: false
-  reusable-action-object-parameter:
-    type: object
-    properties:
-      name:
-        type: string
-        pattern: ^[A-Za-z_][A-Za-z_0-9]*$
-      default:
-        type: string
-    required:
-      - name
-    description: A parameter to be used in a reusable action object
     $ref: "#/$defs/specification-extensions"
     unevaluatedProperties: false
   reusable-action-fields-object:
@@ -69,14 +52,6 @@ $defs:
     allOf:
       - $ref: "#/$defs/specification-extensions"
     properties:
-      parameters:
-        type: array
-        items:
-          $ref: "#/$defs/reusable-action-object-parameter"
-      environmentVariables:
-        type: array
-        items:
-          $ref: "#/$defs/reusable-action-object-parameter"
       fields:
         $ref: "#/$defs/reusable-action-fields-object"
     unevaluatedProperties: false
