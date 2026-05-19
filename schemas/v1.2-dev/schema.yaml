@@ -52,6 +52,8 @@ $defs:
     allOf:
       - $ref: "#/$defs/specification-extensions"
     properties:
+      description:
+        type: string
       fields:
         $ref: "#/$defs/reusable-action-fields-object"
     unevaluatedProperties: false
