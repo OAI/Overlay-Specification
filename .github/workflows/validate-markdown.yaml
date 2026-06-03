@@ -28,6 +28,14 @@ jobs:
       - name: Lint markdown
         run: npx --yes markdownlint-cli2 --config .markdownlint.yaml npx markdownlint-cli2 *.md schemas/**/*.md versions/*.md
 
+      - id: setup-chrome
+        uses: browser-actions/setup-chrome@v2
+        with:
+          chrome-version: stable
+
+      - name: Point Puppeteer at the installed Chrome
+        run: echo "PUPPETEER_EXECUTABLE_PATH=${{ steps.setup-chrome.outputs.chrome-path }}" >> "$GITHUB_ENV"
+
       - name: Check links in markdown files
         uses: umbrelladocs/action-linkspector@v1
         with:
