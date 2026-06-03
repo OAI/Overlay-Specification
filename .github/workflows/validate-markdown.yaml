@@ -29,7 +29,7 @@ jobs:
         run: npx --yes markdownlint-cli2 --config .markdownlint.yaml npx markdownlint-cli2 *.md schemas/**/*.md versions/*.md
 
       - name: Check links in markdown files
-        uses: umbrelladocs/action-linkspector@07e5b12c52b55f2013ffbb46d92b809315698c3d
+        uses: umbrelladocs/action-linkspector@e62f23e71b32f39093c7dfc2132a9a63807282d1
         with:
           reporter: github-check
           fail_level: any
