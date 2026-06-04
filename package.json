@@ -16,18 +16,18 @@
   "dependencies": {
     "cheerio": "^1.2.0",
     "highlight.js": "^11.11.1",
-    "markdown-it": "^14.1.1",
-    "respec": "35.9.0",
+    "markdown-it": "^14.2.0",
+    "respec": "37.1.0",
     "yargs": "^18.0.0"
   },
   "devDependencies": {
     "@hyperjump/json-schema-coverage": "^1.2.1",
-    "@umbrelladocs/linkspector": "^0.4.7",
+    "@umbrelladocs/linkspector": "^0.5.3",
     "c8": "^11.0.0",
-    "markdownlint-cli2": "^0.22.0",
-    "prettier": "^3.8.2",
-    "vitest": "^4.1.4",
-    "yaml": "^2.8.3"
+    "markdownlint-cli2": "^0.22.1",
+    "prettier": "^3.8.3",
+    "vitest": "^4.1.8",
+    "yaml": "^2.9.0"
   },
   "keywords": [
     "API",
