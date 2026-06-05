@@ -40,7 +40,6 @@ $defs:
     required:
       - $ref
       - target
-    $ref: "#/$defs/specification-extensions"
     unevaluatedProperties: false
   reusable-action-fields-object:
     type: object
