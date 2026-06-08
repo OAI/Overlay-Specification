@@ -11,4 +11,5 @@ components:
         update:
           description: Updated
 actions:
-  - target: '$.info'
+  - $ref: '#/components/actions/setDescription'
+    target: '$.info'
