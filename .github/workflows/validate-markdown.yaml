@@ -23,7 +23,7 @@ jobs:
 
       - uses: actions/setup-node@v6 # setup Node.js
         with:
-          node-version: "22.x"
+          node-version: "24.x"
 
       - name: Lint markdown
         run: npx --yes markdownlint-cli2 --config .markdownlint.yaml npx markdownlint-cli2 *.md schemas/**/*.md versions/*.md
