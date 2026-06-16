@@ -5,6 +5,7 @@ info:
 components:
   actions:
     placeholder:
+      description: This does not do anything because of the empty fields and lack of reference, it's just to validate a schema permutation.
       fields: {}
 actions:
   - target: '$'
