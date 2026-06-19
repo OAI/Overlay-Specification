@@ -75,7 +75,7 @@ jobs:
       discussions: write
       contents: read
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Get agenda text from template
         id: get-agenda
         run: |
