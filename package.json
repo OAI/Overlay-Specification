@@ -24,7 +24,7 @@
     "@hyperjump/json-schema-coverage": "^1.2.1",
     "@umbrelladocs/linkspector": "^0.5.5",
     "c8": "^11.0.0",
-    "markdownlint-cli2": "^0.22.1",
+    "markdownlint-cli2": "^0.23.0",
     "prettier": "^3.9.4",
     "vitest": "^4.1.9",
     "yaml": "^2.9.0"
