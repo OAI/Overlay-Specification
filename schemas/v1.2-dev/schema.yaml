@@ -16,7 +16,11 @@ properties:
     minItems: 1
     uniqueItems: true
     items:
-      $ref: "#/$defs/action-object"
+      oneOf:
+        - $ref: "#/$defs/reusable-action-reference-object"
+        - $ref: "#/$defs/action-object"
+  components:
+    $ref: "#/$defs/components-object"
 required:
   - overlay
   - info
@@ -24,6 +28,45 @@ required:
 $ref: "#/$defs/specification-extensions"
 unevaluatedProperties: false
 $defs:
+  reusable-action-reference-object:
+    type: object
+    allOf:
+      - $ref: "#/$defs/specification-extensions"
+      - $ref: "#/$defs/description-field"
+      - $ref: "#/$defs/target-field"
+    properties:
+      $ref:
+        type: string
+        pattern: ^#\/components\/actions\/(?:[^~/]|~0|~1)+$
+    required:
+      - $ref
+      - target
+    unevaluatedProperties: false
+  reusable-action-fields-object:
+    type: object
+    allOf:
+      - $ref: "#/$defs/description-field"
+      - $ref: "#/$defs/action-fields"
+      - $ref: "#/$defs/specification-extensions"
+    unevaluatedProperties: false
+  reusable-action-object:
+    type: object
+    allOf:
+      - $ref: "#/$defs/specification-extensions"
+      - $ref: "#/$defs/description-field"
+    properties:
+      fields:
+        $ref: "#/$defs/reusable-action-fields-object"
+    unevaluatedProperties: false
+  components-object:
+    type: object
+    properties:
+      actions:
+        type: object
+        additionalProperties:
+          $ref: "#/$defs/reusable-action-object"
+    $ref: "#/$defs/specification-extensions"
+    unevaluatedProperties: false
   info-object:
     type: object
     properties:
@@ -31,21 +74,27 @@ $defs:
         type: string
       version:
         type: string
-      description:
-        type: string
+    allOf:
+      - $ref: "#/$defs/description-field"
     required:
       - title
       - version
     $ref: "#/$defs/specification-extensions"
     unevaluatedProperties: false
-  action-object:
+  description-field:
+    type: object
+    properties:
+      description:
+        type: string
+  target-field:
     type: object
     properties:
       target:
         type: string
         pattern: ^\$
-      description:
-        type: string
+  action-fields:
+    type: object
+    properties:
       update:
         type:
           - string
@@ -59,9 +108,15 @@ $defs:
       remove:
         type: boolean
         default: false
+  action-object:
+    type: object
+    allOf:
+      - $ref: "#/$defs/description-field"
+      - $ref: "#/$defs/target-field"
+      - $ref: "#/$defs/action-fields"
+      - $ref: "#/$defs/specification-extensions"
     required:
       - target
-    $ref: "#/$defs/specification-extensions"
     unevaluatedProperties: false
   specification-extensions:
     patternProperties:
