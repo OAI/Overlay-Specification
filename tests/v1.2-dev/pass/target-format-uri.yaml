@@ -1,0 +1,7 @@
+overlay: 1.2.0
+info:
+  title: Overlay targeting a format identified by an absolute URI
+  version: 1.0.0
+targetFormat: https://example.com/formats/my-description-format
+actions:
+  - target: '$' # Root of document

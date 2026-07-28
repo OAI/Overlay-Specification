@@ -1,0 +1,9 @@
+overlay: 1.2.0
+info:
+  title: Overlay targeting an AsyncAPI document
+  version: 1.0.0
+targetFormat: asyncapi
+actions:
+  - target: $.channels.*
+    update:
+      x-internal: true

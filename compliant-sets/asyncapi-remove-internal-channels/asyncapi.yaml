@@ -1,0 +1,40 @@
+asyncapi: 3.1.0
+info:
+  title: Account Service
+  version: 1.0.0
+servers:
+  production:
+    host: broker.internal.example.com:9092
+    protocol: kafka
+    description: Internal broker
+channels:
+  userSignedUp:
+    address: user/signedup
+    messages:
+      UserSignedUp:
+        $ref: '#/components/messages/UserSignedUp'
+  userAudited:
+    address: user/audited
+    x-internal: true
+    messages:
+      UserAudited:
+        $ref: '#/components/messages/UserAudited'
+operations:
+  sendUserSignedUp:
+    action: send
+    channel:
+      $ref: '#/channels/userSignedUp'
+components:
+  messages:
+    UserSignedUp:
+      payload:
+        type: object
+        properties:
+          displayName:
+            type: string
+    UserAudited:
+      payload:
+        type: object
+        properties:
+          auditId:
+            type: string

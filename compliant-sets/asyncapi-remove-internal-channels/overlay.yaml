@@ -1,0 +1,17 @@
+overlay: '1.2.0'
+info:
+  title: Prepare the Account Service document for publication
+  version: '1.0.0'
+targetFormat: asyncapi
+actions:
+  - target: $.servers.production
+    description: Point consumers at the public broker
+    update:
+      host: broker.example.com:9092
+      description: Public broker
+  - target: $.channels[?@['x-internal'] == true]
+    description: Remove the channels that are not for public consumption
+    remove: true
+  - target: $.components.messages.UserAudited
+    description: Remove the message that is no longer referenced
+    remove: true

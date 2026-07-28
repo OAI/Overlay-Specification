@@ -1,0 +1,28 @@
+asyncapi: 3.1.0
+info:
+  title: Account Service
+  version: 1.0.0
+servers:
+  production:
+    host: broker.example.com:9092
+    protocol: kafka
+    description: Public broker
+channels:
+  userSignedUp:
+    address: user/signedup
+    messages:
+      UserSignedUp:
+        $ref: '#/components/messages/UserSignedUp'
+operations:
+  sendUserSignedUp:
+    action: send
+    channel:
+      $ref: '#/channels/userSignedUp'
+components:
+  messages:
+    UserSignedUp:
+      payload:
+        type: object
+        properties:
+          displayName:
+            type: string

@@ -1,0 +1,14 @@
+overlay: '1.2.0'
+info:
+  title: Run the pet purchasing workflow against the sandbox
+  version: '1.0.0'
+targetFormat: arazzo
+actions:
+  - target: $.sourceDescriptions[?@.name == 'petStoreDescription']
+    description: Use the sandbox API description as the source
+    update:
+      url: https://sandbox.example.com/petstore.openapi.yaml
+  - target: $.workflows[*].steps[*].successCriteria
+    description: Require every step to meet the sandbox response time budget
+    update:
+      condition: $response.header.X-Response-Time < 1000

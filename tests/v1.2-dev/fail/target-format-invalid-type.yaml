@@ -1,0 +1,8 @@
+overlay: 1.2.0
+info:
+  title: Invalid `targetFormat` type
+  version: 1.0.0
+targetFormat:
+  - openapi
+actions:
+  - target: '$' # Root of document

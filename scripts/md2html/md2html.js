@@ -83,9 +83,19 @@ function preface(title,options) {
                 ],
             },
         ],
-        // localBiblio: {
-        //     // add local bibliography entries here, add them to https://www.specref.org/, and remove them here once published
-        // }
+        // add local bibliography entries here, add them to https://www.specref.org/, and remove them here once published
+        localBiblio: {
+            "AsyncAPI": {
+                title: "AsyncAPI Specification",
+                href: "https://www.asyncapi.com/docs/reference/specification/latest",
+                publisher: "AsyncAPI Initiative",
+            },
+            "Arazzo": {
+                title: "Arazzo Specification",
+                href: "https://spec.openapis.org/arazzo/latest.html",
+                publisher: "OpenAPI Initiative",
+            },
+        }
     };
 
     let preface = '<!DOCTYPE html><html lang="en"><head>\n'

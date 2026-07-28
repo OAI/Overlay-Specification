@@ -1,6 +1,8 @@
 # Overlay Specification
 
-The [Overlay Specification](https://spec.openapis.org/overlay/latest.html) defines a document format for information that augments an existing OpenAPI description yet remains separate from the OpenAPI description's source document(s).
+The [Overlay Specification](https://spec.openapis.org/overlay/latest.html) defines a document format for information that augments an existing target document yet remains separate from the target document's source document(s).
+
+A target document is any JSON or YAML document. The specification recognizes [OpenAPI](https://www.openapis.org/) Descriptions, [AsyncAPI](https://www.asyncapi.com/) documents and [Arazzo](https://spec.openapis.org/arazzo/latest.html) Descriptions as target documents, and an Overlay can declare which of them it was designed for with the `targetFormat` field.
 
 This specification is a community-driven, open specification within the [OpenAPI Initiative](https://www.openapis.org/), a Linux Foundation Collaborative Project.
 
