@@ -14,20 +14,7 @@
   "license": "Apache-2.0",
   "readmeFilename": "README.md",
   "dependencies": {
-    "cheerio": "^1.2.0",
-    "highlight.js": "^11.12.0",
-    "markdown-it": "^15.0.0",
-    "respec": "37.3.2",
-    "yargs": "^18.1.0"
-  },
-  "devDependencies": {
-    "@hyperjump/json-schema-coverage": "^1.2.1",
-    "@umbrelladocs/linkspector": "^0.5.6",
-    "c8": "^12.0.0",
-    "markdownlint-cli2": "^0.23.2",
-    "prettier": "^3.9.6",
-    "vitest": "^4.1.10",
-    "yaml": "^2.9.0"
+    "@oai/build-infra": "git+https://github.com/OAI/build-infra.git#main"
   },
   "keywords": [
     "API",
@@ -39,10 +26,13 @@
     "Swagger"
   ],
   "scripts": {
-    "build": "bash ./scripts/md2html/build.sh",
-    "build-dev": "npm run validate-markdown && bash ./scripts/md2html/build.sh dev && bash ./scripts/schema-publish.sh dev",
-    "format-markdown": "npx markdownlint-cli2 --fix *.md schemas/**/*.md versions/*-dev.md",
-    "validate-markdown": "markdownlint-cli2 *.md schemas/**/*.md versions/*.md && linkspector check",
-    "test": "c8 --100 vitest run --coverage"
+    "build": "oai-spec-build",
+    "build-src": "npm run validate-markdown && oai-spec-build src && oai-spec-publish-schemas src",
+    "format-markdown": "oai-spec-format-markdown",
+    "validate-markdown": "oai-spec-validate-markdown",
+    "start-release": "oai-spec-start-release",
+    "adjust-release-branch": "oai-spec-adjust-release-branch",
+    "publish-schemas": "oai-spec-publish-schemas",
+    "test": "oai-spec-test"
   }
 }

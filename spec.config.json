@@ -1,0 +1,8 @@
+{
+  "slug": "overlay",
+  "shortName": "Overlay",
+  "titleName": "OpenAPI Overlays",
+  "specSrc": "overlay.md",
+  "edDraftURI": "https://github.com/OAI/Overlay-Specification",
+  "schemas": ["schema.yaml"]
+}
