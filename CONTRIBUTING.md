@@ -24,6 +24,23 @@ The [spec site](https://spec.openapis.org) is the source of truth for the OpenAP
 The OpenAPI project is almost entirely staffed by volunteers.
 Please be patient with the people in this project, who all have other jobs and are active here because we believe this project has a positive impact in the world.
 
+## Shared infrastructure
+
+This repository uses the shared OpenAPI Initiative infrastructure package
+[`@oai/build-infra`](https://github.com/OAI/build-infra) for Markdown
+validation, HTML builds, schema publication, schema tests, and release helper
+commands. The npm scripts in this repository are intentionally thin wrappers
+around that package.
+
+The shared infrastructure docs explain how the tooling works and how to maintain
+it:
+
+- [build-infra README](https://github.com/OAI/build-infra/blob/main/README.md)
+- [build-infra CONTRIBUTING](https://github.com/OAI/build-infra/blob/main/CONTRIBUTING.md)
+
+Most contributors only need the commands shown below. Maintainers changing the
+tooling itself should read the build-infra docs first.
+
 ## Pull Requests
 
 Pull requests are always welcome but please read the section below on [branching strategy](#branching-strategy) before you start.
@@ -92,7 +109,7 @@ The steps for creating a `vX.Y.Z-rel` branch are:
    - adjust and repeat until done
    - merge changes back into `main` via pull request
 3. Create branch `vX.Y.Z-rel` from `main` in the OAI/Overlay-Specification repo and adjust it
-   - the bash script `scripts/adjust-release-branch.sh` does this:
+   - `npm run adjust-release-branch` does this:
      - move file `versions/X.Y.Z-dev.md` to `versions/X.Y.Z.md` and replace the release date placeholder `| TBD |` in the history table of Appendix A with the current date
      - copy file `EDITORS.md` to `versions/X.Y.Z-editors.md`
      - for an X.Y.0 release
@@ -109,7 +126,7 @@ Schema iterations are generated from the YAML source files in `schemas/vX.Y` by 
 
 Once the released specification version is published, the next patch version X.Y.(Z+1) can be started:
 
-1. Run bash script `scripts/start-release.sh X.Y.(Z+1)` in branch `main` to
+1. Run `npm run start-release X.Y.(Z+1)` in branch `main` to
    - create branch `start-X.Y.(Z+1)`
    - initialize `versions/X.Y.(Z+1)-dev.md` with empty history and content from `versions/X.Y.Z.md`
    - change version heading to X.Y.(Z+1) and add a new line to the version history table in Appendix A
@@ -120,7 +137,7 @@ Once the released specification version is published, the next patch version X.Y
 
 A new minor version X.(Y+1).0 or major version (X+1).0.0 is started similarly:
 
-1. Run bash script `scripts/start-release.sh X'.Y'.0` in branch `main` to
+1. Run `npm run start-release X'.Y'.0` in branch `main` to
    - create branch `start-X'.Y'.0`
    - initialize `versions/X'.Y'.0-dev.md` with empty history and content from `versions/X.Y.Z.md`
    - change version heading to X'.Y'.0 and add a new line to the version history table in Appendix A
