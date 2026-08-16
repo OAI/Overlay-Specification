@@ -3,6 +3,31 @@
   "shortName": "Overlay",
   "titleName": "OpenAPI Overlays",
   "specSrc": "overlay.md",
-  "edDraftURI": "https://github.com/OAI/Overlay-Specification",
-  "schemas": ["schema.yaml"]
+  "abstractQuestion": "What is the OpenAPI Overlay Specification?",
+  "abstractText": "The OpenAPI Overlay Specification defines a document format for information that augments an existing OpenAPI description yet remains separate from the OpenAPI description's source document(s).",
+  "metaDescription": "The OpenAPI Overlay Specification defines a document format for information that augments an existing OpenAPI description yet remains separate from the OpenAPI description's source document(s).",
+  "copyright": "the Linux Foundation",
+  "edDraftURI": "https://github.com/OAI/Overlay-Specification/",
+  "logo": {
+    "src": "https://raw.githubusercontent.com/OAI/OpenAPI-Style-Guide/master/graphics/bitmap/OpenAPI_Logo_Pantone.png",
+    "alt": "OpenAPI Initiative",
+    "height": 48,
+    "url": "https://openapis.org/"
+  },
+  "participateLinks": [
+    { "value": "GitHub OAI/Overlay-Specification", "href": "https://github.com/OAI/Overlay-Specification/" },
+    { "value": "File a bug", "href": "https://github.com/OAI/Overlay-Specification/issues" },
+    { "value": "Pull requests", "href": "https://github.com/OAI/Overlay-Specification/pulls" }
+  ],
+  "titleSuffix": "",
+  "schemas": ["schema.yaml"],
+  "release": {
+    "sourcePath": "src/overlay.md",
+    "releaseHistoryNote": "$releaseType of the Overlay Specification $version",
+    "removeOnReleaseBranch": ["src"],
+    "schemaVersionRewrite": {
+      "enabled": true,
+      "paths": ["src/schemas/validation/*.yaml"]
+    }
+  }
 }
