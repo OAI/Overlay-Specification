@@ -29,7 +29,7 @@ Please be patient with the people in this project, who all have other jobs and a
 This repository uses the shared OpenAPI Initiative infrastructure package
 [`@oai/build-infra`](https://github.com/OAI/build-infra) for Markdown
 validation, HTML builds, schema publication, schema tests, and release helper
-commands. The npm scripts in this repository are intentionally thin wrappers
+commands. The Yarn scripts in this repository are intentionally thin wrappers
 around that package.
 
 The shared infrastructure docs explain how the tooling works and how to maintain
@@ -72,24 +72,25 @@ Additionally, all pull requests that change specification files in the `versions
 We use ReSpec to render the markdown specification as HTML for publishing and easier reading.
 These instructions explain how you can build the HTML locally.
 
-You will need NodeJS 18 or later.
+You will need Node.js 24 and Yarn 4.18 (via Corepack).
 
 Install dependencies:
 
 ```sh
-npm install
+corepack enable
+yarn install
 ```
 
 Produce stand-alone HTML files for all final specifications in the local `deploy/overlay` folder:
 
 ```sh
-npm run build
+yarn build
 ```
 
 Produce stand-alone HTML files for all work-in-progress specifications in the local `deploy-preview` folder:
 
 ```sh
-npm run build-dev
+yarn build-src
 ```
 
 ## Publishing
@@ -103,13 +104,13 @@ The steps for creating a `vX.Y.Z-rel` branch are:
 
 1. Update `EDITORS.md` in a temporary branch and merge changes back into `main` via pull request
 2. Prepare spec files in a temporary branch:
-   - `npm run format-markdown`
-   - `npm run build-dev`
+   - `yarn format-markdown`
+   - `yarn build-src`
    - open `deploy-preview/X.Y.Z-dev.html` in browser and verify correct formatting
    - adjust and repeat until done
    - merge changes back into `main` via pull request
 3. Create branch `vX.Y.Z-rel` from `main` in the OAI/Overlay-Specification repo and adjust it
-   - `npm run adjust-release-branch` does this:
+   - `yarn adjust-release-branch` does this:
      - move file `versions/X.Y.Z-dev.md` to `versions/X.Y.Z.md` and replace the release date placeholder `| TBD |` in the history table of Appendix A with the current date
      - copy file `EDITORS.md` to `versions/X.Y.Z-editors.md`
      - for an X.Y.0 release
@@ -126,7 +127,7 @@ Schema iterations are generated from the YAML source files in `schemas/vX.Y` by 
 
 Once the released specification version is published, the next patch version X.Y.(Z+1) can be started:
 
-1. Run `npm run start-release X.Y.(Z+1)` in branch `main` to
+1. Run `yarn start-release X.Y.(Z+1)` in branch `main` to
    - create branch `start-X.Y.(Z+1)`
    - initialize `versions/X.Y.(Z+1)-dev.md` with empty history and content from `versions/X.Y.Z.md`
    - change version heading to X.Y.(Z+1) and add a new line to the version history table in Appendix A
@@ -137,7 +138,7 @@ Once the released specification version is published, the next patch version X.Y
 
 A new minor version X.(Y+1).0 or major version (X+1).0.0 is started similarly:
 
-1. Run `npm run start-release X'.Y'.0` in branch `main` to
+1. Run `yarn start-release X'.Y'.0` in branch `main` to
    - create branch `start-X'.Y'.0`
    - initialize `versions/X'.Y'.0-dev.md` with empty history and content from `versions/X.Y.Z.md`
    - change version heading to X'.Y'.0 and add a new line to the version history table in Appendix A
@@ -151,7 +152,7 @@ A new minor version X.(Y+1).0 or major version (X+1).0.0 is started similarly:
 If you are running those scripts using Windows Subsystems for Linux (WSL), and cloned the repository under windows, you'll need to make a few adjustments before you can run these procedures:
 
 1. Save the scripts using LF, not CRLF to avoid parsing issues. You can use VSCode or any other editor to do that. Alternatively, you may clone the repository again from WSL to workaround the line return issue.
-1. Make sure you run the npm install from WSL and not from windows.
+1. Make sure you run the yarn install from WSL and not from windows.
 1. If you run into issues launching chrome, [review this StackOverflow answer](https://stackoverflow.com/a/78776116/3808675).
 
 ## Style guide for Overlay Specification

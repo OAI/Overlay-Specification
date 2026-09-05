@@ -13,8 +13,17 @@
   },
   "license": "Apache-2.0",
   "readmeFilename": "README.md",
+  "packageManager": "yarn@4.18.0",
+  "engines": {
+    "node": ">=24 <25"
+  },
   "dependencies": {
     "@oai/build-infra": "git+https://github.com/OAI/build-infra.git#main"
+  },
+  "dependenciesMeta": {
+    "puppeteer": {
+      "built": true
+    }
   },
   "keywords": [
     "API",
@@ -27,7 +36,7 @@
   ],
   "scripts": {
     "build": "oai-spec-build",
-    "build-src": "npm run validate-markdown && oai-spec-build src && oai-spec-publish-schemas src",
+    "build-src": "yarn validate-markdown && oai-spec-build src && oai-spec-publish-schemas src",
     "format-markdown": "oai-spec-format-markdown",
     "validate-markdown": "oai-spec-validate-markdown",
     "start-release": "oai-spec-start-release",
