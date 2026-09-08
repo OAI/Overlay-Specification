@@ -4,6 +4,13 @@ The [Overlay Specification](https://spec.openapis.org/overlay/latest.html) defin
 
 This specification is a community-driven, open specification within the [OpenAPI Initiative](https://www.openapis.org/), a Linux Foundation Collaborative Project.
 
+Build, test, schema publication, and release command infrastructure is shared
+with other OpenAPI Initiative specification repositories through
+[OAI/build-infra](https://github.com/OAI/build-infra). See that repository's
+[README](https://github.com/OAI/build-infra/blob/main/README.md) and
+[CONTRIBUTING guide](https://github.com/OAI/build-infra/blob/main/CONTRIBUTING.md)
+for details on the shared tooling.
+
 Overlays support a range of scenarios, including:
 
 - Translating documentation into another language

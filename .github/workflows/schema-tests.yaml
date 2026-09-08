@@ -26,10 +26,13 @@ jobs:
         with:
           node-version: "24.x"
 
+      - name: Enable corepack
+        run: corepack enable
+
       - name: Install dependencies
-        run: npm ci
+        run: yarn install --immutable
 
       - name: Run tests
-        run: npm test
+        run: yarn test
         env:
           BASE: ${{ github.event.pull_request.base.ref }}
