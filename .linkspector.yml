@@ -1,3 +1,5 @@
 dirs:
   - ./
 useGitIgnore: true
+ignorePatterns:
+  - pattern: 'stackoverflow.com' # has bot protection
