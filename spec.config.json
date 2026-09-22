@@ -1,7 +1,7 @@
 {
   "slug": "overlay",
-  "shortName": "Overlay",
-  "titleName": "OpenAPI Overlays",
+  "shortName": "OAI Overlay",
+  "titleName": "Overlay Specification",
   "specSrc": "overlay.md",
   "abstractQuestion": "What is the OpenAPI Overlay Specification?",
   "abstractText": "The OpenAPI Overlay Specification defines a document format for information that augments an existing OpenAPI description yet remains separate from the OpenAPI description's source document(s).",
@@ -17,7 +17,11 @@
   "participateLinks": [
     { "value": "GitHub OAI/Overlay-Specification", "href": "https://github.com/OAI/Overlay-Specification/" },
     { "value": "File a bug", "href": "https://github.com/OAI/Overlay-Specification/issues" },
-    { "value": "Pull requests", "href": "https://github.com/OAI/Overlay-Specification/pulls" }
+    { "value": "Pull requests", "href": "https://github.com/OAI/Overlay-Specification/pulls" },
+    {
+      "value": "Commit history",
+      "href": "https://github.com/OAI/Overlay-Specification/commits/main/versions/{version}.md"
+    }
   ],
   "titleSuffix": "",
   "schemas": ["schema.yaml"],
