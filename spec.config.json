@@ -17,11 +17,11 @@
   "participateLinks": [
     { "value": "GitHub OAI/Overlay-Specification", "href": "https://github.com/OAI/Overlay-Specification/" },
     { "value": "File a bug", "href": "https://github.com/OAI/Overlay-Specification/issues" },
-    { "value": "Pull requests", "href": "https://github.com/OAI/Overlay-Specification/pulls" },
     {
       "value": "Commit history",
       "href": "https://github.com/OAI/Overlay-Specification/commits/main/versions/{version}.md"
-    }
+    },
+    { "value": "Pull requests", "href": "https://github.com/OAI/Overlay-Specification/pulls" }
   ],
   "titleSuffix": "",
   "schemas": ["schema.yaml"],
