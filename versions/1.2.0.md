@@ -1,0 +1,925 @@
+# Overlay Specification
+
+## Abstract
+
+The Overlay Specification defines a document format for information that augments an existing [[OpenAPI]] description yet remains separate from the OpenAPI description's source document(s).
+
+## Version 1.2.0
+
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in [BCP 14](https://tools.ietf.org/html/bcp14) [RFC2119](https://tools.ietf.org/html/rfc2119) [RFC8174](https://tools.ietf.org/html/rfc8174) when, and only when, they appear in all capitals, as shown here.
+
+This document is licensed under [The Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0.html).
+
+## Introduction
+
+The Overlay Specification is a companion to the [[OpenAPI]] Specification.
+An Overlay describes a set of changes to be applied or "overlaid" onto an existing OpenAPI description.
+
+The main purpose of the Overlay Specification is to provide a way to repeatably apply transformations to one or many OpenAPI descriptions. Use cases include updating descriptions, adding metadata to be consumed by another tool, or removing certain elements from an API description before sharing it with partners. An Overlay may be specific to a single OpenAPI description or be designed to apply the same transform to any OpenAPI description.
+
+## Definitions
+
+### Overlay
+
+An Overlay is represented in JSON or YAML and contains [actions](#overlay-actions) that are applied in order to an [[OpenAPI]] description. Each action uses a target expressed as a [[RFC9535|RFC9535 JSONPath]] query expression to identify where changes apply. [Reusable actions](#reusable-action-object) may be used to reduce duplication through references.
+
+## Specification
+
+### Versions
+
+The Overlay Specification is versioned using a `major`.`minor`.`patch` versioning scheme. The `major`.`minor` portion of the version string (for example 1.0) SHALL designate the Overlay feature set. `patch` versions address errors in, or provide clarifications to, this document, not the feature set. The patch version SHOULD NOT be considered by tooling, making no distinction between 1.0.0 and 1.0.1 for example.
+
+**Note:** Version 1.0.0 of the Overlay Specification was released after spending some time in draft and being implemented by a few early-adopting tool providers. Check with your tool provider for the details of what is supported in each tool.
+
+### Format
+
+An Overlay that conforms to the Overlay Specification is itself a JSON object, which may be represented either in [[RFC8259|JSON]] or [[YAML|YAML]] format. Examples in this specification will be shown in YAML for brevity.
+
+Implementations MUST support applying either JSON or YAML Overlay documents to
+[[OpenAPI|OpenAPI]] descriptions
+represented in either YAML or JSON format.
+
+All field names in the specification are **case sensitive**.
+This includes all fields that are used as keys in a map, except where explicitly noted that keys are **case insensitive**.
+
+The Overlay [schema](#schema) defines two types of fields: _fixed fields_, which have a declared name, and _patterned fields_, which have a declared pattern for the field name.
+
+Patterned fields MUST have unique names within the containing object.
+
+#### JSON and YAML Compatibility
+
+In order to preserve the ability to round-trip between YAML and JSON formats, YAML version [1.2](https://yaml.org/spec/1.2/spec.html) is RECOMMENDED along with the additional constraints listed in [[!RFC9512]] [Section 3.4](https://www.rfc-editor.org/rfc/rfc9512.html#name-yaml-and-json).
+
+The recommendation in previous versions of this specification to restrict YAML to its "JSON" [schema ruleset](https://yaml.org/spec/1.2/spec.html#id2803231) allowed for the inclusion of certain values that (despite the name) cannot be represented in JSON.
+Overlay authors SHOULD NOT rely on any such JSON-incompatible YAML values.
+
+#### Case Sensitivity
+
+As most field names and values in the Overlay Specification are case-sensitive, this document endeavors to call out any case-insensitive names and values.
+
+#### Rich Text Formatting
+
+Throughout the specification `description` fields are noted as supporting CommonMark markdown formatting.
+Where Overlay tooling renders rich text it MUST support, at a minimum, markdown syntax as described by [CommonMark 0.27](https://spec.commonmark.org/0.27/). Tooling MAY choose to ignore some CommonMark or extension features to address security concerns.
+
+While the framing of CommonMark 0.27 as a minimum requirement means that tooling MAY choose to implement extensions on top of it, note that any such extensions are by definition implementation-defined and will not be interoperable.
+Overlay Description authors SHOULD consider how text using such extensions will be rendered by tools that offer only the minimum support.
+
+### Parsing Documents
+
+Implementations MUST check all possible target [[OpenAPI]] Description documents provided to the implementation before treating an `extends` value as unresolvable.
+
+To ensure portability, when a target [[OpenAPI]] Description defines `$self`, the Overlay's `extends` value SHOULD match the target's `$self` URI.
+
+### Relative References in URIs
+
+URIs used in an Overlay document, including `$self` and `extends`, are identifiers, and not necessarily locators (URLs).
+
+Unless specified otherwise, all fields that are URI references MAY be relative references as defined by [RFC3986 Section 4.2](https://tools.ietf.org/html/rfc3986#section-4.2).
+
+#### Establishing the Base URI
+
+Relative URI references are resolved using the appropriate base URI, which MUST be determined in accordance with [RFC3986 Section 5.1.1 - 5.1.4](https://tools.ietf.org/html/rfc3986#section-5.1.1).
+
+The base URI for resolving relative references within an Overlay document is determined as follows:
+
+- If the [`$self`](#overlay-self) field is present and is an absolute URI, the base URI is the `$self` URI (per [RFC3986 Section 5.1.1](https://tools.ietf.org/html/rfc3986#section-5.1.1): Base URI Embedded in Content).
+- If the [`$self`](#overlay-self) field is present and is a relative URI-reference, it MUST first be resolved against the next possible base URI source per [RFC3986 Section 5.1.2 - 5.1.4](https://tools.ietf.org/html/rfc3986#section-5.1.2) before being used as the base URI for resolving other relative references.
+- If the [`$self`](#overlay-self) field is not present, the base URI MUST be determined from the next possible base URI source per [RFC3986 Section 5.1.2 - 5.1.4](https://tools.ietf.org/html/rfc3986#section-5.1.2).
+
+The most common base URI source in this case is the retrieval URI of the Overlay document (per [RFC3986 Section 5.1.3](https://tools.ietf.org/html/rfc3986#section-5.1.3)), though other sources such as encapsulating entities ([RFC3986 Section 5.1.2](https://tools.ietf.org/html/rfc3986#section-5.1.2)) or application-specific defaults ([RFC3986 Section 5.1.4](https://tools.ietf.org/html/rfc3986#section-5.1.4)) MAY apply.
+
+#### Resolving URI Fragments
+
+For Overlay Object fields that identify whole documents (`$self` and `extends`), fragment identifiers MUST NOT be used.
+
+#### Relative URI References in CommonMark Fields
+
+Relative references in CommonMark hyperlinks (such as those in `description` fields) are resolved in their rendered context, which might differ from the context of the Overlay document.
+
+### Schema
+
+In the following description, if a field is not explicitly **REQUIRED** or described with a MUST or SHALL, it can be considered OPTIONAL.
+
+#### Overlay Object
+
+This is the root object of the [Overlay](#overlay).
+
+##### Fixed Fields
+
+| Field Name | Type | Description |
+| ---- | :----: | ---- |
+| <a name="overlay-version"></a>overlay | `string` | **REQUIRED**. This string MUST be the [version number](#versions) of the Overlay Specification that the Overlay document uses. The `overlay` field SHOULD be used by tooling to interpret the Overlay document. |
+| <a name="overlay-self"></a>$self | `string` | A URI-reference for the Overlay document. This string MUST be in the form of a URI-reference as defined by [RFC3986 Section 4.1](https://tools.ietf.org/html/rfc3986#section-4.1). When present, this field provides the self-assigned URI of this Overlay document, which also serves as its base URI in accordance with [RFC3986 Section 5.1.1](https://tools.ietf.org/html/rfc3986#section-5.1.1) for resolving relative references within this document. The `$self` URI MUST NOT contain a fragment identifier. Overlay documents MAY include a `$self` field to ensure portable, unambiguous reference resolution. |
+| <a name="overlay-info"></a>info | [Info Object](#info-object) | **REQUIRED**. Provides metadata about the Overlay. The metadata MAY be used by tooling as required. |
+| <a name="overlay-extends"></a>extends | `string` | URI reference that identifies the target document (such as an [[OpenAPI]] document) this overlay applies to. |
+| <a name="overlay-actions"></a>actions | [[Action Object](#action-object) \| [Reusable Action Reference Object](#reusable-action-reference-object)] | **REQUIRED** An ordered list of actions to be applied to the target document. The array MUST contain at least one value. |
+| <a name="overlay-components"></a>components | [Components Object](#components-object) | A set of components to reuse across the Overlay Document. |
+
+This object MAY be extended with [Specification Extensions](#specification-extensions).
+
+The list of actions MUST be applied in sequential order to ensure a consistent outcome. Actions are applied to the result of the previous action. This enables objects to be deleted in one action and then re-created in a subsequent action, for example.
+
+The `extends` property can be used to indicate that the Overlay was designed to update a specific [[OpenAPI]] description.
+Where no `extends` is provided it is the responsibility of tooling to apply the Overlay document to the appropriate OpenAPI description(s).
+
+In the following example, the Overlay identifies a target OpenAPI description using an absolute URI:
+
+```yaml
+overlay: 1.2.0
+info:
+  title: Overlay for the Tic Tac Toe API document
+  version: 1.0.0
+extends: 'https://api.example.com/openapi/tictactoe.yaml'
+...
+```
+
+In the following example, the Overlay document also includes `$self`, which establishes the document's identity and base URI:
+
+```yaml
+overlay: 1.2.0
+$self: 'https://example.com/overlays/tictactoe.overlay.yaml'
+info:
+  title: Overlay for the Tic Tac Toe API document
+  version: 1.0.0
+extends: 'https://api.example.com/openapi/tictactoe.yaml'
+...
+```
+
+The `extends` property can also specify a relative URI reference.
+Relative `extends` values are resolved using the base URI rules in [Relative References in URIs](#relative-references-in-uris):
+
+```yaml
+overlay: 1.2.0
+$self: 'https://example.com/overlays/tictactoe.overlay.yaml'
+info:
+  title: Overlay for the Tic Tac Toe API document
+  version: 1.0.0
+extends: '../openapi/tictactoe.yaml'
+```
+
+With the above Overlay document, `extends` resolves to `https://example.com/openapi/tictactoe.yaml`.
+
+#### Info Object
+
+The object provides metadata about the Overlay.
+The metadata MAY be used by the clients if needed.
+
+##### Fixed Fields
+
+| Field Name | Type | Description |
+| ---- | :----: | ---- |
+| <a name="info-title"></a>title | `string` | **REQUIRED**. A human readable description of the purpose of the overlay. |
+| <a name="info-version"></a>version | `string` | **REQUIRED**. A version identifier for indicating changes to the Overlay document. |
+| <a name="info-description"></a>description | `string` | A description of the Overlay Document. [[CommonMark]] syntax MAY be used for rich text representation. |
+
+This object MAY be extended with [Specification Extensions](#specification-extensions).
+
+#### Components Object
+
+The object provides a set of components to be reused across the Overlay document.
+
+##### Fixed Fields
+
+| Field Name | Type | Description |
+| ---- | :----: | ---- |
+| <a name="component-actions"></a>actions | Map(`string`, [Reusable Action Object](#reusable-action-object)) | A key-value set of reusable actions to reference in the actions through a [Reusable Action Reference Object](#reusable-action-reference-object). |
+
+When a key under `components.actions` is referenced by a Reusable Action Reference Object, that key is part of a JSON Pointer token and MUST be encoded according to [[RFC6901], Section 3](https://www.rfc-editor.org/rfc/rfc6901#section-3) (for example, `~` as `~0` and `/` as `~1`).
+
+This object MAY be extended with [Specification Extensions](#specification-extensions).
+
+#### Action Object
+
+This object represents one or more changes to be applied to the target document at the locations defined by the target JSONPath expression.
+
+##### Fixed Fields
+
+| Field Name | Type | Description |
+| ---- | :----: | ---- |
+| <a name="action-target"></a>target | `string` | **REQUIRED** A RFC9535 JSONPath query expression selecting nodes in the target document. |
+| <a name="action-description"></a>description | `string` | A description of the action. [[CommonMark]] syntax MAY be used for rich text representation. |
+| <a name="action-update"></a>update | Any | If the `target` selects object nodes, the value of this field MUST be an object with the properties and values to merge with each selected object. If the `target` selects array nodes, the value of this field MUST be an array to concatenate with each selected array, or an object or primitive value to append to each selected array. If the `target` selects primitive nodes, the value of this field MUST be a primitive value to replace each selected node. This field has no impact if the `remove` field of this action object is `true` or if the `copy` field contains a value. |
+| <a name="action-copy"></a>copy | `string` | A JSONPath expression selecting a single node to copy into the `target` nodes. If the `target` selects object nodes, the value of this field MUST be an object with the properties and values to merge with each selected object. If the `target` selects array nodes, the value of this field MUST be an array to concatenate with each selected array, or an object or primitive value to append to each selected array. If the `target` selects primitive nodes, the value of this field MUST be a primitive value to replace each selected node. This field has no impact if the `remove` field of this action object is `true` or if the `update` field contains a value. |
+| <a name="action-remove"></a>remove | `boolean` | A boolean value that indicates that each of the target nodes MUST be removed from the the map or array it is contained in. The default value is `false`. |
+
+If the `target` JSONPath expression selects zero nodes, the action succeeds without changing the target document.
+If the `target` JSONPath expression selects two or more nodes for an `update` or `copy` action, the selected nodes MUST be either all objects or all arrays or all primitives.
+
+The properties of the `update` or `copy` object MUST be compatible with the target object referenced by the JSONPath key. When the Overlay document is applied, the `update` or `copy` object is merged with the target object by recursively applying these steps:
+
+- A property that only exists in the target object is left unchanged.
+- A property that only exists in the `update` or `copy` object is inserted into the target object.
+- If a property exists in both `update` or `copy` and target object:
+  - A primitive value of the `update` or `copy` property replaces a primitive value of the target property.
+  - An array value of the `update` or `copy` property is concatenated with an array value of the target property.
+  - An object value of the `update` or `copy` property is recursively merged with an object value of the target property.
+  - Other property value combinations are incompatible and result in an error.
+
+This object MAY be extended with [Specification Extensions](#specification-extensions).
+
+#### Reusable Action Object
+
+This object defines a reusable action in [`components.actions`](#component-actions).
+It can be referenced from [`actions`](#overlay-actions) by a [Reusable Action Reference Object](#reusable-action-reference-object).
+
+##### Fixed fields
+
+| Field Name | Type | Description |
+| ---- | :----: | ---- |
+| <a name="reusable-action-description"></a>description | `string` | A description of the reusable action. This description is independent of the `description` field on the contained [Action Object](#action-object) and is intended to document the reusable action itself (for example, its purpose or usage). [CommonMark syntax](https://spec.commonmark.org/) MAY be used for rich text representation. |
+| <a name="reusable-action-fields"></a>fields | [Action Object](#action-object) | An [Action Object](#action-object) where no field is required, except that the `target` field MUST NOT be provided. The `target` MUST be supplied by the [Reusable Action Reference Object](#reusable-action-reference-object). |
+
+This object MAY be extended with [Specification Extensions](#specification-extensions).
+
+A reusable action is similar to an action but differs in important ways:
+
+1. Action fields are nested inside the `fields` property, not defined as peer properties. The `fields` object may omit any action field, and MUST NOT include the `target` field; the `target` MUST be supplied by the [Reusable Action Reference Object](#reusable-action-reference-object).
+1. A Reusable Action Object has to be referenced by a Reusable Action Reference Object to have any effect on the OpenAPI description.
+
+#### Reusable Action Reference Object
+
+A Reusable Action Reference Object applies a reusable action defined in `components.actions` to a specific target in the source document.
+It references the reusable action by `$ref` and MAY provide action fields that override values from the referenced reusable action for that use.
+
+##### Fixed fields
+
+| Field Name | Type | Description |
+| ---- | :----: | ---- |
+| <a name="reusable-action-reference-ref"></a>$ref | `string` | **REQUIRED** A [same-document](https://www.rfc-editor.org/rfc/rfc3986.html#section-4.4) (or fragment-only) relative URI reference, per RFC3986 §4.4, where the fragment syntax is JSON Pointer with the pointer prefix restricted to `/components/actions/`. Component action keys in this pointer MUST be encoded according to [[RFC6901], Section 3](https://www.rfc-editor.org/rfc/rfc6901#section-3). |
+| <a name="reusable-action-reference-target"></a>target | `string` | **REQUIRED** A JSONPath query expression, as described in [[RFC9535]], referencing the target objects in the source document. |
+| <a name="action-description"></a>description | `string` | A description of the action. [[CommonMark]] syntax MAY be used for rich text representation. |
+
+This object MAY be extended with [Specification Extensions](#specification-extensions).
+
+In case a description is defined in `fields` of the referenced [Reusable Action Object](#reusable-action-object) and in the [Reusable Action Reference Object](#reusable-action-reference-object), the description from the Reusable Action Reference Object MUST be used.
+
+### Examples
+
+#### Structured Overlay Example
+
+When updating properties throughout the target document it may be more efficient to create a single `Action Object` that mirrors the structure of the target document. e.g.
+
+```yaml
+overlay: 1.2.0
+info:
+  title: Structured Overlay
+  version: 1.0.0
+actions:
+  - target: '$' # Root of document
+    update:
+      info:
+        x-overlay-applied: structured-overlay
+      paths:
+        '/':
+          summary: 'The root resource'
+          get:
+            summary: 'Retrieve the root resource'
+            x-rate-limit: 100
+        '/pets':
+          get:
+            summary: 'Retrieve a list of pets'
+            x-rate-limit: 100
+      components:
+      tags:
+```
+
+#### Targeted Overlay Example
+
+Alternatively, where only a small number of updates need to be applied to a large document, each [Action Object](#action-object) MAY be more targeted.
+
+```yaml
+overlay: 1.1.0
+info:
+  title: Targeted Overlay
+  version: 1.0.0
+actions:
+  - target: $.paths['/foo'].get.description
+    update: This is the new description
+  - target: $.paths['/bar'].get.description
+    update: This is the updated description
+  - target: $.paths['/bar']
+    update:
+      post:
+        description: This is an updated description of a child object
+        x-safe: false
+```
+
+#### Wildcard Overlay Example
+
+One significant advantage of using the JSONPath syntax is that it allows referencing multiple nodes in the target document. This would allow a single update object to be applied to multiple target objects using wildcards and other multi-value selectors.
+
+```yaml
+overlay: 1.2.0
+info:
+  title: Update many objects at once
+  version: 1.0.0
+actions:
+  - target: $.paths.*.get
+    update:
+      x-safe: true
+  - target: $.paths.*.get.parameters[?@.name=='filter' && @.in=='query']
+    update:
+      schema:
+        $ref: '#/components/schemas/filterSchema'
+```
+
+#### Array Modification Examples
+
+Array elements can be added using the `update` action.
+
+```yaml
+overlay: 1.2.0
+info:
+  title: Add an array element
+  version: 1.0.0
+actions:
+  - target: $.paths.*.get.parameters
+    update:
+      name: newParam
+      in: query
+```
+
+Array elements can be deleted using the `remove` action. Use of array indexes to remove array items should be avoided where possible as indexes will change when items are removed.
+
+```yaml
+overlay: 1.2.0
+info:
+  title: Remove an array element
+  version: 1.0.0
+actions:
+  - target: $.paths.*.get.parameters[?@.name == 'dummy']
+    remove: true
+```
+
+This also works for primitive target nodes:
+
+```yaml
+overlay: 1.1.0
+info:
+  title: Remove a primitive array element
+  version: 1.0.0
+actions:
+  - target: $.paths.*.get.tags[?@ == 'dummy']
+    remove: true
+```
+
+#### Traits Example
+
+By annotating a target document (such as an [[OpenAPI]] document) using [Specification Extensions](#specification-extensions) such as `x-oai-traits`, the author of the target document MAY identify where overlay updates should be applied.
+
+```yaml
+openapi: 3.2.0
+info:
+  title: API with a paged collection
+  version: 1.0.0
+paths:
+  /items:
+    get:
+      x-oai-traits: ['paged']
+      responses:
+        200:
+          description: OK
+  /items/{id}/subitems:
+    get:
+      x-oai-traits: ['paged']
+      parameters:
+        - name: id
+          in: path
+          required: true
+      responses:
+        200:
+          description: OK
+  /other:
+    get:
+      responses:
+        200:
+          description: OK
+```
+
+With the above OpenAPI document, the following Overlay document will apply the necessary updates to describe how paging is implemented, where that trait has been applied.
+
+```yaml
+overlay: 1.2.0
+info:
+  title: Apply Traits
+  version: 1.0.0
+actions:
+  - target: $.paths[?(@.get['x-oai-traits'][?(@ == 'paged')])].get
+    update:
+      parameters:
+        - name: top
+          in: query
+          # ...
+        - name: skip
+          in: query
+          # ...
+```
+
+resulting in
+
+```yaml
+openapi: 3.2.0
+info:
+  title: API with a paged collection
+  version: 1.0.0
+paths:
+  /items:
+    get:
+      x-oai-traits: ["paged"]
+      responses:
+        200:
+          description: OK
+      parameters:
+        - name: top
+          in: query
+          # ...
+        - name: skip
+          in: query
+          # ...
+  /items/{id}/subitems:
+    get:
+      x-oai-traits: ["paged"]
+      parameters:
+        - name: id
+          in: path
+          required: true
+        - name: top
+          in: query
+          # ...
+        - name: skip
+          in: query
+          # ...
+      responses:
+        200:
+          description: OK
+  /other:
+    get:
+      responses:
+        200:
+          description: OK
+```
+
+This approach allows inversion of control as to where the Overlay updates apply to the target document itself.
+
+#### Copy Example
+
+Copy actions behave similarly to `update` actions but source the new values to merge with the target from the document being transformed instead of providing them in the Overlay document. Copy actions MAY be used in sequence with `update` or `remove` actions to perform more advanced transformations like moving or renaming nodes.
+
+##### Simple Copy
+
+This example shows how to copy all operations from the `items` path item to the `some-items` path item.
+
+###### Source Description
+
+```yaml
+openapi: 3.2.0
+info:
+  title: Example API
+  version: 1.0.0
+paths:
+  /items:
+    get:
+      responses:
+        200:
+          description: OK
+  /some-items:
+    delete:
+      responses:
+        200:
+          description: OK
+```
+
+###### Overlay
+
+```yaml
+overlay: 1.1.0
+info:
+  title: Copy contents of an existing path to a new location
+  version: 1.0.0
+actions:
+  - target: '$.paths["/some-items"]'
+    copy: '$.paths["/items"]'
+    description: 'copies recursively all elements from the "items" path item to the new "some-items" path item without ensuring the node exists before the copy'
+```
+
+###### Result Description
+
+```yaml
+openapi: 3.2.0
+info:
+  title: Example API
+  version: 1.0.0
+paths:
+  /items:
+    get:
+      responses:
+        200:
+          description: OK
+  /some-items:
+    get:
+      responses:
+        200:
+          description: OK
+    delete:
+      responses:
+        200:
+          description: OK
+```
+
+##### Ensure the Target Exists and Copy
+
+This example shows how to copy all operations from the `items` path item to the `other-items` path item after first ensuring the target exists with an update action.
+
+###### Source Description
+
+```yaml
+openapi: 3.2.0
+info:
+  title: Example API
+  version: 1.0.0
+paths:
+  /items:
+    get:
+      responses:
+        200:
+          description: OK
+  /some-items:
+    delete:
+      responses:
+        200:
+          description: OK
+```
+
+###### Overlay
+
+```yaml
+overlay: 1.1.0
+info:
+  title: Create a path and copy the contents of an existing path to the new path
+  version: 1.0.0
+actions:
+  - target: '$.paths'
+    update: { "/other-items": {} }
+  - target: '$.paths["/other-items"]'
+    copy: '$.paths["/items"]'
+    description: 'copies recursively all elements from the "items" path item to the new "other-items" path item while ensuring the node exists before the copy'
+```
+
+###### Result Description
+
+```yaml
+openapi: 3.2.0
+info:
+  title: Example API
+  version: 1.0.0
+paths:
+  /items:
+    get:
+      responses:
+        200:
+          description: OK
+  /other-items:
+    get:
+      responses:
+        200:
+          description: OK
+  /some-items:
+    delete:
+      responses:
+        200:
+          description: OK
+```
+
+##### Move Example
+
+This example shows how to rename the `items` path item to `new-items` using a sequence of overlay actions:
+
+1. Use an `update` action to ensure the target path item exists.
+2. Use a `copy` action to copy the source path item to the target.
+3. Use a `remove` action to delete the original source path item.
+
+###### Source Description
+
+```yaml
+openapi: 3.2.0
+info:
+  title: Example API
+  version: 1.0.0
+paths:
+  /items:
+    get:
+      responses:
+        200:
+          description: OK
+  /some-items:
+    delete:
+      responses:
+        200:
+          description: OK
+```
+
+###### Overlay
+
+```yaml
+overlay: 1.1.0
+info:
+  title: Update the path for an API endpoint
+  version: 1.0.0
+actions:
+  - target: '$.paths'
+    update: { "/new-items": {} }
+  - target: '$.paths["/new-items"]'
+    copy: '$.paths["/items"]'
+  - target: '$.paths["/items"]'
+    remove: true
+    description: 'moves (renames) the "items" path item to "new-items"'
+```
+
+###### Result Description
+
+```yaml
+openapi: 3.2.0
+info:
+  title: Example API
+  version: 1.0.0
+paths:
+  /new-items:
+    get:
+      responses:
+        200:
+          description: OK
+  /some-items:
+    delete:
+      responses:
+        200:
+          description: OK
+```
+
+##### Reusable Action Reference Example - Overrides
+
+This example shows how a reusable action can provide shared update content while a reusable action reference supplies the `target` locally. In this case, each reference reuses the same error response definition but supplies a different `target` so the update is applied to different operations.
+
+###### Source Description
+
+```yaml
+openapi: 3.2.0
+info:
+  title: Example API
+  version: 1.0.0
+paths:
+  /items:
+    get:
+      responses:
+        200:
+          description: OK
+  /some-items:
+    delete:
+      responses:
+        200:
+          description: OK
+```
+
+###### Overlay
+
+```yaml
+overlay: 1.2.0
+info:
+  title: Use reusable actions to insert error responses
+  version: 1.0.0
+components:
+  actions:
+    errorResponse:
+      fields:
+        update:
+          404:
+            description: Not Found
+            content:
+              application/json:
+                schema:
+                  type: object
+                  properties:
+                    message:
+                      type: string
+      description: Adds an error response to the operation
+actions:
+- $ref: '#/components/actions/errorResponse'
+  target: "$.paths['/items'].get.responses"
+- $ref: '#/components/actions/errorResponse'
+  target: "$.paths['/some-items'].delete.responses"
+```
+
+###### Result Description
+
+```yaml
+openapi: 3.2.0
+info:
+  title: Example API
+  version: 1.0.0
+paths:
+  /items:
+    get:
+      responses:
+        200:
+          description: OK
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+  /some-items:
+    delete:
+      responses:
+        200:
+          description: OK
+        404:
+          description: Not Found
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
+                    type: string
+```
+
+### Specification Extensions
+
+While the Overlay Specification tries to accommodate most use cases, additional data can be added to extend the specification at certain points.
+
+The extension properties are implemented as patterned fields that are always prefixed by `"x-"`.
+
+| Field Pattern | Type | Description |
+| ---- | :--: | ---- |
+| <a name="overlay-extensions"></a>^x- | Any | Allows extensions to the Overlay Specification. The field name MUST begin with `x-`, for example, `x-internal-id`. Field names beginning `x-oai-` and `x-oas-` are reserved for uses defined by the [OpenAPI Initiative](https://www.openapis.org/). The value MAY be `null`, a primitive, an array or an object. |
+
+The extensions may or may not be supported by the available tooling, but those may be extended as well to add requested support (if tools are internal or open-sourced).
+
+### File Naming Convention
+
+Overlay files MAY choose to follow the convention of a `purpose.overlay.yaml` file naming pattern.
+Other file naming conventions are also supported.
+
+### RFC9535 Compliance
+
+[[RFC9535]] is a recent specification and libraries implementing JSONPath support might predate the RFC. Those libraries might differ entirely (expressions syntax is incompatible), or implement additional capabilities (superset of the RFC). A tool or library MUST fully implement [[RFC9535]] when parsing and expanding JSONPath query expressions to be compliant with the Overlay specification.
+
+Interoperable Overlay Documents MUST use RFC9535 JSONPath query expressions and MUST NOT use tool-specific JSONPath extensions.
+
+
+### Comments in OpenAPI Descriptions
+
+Some formats, like [YAML](https://yaml.org/) or [JSONC](https://jsonc.org/), support using comments which do not impact the semantic meaning of the description. Applying Overlay Actions to a description MAY result in the loss of such comments in the updated description. The exact behavior is specific to the tool implementing the Overlay Specification.
+
+## Appendix A: Revision History
+
+| Version | Date | Notes |
+| ---- | ---- | ---- |
+| 1.2.0 | 2026-09-22 | Release of the Overlay Specification 1.2.0 |
+| 1.1.0 | 2026-01-14 | Release of the Overlay Specification 1.1.0 |
+| 1.0.0 | 2024-10-17 | First release of the Overlay Specification |
+
+## Appendix B: Examples of Base URI Determination and Identifier Resolution
+
+This appendix provides concrete examples demonstrating how the [`$self`](#overlay-self) field, Source Description URLs, and relative references work together across different deployment scenarios.
+
+### Base URI Within Content (Using `$self`)
+
+Assume the following Overlay document is retrieved from `file:///Users/dev/projects/overlays/purchase.overlay.yaml`:
+
+```yaml
+overlay: 1.2.0
+$self: https://example.com/overlays/purchase.overlay.yaml
+info:
+  title: Purchase overlay
+  version: 1.0.0
+extends: ../openapi/petstore.yaml
+actions:
+  - target: '$.info'
+    update:
+      x-overlay: purchase
+```
+
+The relative `extends` URI `../openapi/petstore.yaml` resolves against the `$self` base URI `https://example.com/overlays/purchase.overlay.yaml`, producing `https://example.com/openapi/petstore.yaml`, regardless of the retrieval URI.
+
+### Base URI From the Retrieval URI (No `$self`)
+
+If the same Overlay document does not define `$self`:
+
+```yaml
+overlay: 1.2.0
+info:
+  title: Purchase overlay
+  version: 1.0.0
+extends: ../openapi/petstore.yaml
+actions:
+  - target: '$.info'
+    update:
+      x-overlay: purchase
+```
+
+Retrieved from `file:///Users/dev/projects/overlays/purchase.overlay.yaml`, the relative `extends` URI resolves to `file:///Users/dev/projects/openapi/petstore.yaml`.
+
+### Base URI From Encapsulating Entity
+
+Per [RFC3986 Section 5.1.2](https://tools.ietf.org/html/rfc3986#section-5.1.2), the base URI can be provided by an encapsulating entity. For example, in a `multipart/related` response where an Overlay document is embedded:
+
+```http
+Content-Type: multipart/related; boundary=example; type=application/json
+
+--example
+Content-Type: application/json
+Content-Location: https://example.com/overlays/purchase.overlay.json
+
+{
+  "overlay": "1.2.0",
+  "info": {"title": "Purchase overlay", "version": "1.0.0"},
+  "extends": "../openapi/petstore.json",
+  "actions": [
+    {
+      "target": "$.info",
+      "update": {"x-overlay": "purchase"}
+    }
+  ]
+}
+--example--
+```
+
+The `Content-Location` header provides the base URI (`https://example.com/overlays/purchase.overlay.json`), so `../openapi/petstore.json` resolves to `https://example.com/openapi/petstore.json` even without a `$self` field.
+
+### Application-Specific Default Base URI
+
+Per [RFC3986 Section 5.1.4](https://tools.ietf.org/html/rfc3986#section-5.1.4), applications may define default base URIs. For documents loaded without explicit retrieval URIs (e.g., from a database), implementations typically generate a unique base URI per document using a fixed prefix plus a unique identifier.
+
+For example, an API management platform might construct base URIs as `https://overlays.example.com/{uuid}` for each document:
+
+```yaml
+overlay: 1.2.0
+# No $self field
+# Loaded from database, assigned base URI: https://overlays.example.com/a7b3c4d5
+info:
+  title: Purchase overlay
+  version: 1.0.0
+extends: specs/petstore.yaml  # Resolves using application default
+actions:
+  - target: '$.info'
+    update:
+      x-overlay: purchase
+```
+
+If the application assigns base URI `https://overlays.example.com/a7b3c4d5` to this document, then `specs/petstore.yaml` resolves to `https://overlays.example.com/specs/petstore.yaml`.
+
+### Resolving Relative `$self`
+
+When `$self` is itself a relative URI-reference, it must be resolved before being used as a base URI:
+
+```yaml
+overlay: 1.2.0
+$self: overlays/purchase.overlay.yaml
+info:
+  title: Purchase overlay
+  version: 1.0.0
+extends: ../openapi/petstore.yaml
+actions:
+  - target: '$.info'
+    update:
+      x-overlay: purchase
+```
+
+Retrieved from `https://example.com/v2/api-description.yaml`:
+
+1. First, resolve the `$self` relative reference `overlays/purchase.overlay.yaml` against the retrieval URI `https://example.com/v2/api-description.yaml`, which resolves to `https://example.com/v2/overlays/purchase.overlay.yaml` per [RFC3986 Section 5.2](https://tools.ietf.org/html/rfc3986#section-5.2).
+2. Then resolve the `extends` relative reference `../openapi/petstore.yaml` against the resolved `$self` base URI `https://example.com/v2/overlays/purchase.overlay.yaml`, which resolves to `https://example.com/v2/openapi/petstore.yaml`.
+
+### Why Potential Target Documents Should Be Checked for `$self`
+
+An Overlay may be given this `extends` value:
+
+```yaml
+overlay: 1.2.0
+info:
+  title: Overlay for approved API description
+  version: 1.0.0
+extends: https://apis.example.com/approved/petstore.yaml
+actions:
+  - target: '$.info'
+    update:
+      x-overlay: approved
+```
+
+A candidate target OpenAPI description might be retrieved from `https://cdn.example.net/mirror/petstore.yaml` while declaring:
+
+```yaml
+openapi: 3.2.0
+$self: https://apis.example.com/approved/petstore.yaml
+info:
+  title: Petstore
+  version: 1.0.0
+paths: {}
+```
+
+Because `extends` is identifier-based, the match succeeds using the target description's `$self` URI, even though retrieval occurred from a different location.
