@@ -10,9 +10,9 @@ name: schema-publish
 on:
   push:
     branches:
-      - main
+      - "v[0-9].[0-9]-dev"
     paths:
-      - "schemas/v[0-9].[0-9]/*.yaml"
+      - "src/schemas/validation/*.yaml"
   workflow_dispatch: {}
 
 jobs:
