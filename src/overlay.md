@@ -110,7 +110,7 @@ This is the root object of the [Overlay](#overlay).
 | Field Name | Type | Description |
 | ---- | :----: | ---- |
 | <a name="overlay-version"></a>overlay | `string` | **REQUIRED**. This string MUST be the [version number](#versions) of the Overlay Specification that the Overlay document uses. The `overlay` field SHOULD be used by tooling to interpret the Overlay document. |
-| <a name="overlay-self"></a>$self | `string` | A URI-reference for the Overlay document. This string MUST be in the form of a URI-reference as defined by [RFC3986 Section 4.1](https://tools.ietf.org/html/rfc3986#section-4.1). When present, this field provides the self-assigned URI of this Overlay document, which also serves as its base URI in accordance with [RFC3986 Section 5.1.1](https://tools.ietf.org/html/rfc3986#section-5.1.1) for resolving relative references within this document. The `$self` URI MUST NOT contain a fragment identifier. Overlay documents MAY include a `$self` field to ensure portable, unambiguous reference resolution. |
+| <a name="overlay-self"></a>$self | `string` | A URI reference for the Overlay document. This string MUST be in the form of a URI-reference as defined by [RFC3986 Section 4.1](https://tools.ietf.org/html/rfc3986#section-4.1). When present, this field provides the self-assigned URI of this Overlay document, which also serves as its base URI in accordance with [RFC3986 Section 5.1.1](https://tools.ietf.org/html/rfc3986#section-5.1.1) for resolving relative references within this document. The `$self` URI MUST NOT contain a fragment identifier. Overlay documents MAY include a `$self` field to ensure portable, unambiguous reference resolution. |
 | <a name="overlay-info"></a>info | [Info Object](#info-object) | **REQUIRED**. Provides metadata about the Overlay. The metadata MAY be used by tooling as required. |
 | <a name="overlay-extends"></a>extends | `string` | URI reference that identifies the target document (such as an [[OpenAPI]] document) this overlay applies to. |
 | <a name="overlay-actions"></a>actions | [[Action Object](#action-object) \| [Reusable Action Reference Object](#reusable-action-reference-object)] | **REQUIRED** An ordered list of actions to be applied to the target document. The array MUST contain at least one value. |
@@ -123,7 +123,7 @@ The list of actions MUST be applied in sequential order to ensure a consistent o
 The `extends` property can be used to indicate that the Overlay was designed to update a specific [[OpenAPI]] description.
 Where no `extends` is provided it is the responsibility of tooling to apply the Overlay document to the appropriate OpenAPI description(s).
 
-In the following example, the Overlay identifies a target OpenAPI description using an absolute URI:
+In the following example, the Overlay identifies a target OpenAPI description using a URI:
 
 ```yaml
 overlay: 1.2.0
