@@ -58,6 +58,13 @@ Pull requests must come from a fork; create a fresh branch on your fork based on
 
 ### Branching Strategy
 
+#### Branch roles
+
+- `main` contains published specifications and schemas, schema tests, and supporting repository files. It holds the authoritative versions of documentation and infrastructure shared by all versions; the active `src` tree is not present on `main`.
+- `dev` is the primary branch for infrastructure supporting the `src` tree. Development-only infrastructure that is not needed on `main` is maintained here and merged into the versioned development branches.
+- `vX.Y-dev` contains the work-in-progress specification and schema for the X.Y release line, including the initial X.Y.0 release and subsequent patch releases.
+- `vX.Y.Z-rel` is a temporary release branch created from `vX.Y-dev` to prepare the published files for an X.Y.Z release before merging them into `main`.
+
 #### Active branches
 
 The current and planned active specification releases are:
@@ -73,10 +80,16 @@ Branch from and submit specification pull requests to the earliest relevant acti
 For example, a correction that applies to 1.2 should target `v1.2-dev`.
 Changes that introduce features for the next minor release should target `v1.3-dev` once that branch has been created; until then, use an issue or discussion to develop the proposal.
 
-The development branch contains the work-in-progress specification in `src/overlay.md` and its schema in `src/schemas/validation`.
+Each versioned development branch contains the work-in-progress specification in `src/overlay.md` and its schema in `src/schemas/validation`.
 
 For repository files that affect all versions, such as Markdown documentation, automation, and scripts, target the `main` branch.
-The `main` branch contains published specifications in `versions/X.Y.Z.md`, published schemas, schema tests, and supporting repository files; it does not contain the active `src` tree.
+For development-only infrastructure that is not needed on `main`, target the `dev` branch.
+
+#### Keeping branches in sync
+
+Merge `main` into `dev` and `dev` into each active `vX.Y-dev` branch via pull requests.
+This brings shared documentation, infrastructure changes, and newly published specification and schema files into the development branches.
+Do not merge versioned development branches directly into `main`; publish specification releases through a `vX.Y.Z-rel` branch as described below.
 
 ### Reviewers
 
@@ -117,7 +130,7 @@ Before starting, check that the release content and release notes have the requi
 The steps for publishing a new specification version are:
 
 1. Update `EDITORS.md` on `main` via pull request
-2. Merge `main` into `vX.Y-dev` via pull request
+2. Merge `main` into `dev` and `dev` into `vX.Y-dev` via pull requests
 3. Prepare the specification files on `vX.Y-dev`:
    - `yarn format-markdown`
    - `yarn build-src`
@@ -135,7 +148,7 @@ The steps for publishing a new specification version are:
    - commit the changes
 5. Push and merge `vX.Y.Z-rel` into `main` via pull request
 6. Tag a release using GitHub's Releases feature and add the release notes as the description
-7. Merge `main` back into `vX.Y-dev` via pull request
+7. Merge `main` back into `dev` and `dev` into each active `vX.Y-dev` branch via pull requests
 8. Archive branch `vX.Y.Z-rel`
 
 HTML renderings of the specification versions are generated from the `versions` folder on `main` by the `respec` workflow on changes to files in that folder, which generates a pull request for publishing the HTML renderings to the [spec site](https://spec.openapis.org/overlay). The workflow can be run manually if required.
