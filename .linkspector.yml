@@ -3,3 +3,4 @@ dirs:
 useGitIgnore: true
 ignorePatterns:
   - pattern: 'stackoverflow.com' # has bot protection
+  - pattern: 'w3.org' # returns 403 for automated requests
