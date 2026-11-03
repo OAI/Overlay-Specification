@@ -79,12 +79,12 @@ Unless specified otherwise, all fields that are URI references MAY be relative r
 
 #### Establishing the Base URI
 
-Relative URI references are resolved using the appropriate base URI, which MUST be determined in accordance with [RFC3986 Section 5.1.1 - 5.1.4](https://tools.ietf.org/html/rfc3986#section-5.1.1).
+Relative references are resolved using the appropriate base URI, which MUST be determined in accordance with [RFC3986 Section 5.1.1 - 5.1.4](https://tools.ietf.org/html/rfc3986#section-5.1.1).
 
 The base URI for resolving relative references within an Overlay document is determined as follows:
 
 - If the [`$self`](#overlay-self) field is present and is an absolute URI, the base URI is the `$self` URI (per [RFC3986 Section 5.1.1](https://tools.ietf.org/html/rfc3986#section-5.1.1): Base URI Embedded in Content).
-- If the [`$self`](#overlay-self) field is present and is a relative URI-reference, it MUST first be resolved against the next possible base URI source per [RFC3986 Section 5.1.2 - 5.1.4](https://tools.ietf.org/html/rfc3986#section-5.1.2) before being used as the base URI for resolving other relative references.
+- If the [`$self`](#overlay-self) field is present and is a relative reference, it MUST first be resolved against the next possible base URI source per [RFC3986 Section 5.1.2 - 5.1.4](https://tools.ietf.org/html/rfc3986#section-5.1.2) before being used as the base URI for resolving other relative references.
 - If the [`$self`](#overlay-self) field is not present, the base URI MUST be determined from the next possible base URI source per [RFC3986 Section 5.1.2 - 5.1.4](https://tools.ietf.org/html/rfc3986#section-5.1.2).
 
 The most common base URI source in this case is the retrieval URI of the Overlay document (per [RFC3986 Section 5.1.3](https://tools.ietf.org/html/rfc3986#section-5.1.3)), though other sources such as encapsulating entities ([RFC3986 Section 5.1.2](https://tools.ietf.org/html/rfc3986#section-5.1.2)) or application-specific defaults ([RFC3986 Section 5.1.4](https://tools.ietf.org/html/rfc3986#section-5.1.4)) MAY apply.
@@ -93,7 +93,7 @@ The most common base URI source in this case is the retrieval URI of the Overlay
 
 For Overlay Object fields that identify whole documents (`$self` and `extends`), fragment identifiers MUST NOT be used.
 
-#### Relative URI References in CommonMark Fields
+#### Relative References in CommonMark Fields
 
 Relative references in CommonMark hyperlinks (such as those in `description` fields) are resolved in their rendered context, which might differ from the context of the Overlay document.
 
@@ -110,7 +110,7 @@ This is the root object of the [Overlay](#overlay).
 | Field Name | Type | Description |
 | ---- | :----: | ---- |
 | <a name="overlay-version"></a>overlay | `string` | **REQUIRED**. This string MUST be the [version number](#versions) of the Overlay Specification that the Overlay document uses. The `overlay` field SHOULD be used by tooling to interpret the Overlay document. |
-| <a name="overlay-self"></a>$self | `string` | A URI-reference for the Overlay document. This string MUST be in the form of a URI-reference as defined by [RFC3986 Section 4.1](https://tools.ietf.org/html/rfc3986#section-4.1). When present, this field provides the self-assigned URI of this Overlay document, which also serves as its base URI in accordance with [RFC3986 Section 5.1.1](https://tools.ietf.org/html/rfc3986#section-5.1.1) for resolving relative references within this document. The `$self` URI MUST NOT contain a fragment identifier. Overlay documents MAY include a `$self` field to ensure portable, unambiguous reference resolution. |
+| <a name="overlay-self"></a>$self | `string` | A URI reference for the Overlay document. This string MUST be in the form of a URI-reference as defined by [RFC3986 Section 4.1](https://tools.ietf.org/html/rfc3986#section-4.1). When present, this field provides the self-assigned URI of this Overlay document, which also serves as its base URI in accordance with [RFC3986 Section 5.1.1](https://tools.ietf.org/html/rfc3986#section-5.1.1) for resolving relative references within this document. The `$self` URI MUST NOT contain a fragment identifier. Overlay documents MAY include a `$self` field to ensure portable, unambiguous reference resolution. |
 | <a name="overlay-info"></a>info | [Info Object](#info-object) | **REQUIRED**. Provides metadata about the Overlay. The metadata MAY be used by tooling as required. |
 | <a name="overlay-extends"></a>extends | `string` | URI reference that identifies the target document (such as an [[OpenAPI]] document) this overlay applies to. |
 | <a name="overlay-actions"></a>actions | [[Action Object](#action-object) \| [Reusable Action Reference Object](#reusable-action-reference-object)] | **REQUIRED** An ordered list of actions to be applied to the target document. The array MUST contain at least one value. |
@@ -123,7 +123,7 @@ The list of actions MUST be applied in sequential order to ensure a consistent o
 The `extends` property can be used to indicate that the Overlay was designed to update a specific [[OpenAPI]] description.
 Where no `extends` is provided it is the responsibility of tooling to apply the Overlay document to the appropriate OpenAPI description(s).
 
-In the following example, the Overlay identifies a target OpenAPI description using an absolute URI:
+In the following example, the Overlay identifies a target OpenAPI description using a URI:
 
 ```yaml
 overlay: 1.2.0
@@ -146,7 +146,7 @@ extends: 'https://api.example.com/openapi/tictactoe.yaml'
 ...
 ```
 
-The `extends` property can also specify a relative URI reference.
+The `extends` property can also specify a relative reference.
 Relative `extends` values are resolved using the base URI rules in [Relative References in URIs](#relative-references-in-uris):
 
 ```yaml
@@ -246,7 +246,7 @@ It references the reusable action by `$ref` and MAY provide action fields that o
 
 | Field Name | Type | Description |
 | ---- | :----: | ---- |
-| <a name="reusable-action-reference-ref"></a>$ref | `string` | **REQUIRED** A [same-document](https://www.rfc-editor.org/rfc/rfc3986.html#section-4.4) (or fragment-only) relative URI reference, per RFC3986 §4.4, where the fragment syntax is JSON Pointer with the pointer prefix restricted to `/components/actions/`. Component action keys in this pointer MUST be encoded according to [[RFC6901], Section 3](https://www.rfc-editor.org/rfc/rfc6901#section-3). |
+| <a name="reusable-action-reference-ref"></a>$ref | `string` | **REQUIRED** A [same-document](https://www.rfc-editor.org/rfc/rfc3986.html#section-4.4) reference in fragment-only form, as defined by RFC3986 §4.4. The fragment syntax MUST be JSON Pointer with the pointer prefix restricted to `/components/actions/`. Component action keys in this pointer MUST be encoded according to [[RFC6901], Section 3](https://www.rfc-editor.org/rfc/rfc6901#section-3). |
 | <a name="reusable-action-reference-target"></a>target | `string` | **REQUIRED** A JSONPath query expression, as described in [[RFC9535]], referencing the target objects in the source document. |
 | <a name="action-description"></a>description | `string` | A description of the action. [[CommonMark]] syntax MAY be used for rich text representation. |
 
@@ -875,7 +875,7 @@ If the application assigns base URI `https://overlays.example.com/a7b3c4d5` to t
 
 ### Resolving Relative `$self`
 
-When `$self` is itself a relative URI-reference, it must be resolved before being used as a base URI:
+When `$self` is itself a relative reference, it must be resolved before being used as a base URI:
 
 ```yaml
 overlay: 1.2.0
