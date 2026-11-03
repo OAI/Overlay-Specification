@@ -4,7 +4,7 @@
 
 The Overlay Specification defines a document format for information that augments an existing [[OpenAPI]] description yet remains separate from the OpenAPI description's source document(s).
 
-## Version 1.2.0
+## Version 1.3.0
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in [BCP 14](https://tools.ietf.org/html/bcp14) [RFC2119](https://tools.ietf.org/html/rfc2119) [RFC8174](https://tools.ietf.org/html/rfc8174) when, and only when, they appear in all capitals, as shown here.
 
@@ -779,6 +779,7 @@ Some formats, like [YAML](https://yaml.org/) or [JSONC](https://jsonc.org/), sup
 
 | Version | Date | Notes |
 | ---- | ---- | ---- |
+| 1.3.0 | TBD | Release of the Overlay Specification 1.3.0 |
 | 1.2.0 | 2026-09-22 | Release of the Overlay Specification 1.2.0 |
 | 1.1.0 | 2026-01-14 | Release of the Overlay Specification 1.1.0 |
 | 1.0.0 | 2024-10-17 | First release of the Overlay Specification |
