@@ -62,7 +62,7 @@ Pull requests must come from a fork; create a fresh branch on your fork based on
 
 - `main` contains published specifications and schemas, schema tests, and supporting repository files. It holds the authoritative versions of documentation and infrastructure shared by all versions; the active `src` tree is not present on `main`.
 - `dev` is the primary branch for infrastructure supporting the `src` tree. Development-only infrastructure that is not needed on `main` is maintained here and merged into the versioned development branches.
-- `vX.Y-dev` contains the work-in-progress specification and schema for the X.Y release line, including the initial X.Y.0 release and subsequent patch releases.
+- `vX.Y-dev` is the development branch for X.Y release line, including the initial X.Y.0 release and subsequent patch releases. It contains the work-in-progress specification and schema for next unreleased patch version of the X.Y release line.
 - `vX.Y.Z-rel` is a temporary release branch created from `vX.Y-dev` to prepare the published files for an X.Y.Z release before merging them into `main`.
 
 #### Active branches
