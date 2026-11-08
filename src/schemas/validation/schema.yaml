@@ -1,11 +1,11 @@
-$id: https://spec.openapis.org/overlay/1.2/schema/WORK-IN-PROGRESS
+$id: https://spec.openapis.org/overlay/1.3/schema/WORK-IN-PROGRESS
 $schema: https://json-schema.org/draft/2020-12/schema
-description: The description of Overlay v1.2.x documents
+description: The description of Overlay v1.3.x documents
 type: object
 properties:
   overlay:
     type: string
-    pattern: ^1\.2\.\d+$
+    pattern: ^1\.3\.\d+$
   $self:
     type: string
     format: uri-reference
